@@ -49,6 +49,9 @@ function create() {
     layer3 = map.createLayer('Tile Layer 3');
     layer4 = map.createLayer('Object Layer 1');
     layer.resizeWorld();
+    layer2.resizeWorld();
+    layer3.resizeWorld();
+    layer4.resizeWorld();
     
 	banana = game.add.sprite(100, 100, 'banana'); 
 	

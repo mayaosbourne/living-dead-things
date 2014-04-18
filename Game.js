@@ -45,13 +45,7 @@ function create() {
     
 	//'Grass 1' is the name of a layer inside of Tiled Map Editor
     layer = map.createLayer('Tile Layer 1');
-    layer2 = map.createLayer('Tile Layer 2');
-    layer3 = map.createLayer('Tile Layer 3');
-    layer4 = map.createLayer('Object Layer 1');
     layer.resizeWorld();
-    layer2.resizeWorld();
-    layer3.resizeWorld();
-    layer4.resizeWorld();
     
 	banana = game.add.sprite(100, 100, 'banana'); 
 	

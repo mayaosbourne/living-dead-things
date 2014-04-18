@@ -755,11 +755,11 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"TileMapStuff\/images\/AkujiTile_09.png",
+         "image":"assets\/tilesets\/tile_04.png",
          "imageheight":320,
          "imagewidth":320,
          "margin":0,
-         "name":"AkujiTile_09",
+         "name":"tile_04",
          "properties":
             {
 
@@ -770,11 +770,11 @@
         }, 
         {
          "firstgid":101,
-         "image":"CpWoT7u.png",
+         "image":"assets\/tilesets\/stars.png",
          "imageheight":512,
          "imagewidth":512,
          "margin":0,
-         "name":"CpWoT7u",
+         "name":"stars",
          "properties":
             {
 
@@ -785,11 +785,11 @@
         }, 
         {
          "firstgid":357,
-         "image":"tileset_cave_1.png",
+         "image":"assets\/tilesets\/up_cave.png",
          "imageheight":1024,
          "imagewidth":1024,
          "margin":0,
-         "name":"tileset_cave_1",
+         "name":"up_cave",
          "properties":
             {
 
@@ -800,11 +800,11 @@
         }, 
         {
          "firstgid":1381,
-         "image":"XPW8hdO.png",
+         "image":"assets\/tilesets\/down_cave.png",
          "imageheight":1024,
          "imagewidth":1024,
          "margin":0,
-         "name":"XPW8hdO",
+         "name":"down_cave",
          "properties":
             {
 
@@ -815,11 +815,11 @@
         }, 
         {
          "firstgid":2405,
-         "image":"TileMapStuff\/images\/AkujiTile_15.png",
+         "image":"assets\/tilesets\/tile_07.png",
          "imageheight":320,
          "imagewidth":320,
          "margin":0,
-         "name":"AkujiTile_15",
+         "name":"tile_07",
          "properties":
             {
 

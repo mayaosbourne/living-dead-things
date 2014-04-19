@@ -9,9 +9,15 @@ function preload() {
 	
 	//Load the tilemap file
     game.load.tilemap('myGame', 'test_map.json', null, Phaser.Tilemap.TILED_JSON);
-    
+    var img = new Image();
+    img.onload = function() {
+        canvas.drawImage(img, 0, 0);
+        originalImageData = canvas.getImageData(0,0,width, height)); //chrome will not fail
+    }
+    img.crossOrigin = 'http://profile.ak.fbcdn.net/crossdomain.xml';//crossdomain xml file, this is facebook example
+    img.src = 'assets/tilesets/tile_04.png';
 	//Load the spritesheet for the tilemap
-    game.load.image('tiles1', 'assets/tilesets/tile_04.png');
+    game.load.image('tiles1', img.onload().Location);
     
 }
 

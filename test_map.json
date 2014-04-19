@@ -20,7 +20,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"UW\/TCSS 491\/Game\/assets\/tilesets\/tile_04.png",
+         "image":"assets\/tilesets\/tile_04.png",
          "imageheight":320,
          "imagewidth":320,
          "margin":0,

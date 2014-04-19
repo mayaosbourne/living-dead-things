@@ -5,7 +5,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: p
 
 function preload() {
 
-	game.load.image('banana', 'seductive.jpg');
+	//game.load.image('banana', 'seductive.jpg');
 	
 	//Load the tilemap file
     game.load.tilemap('myGame', 'test_map.json', null, Phaser.Tilemap.TILED_JSON);
@@ -27,7 +27,7 @@ function create() {
     layer = map.createLayer('Tile Layer 1');
     layer.resizeWorld();
     
-	banana = game.add.sprite(100, 100, 'banana'); 
+	//banana = game.add.sprite(100, 100, 'banana'); 
 	
 }
 

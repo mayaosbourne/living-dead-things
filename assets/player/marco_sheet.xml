@@ -13,8 +13,8 @@
 <SubTexture name="run_right-1-05.png" x="528" y="1" width="48.3" height="40"/>
 <SubTexture name="idle-1-00.png" x="580" y="1" width="48" height="40"/>
 <SubTexture name="idle-1-01.png" x="628" y="1" width="48" height="40"/>
-<SubTexture name="idle-1-02.png" x="676" y="1" width="44" height="40"/>
+<SubTexture name="idle-1-02.png" x="676" y="1" width="48" height="40"/>
 <SubTexture name="idle-1-03.png" x="720" y="1" width="48" height="40"/>
-<SubTexture name="idle-1-04.png" x="766" y="1" width="44" height="40"/>
-<SubTexture name="idle-1-05.png" x="810" y="1" width="46" height="40"/>
+<SubTexture name="idle-1-04.png" x="766" y="1" width="48" height="40"/>
+<SubTexture name="idle-1-05.png" x="815" y="1" width="38" height="40"/>
 </TextureAtlas>

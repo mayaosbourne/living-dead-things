@@ -5,7 +5,7 @@ var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, c
 
 function preload() {
 	game.load.atlasXML('player', 'assets/player/marco_sheet3.png', 'assets/player/marco_sheet3.xml');
-	
+	game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
     //game.load.image('stand', 'assets/player/standing.png');
@@ -26,7 +26,7 @@ var sprite;
 var player;
 var jumping;
 var velocity;
-
+var monster_mj;
 var platforms;
 var upKey;
 var downKey;
@@ -101,6 +101,11 @@ function create() {
     player.body.collideWorldBounds = true;
 	
     game.camera.follow(player);
+    
+    monster_mj = game.add.sprite(150, 675, 'monsters');
+    monster_mj.animations.add('idle', [0, 1], true);
+    monster_mj.animations.play('idle', 5);
+    game.physics.enable(monster_mj);
 }
 
 var facing_right = true;
@@ -108,6 +113,8 @@ var facing_right = true;
 function update() {
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(player, ouch_layer);
+    game.physics.arcade.collide(monster_mj, layer);
+    monster_mj.animations.play('idle', 5);
     //Fixed!! Please do not mess with these for now.
     //If you need them changed for testing, please
     //ask Tall Aaron for help. 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-var game = new Phaser.Game(800, 800, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 function preload() {
 	game.load.atlasXML('player', 'assets/player/marco_sheet.png', 'assets/player/marco_sheet.xml');
@@ -12,9 +12,13 @@ function preload() {
     //game.load.spritesheet('player', 'assets/player/marco_sheet.png', 47, 40);
 	
 	//Load the tilemap file
-    game.load.tilemap('map', 'test_map1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
 	//Load the spritesheet for the tilemap
-    game.load.image('tiles1', 'assets/tilesets/tile_04.png');
+    game.load.image('tile_04', 'assets/tilesets/tile_04.png');
+    game.load.image('stars', 'assets/tilesets/stars.png');
+    game.load.image('up_cave', 'assets/tilesets/up_cave.png');
+    game.load.image('down_cave', 'assets/tilesets/down_cave.png');
+    game.load.image('tile_07', 'assets/tilesets/tile_07.png')
     
 }
 
@@ -34,7 +38,7 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.P2JS);
  
-    
+
 	jumping = false;
     game.stage.backgroundColor = '#736357';
 
@@ -48,15 +52,23 @@ function create() {
 	
 	//'main' is the name of the spritesheet inside of Tiled Map Editor
 	
-    map.addTilesetImage('tiles1');
+    map.addTilesetImage('tile_04');
+    map.addTilesetImage('stars');
+    map.addTilesetImage('up_cave');
+    map.addTilesetImage('down_cave');
+    map.addTilesetImage('tile_07');
     
-	//'Grass 1' is the name of a layer inside of Tiled Map Editor
-    layer = map.createLayer('Tile Layer 1');
+	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
+    bg_layer = map.createLayer('BG Layer');
+    ouch_layer = map.createLayer('Ouch Layer');
+    layer = map.createLayer('Platform Layer');
+    deco_layer = map.createLayer('Deco Layer');
+    
     layer.resizeWorld();
 
     
-    map.setCollisionBetween(70, 77, true, 'Tile Layer 1');
-    map.setCollisionBetween(0, 20, true, 'Tile Layer 1');
+    map.setCollisionBetween(70, 97, true, 'Platform Layer');
+
 
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
@@ -88,6 +100,7 @@ function create() {
     player.body.gravity.y = 500;
     player.body.collideWorldBounds = true;
 	
+    game.camera.follow(player);
 }
 
 function update() {
@@ -115,7 +128,8 @@ function update() {
     	player.x += 2;
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
-    }else if (player.body.velocity.x === 0){
+    }
+    else {
     	player.animations.play('idle', 10, true);
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;

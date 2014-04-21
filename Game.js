@@ -67,11 +67,9 @@ function create() {
     layer.resizeWorld();
     layer.enableBody = true;
 
-    
     map.setCollisionBetween(70, 97, true, 'Platform Layer');
-
-
-
+    map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+    
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
  
@@ -87,7 +85,7 @@ function create() {
     //  This stops it from falling away when you jump on it
     //ground.body.immovable = true;
     
-    player = game.add.sprite(100, 700, 'player');
+    player = game.add.sprite(100, 0, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
     player.animations.add('run right', [6, 7, 8, 9, 10, 11], 10, true);
     player.animations.add('idle right', [12, 13, 14, 15, 16, 17], 10, true);
@@ -109,6 +107,7 @@ var facing_right = true;
 
 function update() {
     game.physics.arcade.collide(player, layer);
+    game.physics.arcade.collide(player, ouch_layer);
     //Fixed!! Please do not mess with these for now.
     //If you need them changed for testing, please
     //ask Tall Aaron for help. 
@@ -138,6 +137,15 @@ function update() {
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
     }
+    else if (fireKey.isDown){
+		
+    	if (facing_right) {
+    		player.animations.play('shoot right', 15);
+    	} else {
+    		player.animations.play('shoot left', 15);
+    	}
+
+	}
     else if (jumping === false) {
     	if (facing_right) {
     		player.animations.play('idle right', 10);
@@ -148,16 +156,7 @@ function update() {
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
     }
-
-	if (fireKey.isDown){
-		
-    	if (facing_right) {
-    		player.animations.play('shoot right', 15);
-    	} else {
-    		player.animations.play('shoot left', 15);
-    	}
-
-	}
+	
 	
 
 }

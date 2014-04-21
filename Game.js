@@ -24,8 +24,7 @@ var velocity;
 var platforms;
 var upKey;
 var downKey;
-var leftKey;
-var rightKey;
+var fireKey;
 
 function create() {
 	jumping = false;
@@ -35,8 +34,7 @@ function create() {
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
-    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    fireKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 
 	map = game.add.tilemap('myGame');
 	
@@ -86,7 +84,7 @@ function update() {
 
 //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
-	if (jumpKey.isDown)
+	if (jumpKey.isDown && player.body.touching.down)
     {
     	jumping = true;
         player.body.velocity.y = -250;
@@ -96,32 +94,25 @@ function update() {
     }else{
     	player.body.velocity.x = velocity;
     }
-	if (leftKey.isDown)
+	if (leftKey.isDown && player.body.touching.down)
     {
-    	player.x--;
+		player.body.velocity.x = -250;
     	player.animations.play('run left', 10);
         velocity = player.body.velocity.x;
     }
-    else if (rightKey.isDown)
+    else if (rightKey.isDown && player.body.touching.down)
     {
-    	player.x++;
+    	player.body.velocity.x = 250;
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
-    }
-    else if (player.body.touching.down){
+    }else if (player.body.touching.down){
+    	player.animations.play('idle', 10, true);
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
-    } else {
-    	player.animations.play('idle', 10, true);
     }
 
-//    if (leftKey.isDown)
-//    {
-//        sprite.x--;
-//    }
-//    else if (rightKey.isDown)
-//    {
-//        sprite.x++;
-//    }
+	if (fireKey.isDown){
+		//play shooting animation.
+	}
 
 }

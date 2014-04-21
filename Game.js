@@ -65,6 +65,7 @@ function create() {
     deco_layer = map.createLayer('Deco Layer');
     
     layer.resizeWorld();
+    layer.enableBody = true;
 
     
     map.setCollisionBetween(70, 97, true, 'Platform Layer');
@@ -78,7 +79,7 @@ function create() {
     platforms.enableBody = true;
  
     // Here we create the ground.
-    //var ground = platforms.create(0, game.world.height - 64, layer);
+    //var ground = platforms.create(0, game.world.height - 64, 'Platform Layer');
  
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     //ground.scale.setTo(3, 3);
@@ -93,7 +94,7 @@ function create() {
     
     player.animations.play('idle', 10);
 
-    game.physics.arcade.enable(player);
+    game.physics.enable(player);
     
     //  Player physics properties. 
     player.body.bounce.y = 0.0;
@@ -104,10 +105,10 @@ function create() {
 }
 
 function update() {
-
-//  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, layer);
-	if (jumpKey.isDown)
+    //Tall Aaron is still working on tweaking this to make the 
+    //jumping work properly. 
+	if (jumpKey.isDown && player.body.velocity.y === 0)
     {
     	jumping = true;
         player.body.velocity.y = -250;
@@ -119,13 +120,13 @@ function update() {
     }
 	if (leftKey.isDown)
     {
-		player.x -= 2;
+		player.body.velocity.x = -250;
     	player.animations.play('run left', 10);
         velocity = player.body.velocity.x;
     }
     else if (rightKey.isDown)
     {
-    	player.x += 2;
+    	player.body.velocity.x = 250;
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
     }

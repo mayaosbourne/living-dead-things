@@ -32,8 +32,8 @@ function create() {
     game.stage.backgroundColor = '#736357';
 
     //  In this example we'll create 4 specific keys (up, down, left, right) and monitor them in our update function
-    upKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
-    downKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
+    upKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
@@ -72,7 +72,7 @@ function create() {
     game.physics.arcade.enable(player);
     
     //  Player physics properties. 
-    //player.body.bounce.y = 0.2;
+    player.body.bounce.y = 0.0;
     player.body.gravity.y = 500;
     player.body.collideWorldBounds = true;
 	

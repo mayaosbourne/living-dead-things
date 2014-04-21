@@ -4,7 +4,7 @@
 var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 function preload() {
-	game.load.atlasXML('player', 'assets/player/marco_sheet.png', 'assets/player/marco_sheet.xml');
+	game.load.atlasXML('player', 'assets/player/marco_sheet3.png', 'assets/player/marco_sheet3.xml');
 	
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
@@ -18,7 +18,7 @@ function preload() {
     game.load.image('stars', 'assets/tilesets/stars.png');
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
-    game.load.image('tile_07', 'assets/tilesets/tile_07.png')
+    game.load.image('tile_07', 'assets/tilesets/tile_07.png');
     
 }
 
@@ -90,9 +90,10 @@ function create() {
     player = game.add.sprite(100, 700, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
     player.animations.add('run right', [6, 7, 8, 9, 10, 11], 10, true);
-    player.animations.add('idle', [12, 13, 14, 15, 16, 17], true);
-    
-    player.animations.play('idle', 10);
+    player.animations.add('idle right', [12, 13, 14, 15, 16, 17], 10, true);
+    player.animations.add('shoot right', [18, 19, 20, 21], 5, true);
+    player.animations.add('shoot left', [22, 23, 24, 25], 10, true);
+    player.animations.add('idle left', [26, 27, 28, 29, 30, 31], 10, true);
 
     game.physics.enable(player);
     
@@ -104,11 +105,14 @@ function create() {
     game.camera.follow(player);
 }
 
+var facing_right = true;
+
 function update() {
     game.physics.arcade.collide(player, layer);
     //Fixed!! Please do not mess with these for now.
     //If you need them changed for testing, please
     //ask Tall Aaron for help. 
+    
 	if (jumpKey.isDown && jumping === false)
     {
     	jumping = true;
@@ -122,24 +126,38 @@ function update() {
     }
 	if (leftKey.isDown && jumping === false)
     {
+		facing_right = false;
 		player.body.velocity.x = -250;
     	player.animations.play('run left', 10);
         velocity = player.body.velocity.x;
     }
     else if (rightKey.isDown && jumping === false)
     {
+    	facing_right = true;
     	player.body.velocity.x = 250;
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
     }
     else if (jumping === false) {
-    	player.animations.play('idle', 10, true);
+    	if (facing_right) {
+    		player.animations.play('idle right', 10);
+    	} else {
+    		player.animations.play('idle left', 10);
+    	}
+    	
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
     }
 
 	if (fireKey.isDown){
-		//play shooting animation.
+		
+    	if (facing_right) {
+    		player.animations.play('shoot right', 15);
+    	} else {
+    		player.animations.play('shoot left', 15);
+    	}
+
 	}
+	
 
 }

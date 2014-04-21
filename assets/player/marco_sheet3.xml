@@ -1,0 +1,41 @@
+<TextureAtlas imagePath="marco_sheet3.png">
+<SubTexture name="run_left-1-00.png" x="0" y="0" width="42" height="48"/>
+<SubTexture name="run_left-1-01.png" x="49" y="0" width="42" height="48"/>
+<SubTexture name="run_left-1-02.png" x="96" y="0" width="39" height="48"/>
+<SubTexture name="run_left-1-03.png" x="143" y="0" width="42" height="48"/>
+<SubTexture name="run_left-1-04.png" x="192" y="0" width="42" height="48"/>
+<SubTexture name="run_left-1-05.png" x="240" y="0" width="42" height="48"/>
+
+<SubTexture name="run_right-1-00.png" x="294" y="0" width="42" height="48"/>
+<SubTexture name="run_right-1-01.png" x="343" y="0" width="42" height="48"/>
+<SubTexture name="run_right-1-02.png" x="391" y="0" width="42" height="48"/>
+<SubTexture name="run_right-1-03.png" x="441" y="0" width="42" height="48"/>
+<SubTexture name="run_right-1-04.png" x="486" y="0" width="42" height="48"/>
+<SubTexture name="run_right-1-05.png" x="534" y="0" width="42" height="48"/>
+
+<SubTexture name="idle_right-1-00.png" x="587" y="0" width="38" height="48"/>
+<SubTexture name="idle_right-1-01.png" x="633" y="0" width="38" height="48"/>
+<SubTexture name="idle_right-1-02.png" x="679" y="0" width="38" height="48"/>
+<SubTexture name="idle_right-1-03.png" x="725" y="0" width="38" height="48"/>
+<SubTexture name="idle_right-1-04.png" x="770" y="0" width="38" height="48"/>
+<SubTexture name="idle_right-1-05.png" x="815" y="0" width="38" height="48"/>
+
+<SubTexture name="shoot_right-1-00.png" x="1" y="50" width="60" height="41"/>
+<SubTexture name="shoot_right-1-01.png" x="67" y="50" width="60" height="41"/>
+<SubTexture name="shoot_right-1-02.png" x="141" y="50" width="60" height="41"/>
+<SubTexture name="shoot_right-1-03.png" x="208" y="50" width="60" height="41"/>
+
+<SubTexture name="shoot_left-1-00.png" x="275" y="50" width="60" height="41"/>
+<SubTexture name="shoot_left-1-01.png" x="342" y="50" width="60" height="41"/>
+<SubTexture name="shoot_left-1-02.png" x="416" y="50" width="60" height="41"/>
+<SubTexture name="shoot_left-1-03.png" x="483" y="50" width="60" height="41"/>
+
+<SubTexture name="idle_left-1-00.png" x="587" y="50" width="38" height="41"/>
+<SubTexture name="idle_left-1-01.png" x="632" y="50" width="38" height="41"/>
+<SubTexture name="idle_left-1-02.png" x="677" y="50" width="38" height="41"/>
+<SubTexture name="idle_left-1-03.png" x="723" y="50" width="38" height="41"/>
+<SubTexture name="idle_left-1-04.png" x="769" y="50" width="38" height="41"/>
+<SubTexture name="idle_left-1-05.png" x="816" y="50" width="38" height="41"/>
+
+<SubTexture name="bullet-1-00.png" x="551" y="68" width="30" height="5"/>
+</TextureAtlas>

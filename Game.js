@@ -86,7 +86,7 @@ function create() {
     //  This stops it from falling away when you jump on it
     //ground.body.immovable = true;
     
-    player = game.add.sprite(200, 360, 'player');
+    player = game.add.sprite(100, 700, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
     player.animations.add('run right', [6, 7, 8, 9, 10, 11], 10, true);
     player.animations.add('idle', [12, 13, 14, 15, 16, 17], true);

@@ -106,31 +106,33 @@ function create() {
 
 function update() {
     game.physics.arcade.collide(player, layer);
-    //Tall Aaron is still working on tweaking this to make the 
-    //jumping work properly. 
-	if (jumpKey.isDown && player.body.velocity.y === 0)
+    //Fixed!! Please do not mess with these for now.
+    //If you need them changed for testing, please
+    //ask Tall Aaron for help. 
+	if (jumpKey.isDown && jumping === false)
     {
     	jumping = true;
         player.body.velocity.y = -250;
+        player.body.velocity.x = velocity;
     }
-	if (player.body.touching.down){
+	if (player.body.onFloor()){
     	jumping = false;
     }else{
     	player.body.velocity.x = velocity;
     }
-	if (leftKey.isDown)
+	if (leftKey.isDown && jumping === false)
     {
 		player.body.velocity.x = -250;
     	player.animations.play('run left', 10);
         velocity = player.body.velocity.x;
     }
-    else if (rightKey.isDown)
+    else if (rightKey.isDown && jumping === false)
     {
     	player.body.velocity.x = 250;
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
     }
-    else {
+    else if (jumping === false) {
     	player.animations.play('idle', 10, true);
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;

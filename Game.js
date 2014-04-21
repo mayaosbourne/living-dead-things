@@ -1,13 +1,13 @@
 /**
  * 
  */
-var game = new Phaser.Game(800, 800, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 800, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 function preload() {
+	game.load.atlasXML('player', 'assets/player/marco_sheet.png', 'assets/player/marco_sheet.xml')
 	game.load.image('ground', 'assets/seductive.jpg');
-    game.load.image('stand', 'assets/player/standing.png');
-    game.load.spritesheet('run', 'assets/player/running_1.png', 48, 47, 6);
-    game.load.spritesheet('backwards', 'assets/player/backwards.png', 48, 47, 6);
+    //game.load.image('stand', 'assets/player/standing.png');
+    //game.load.spritesheet('player', 'assets/player/marco_sheet.png', 47, 40);
 	
 	//Load the tilemap file
     game.load.tilemap('myGame', 'test_map.json', null, Phaser.Tilemap.TILED_JSON);
@@ -36,6 +36,7 @@ function create() {
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
 
 	map = game.add.tilemap('myGame');
 	
@@ -65,9 +66,12 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
     
-    player = game.add.sprite(200, 360, 'run');
-    player.animations.add('run');
-    player.animations.add('backwards');
+    player = game.add.sprite(200, 360, 'player');
+    player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
+    player.animations.add('run right', [6, 7, 8, 9, 10, 11], 10, true);
+    player.animations.add('idle', [12, 13, 14, 15, 16, 17], true);
+    
+    player.animations.play('idle', 10);
     
     game.physics.arcade.enable(player);
     
@@ -82,7 +86,7 @@ function update() {
 
 //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
-	if (jumpKey.isDown && player.body.touching.down)
+	if (jumpKey.isDown)
     {
     	jumping = true;
         player.body.velocity.y = -250;
@@ -92,24 +96,24 @@ function update() {
     }else{
     	player.body.velocity.x = velocity;
     }
-	if (downKey.isDown && player.body.touching.down)
+	if (leftKey.isDown)
     {
-    	player.body.velocity.x = -350;
-    	player.animations.play('run', 10);
+    	player.x--;
+    	player.animations.play('run left', 10);
         velocity = player.body.velocity.x;
     }
-    else if (upKey.isDown && player.body.touching.down)
+    else if (rightKey.isDown)
     {
-    	player.body.velocity.x = 350;
-    	player.animations.play('backwards', 10);
+    	player.x++;
+    	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
     }
     else if (player.body.touching.down){
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
+    } else {
+    	player.animations.play('idle', 10, true);
     }
-   
-    
 
 //    if (leftKey.isDown)
 //    {

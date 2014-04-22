@@ -102,7 +102,7 @@ function create() {
 	
     game.camera.follow(player);
     
-    monster_mj = game.add.sprite(150, 675, 'monsters');
+    monster_mj = game.add.sprite(3575, 675, 'monsters');
     monster_mj.animations.add('idle', [0, 1], true);
     monster_mj.animations.play('idle', 5);
     game.physics.enable(monster_mj);

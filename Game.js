@@ -5,7 +5,9 @@ var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, c
 
 function preload() {
 	game.load.atlasXML('player', 'assets/player/marco_sheet3.png', 'assets/player/marco_sheet3.xml');
-	game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
+	//game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
+	game.load.atlasXML ('monsters', 'assets/monsters/mj_dance.png', 'assets/monsters/mj_monster.xml');
+
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
     //game.load.image('stand', 'assets/player/standing.png');
@@ -103,8 +105,11 @@ function create() {
     game.camera.follow(player);
     
     monster_mj = game.add.sprite(3575, 675, 'monsters');
-    monster_mj.animations.add('idle', [0, 1], true);
-    monster_mj.animations.play('idle', 5);
+
+	monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
+  
+	monster_mj.animations.play('dance', 3);
+
     game.physics.enable(monster_mj);
 }
 
@@ -114,7 +119,8 @@ function update() {
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(player, ouch_layer);
     game.physics.arcade.collide(monster_mj, layer);
-    monster_mj.animations.play('idle', 5);
+    monster_mj.animations.play('dance', 5);
+
     //Fixed!! Please do not mess with these for now.
     //If you need them changed for testing, please
     //ask Tall Aaron for help. 

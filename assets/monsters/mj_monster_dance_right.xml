@@ -1,0 +1,5 @@
+<TextureAtlas imagePath="mj_thriller_right.png">
+<SubTexture name="dance_right-1-00.png" x="0" y="1" width="26" height="59"/>
+<SubTexture name="dance_right-1-01.png" x="29" y="1" width="25" height="59"/>
+<SubTexture name="dance_right-1-02.png" x="59" y="1" width="24" height="59"/>
+</TextureAtlas>

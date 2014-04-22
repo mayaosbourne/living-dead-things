@@ -46,7 +46,7 @@ function create() {
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    fireKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
 	map = game.add.tilemap('map');
 	

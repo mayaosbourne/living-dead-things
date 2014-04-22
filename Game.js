@@ -108,7 +108,7 @@ function create() {
 
 	monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
   
-	monster_mj.animations.play('dance', 3);
+	monster_mj.animations.play('dance', 1);
 
     game.physics.enable(monster_mj);
 }
@@ -119,7 +119,7 @@ function update() {
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(player, ouch_layer);
     game.physics.arcade.collide(monster_mj, layer);
-    monster_mj.animations.play('dance', 5);
+    monster_mj.animations.play('dance', 3);
 
     //Fixed!! Please do not mess with these for now.
     //If you need them changed for testing, please

@@ -21,10 +21,11 @@ function preload() {
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
     game.load.image('tile_07', 'assets/tilesets/tile_07.png');
+	game.load.image('hud', 'assets/hud.png');
     
 }
 
-var sprite;
+var hud;
 var player;
 var jumping;
 var velocity;
@@ -51,7 +52,7 @@ function create() {
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
 	map = game.add.tilemap('map');
-	
+
 	//'main' is the name of the spritesheet inside of Tiled Map Editor
 	
     map.addTilesetImage('tile_04');
@@ -87,7 +88,7 @@ function create() {
     //  This stops it from falling away when you jump on it
     //ground.body.immovable = true;
     
-    player = game.add.sprite(100, 0, 'player');
+    player = game.add.sprite(100, 650, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
     player.animations.add('run right', [6, 7, 8, 9, 10, 11], 10, true);
     player.animations.add('idle right', [12, 13, 14, 15, 16, 17], 10, true);
@@ -95,12 +96,17 @@ function create() {
     player.animations.add('shoot left', [22, 23, 24, 25], 10, true);
     player.animations.add('idle left', [26, 27, 28, 29, 30, 31], 10, true);
 
+    hud = game.add.sprite(0, 0, 'hud');
+    
     game.physics.enable(player);
     
-    //  Player physics properties. 
-    player.body.bounce.y = 0.0;
-    player.body.gravity.y = 500;
+    hud.fixedToCamera = true;
+    
+    //  Player physics properties.
     player.body.collideWorldBounds = true;
+    player.body.bounce.y = 0;
+    player.body.gravity.y = 500;
+    
 	
     game.camera.follow(player);
     

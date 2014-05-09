@@ -95,8 +95,10 @@ function create() {
     player.animations.add('shoot right', [18, 19, 20, 21], 5, true);
     player.animations.add('shoot left', [22, 23, 24, 25], 10, true);
     player.animations.add('idle left', [26, 27, 28, 29, 30, 31], 10, true);
-
+    
     hud = game.add.sprite(0, 0, 'hud');
+    
+    game.load.image('mask', 'assets/lantern.png');
     
     game.physics.enable(player);
     
@@ -113,8 +115,6 @@ function create() {
     monster_mj = game.add.sprite(3575, 675, 'monsters');
 
 	monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
-  
-	monster_mj.animations.play('dance', 1);
 
     game.physics.enable(monster_mj);
 }
@@ -125,7 +125,9 @@ function update() {
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(player, ouch_layer);
     game.physics.arcade.collide(monster_mj, layer);
-    monster_mj.animations.play('dance', 3);
+    
+	monster_mj.animations.play('dance', 1);
+
 
     //Fixed!! Please do not mess with these for now.
     //If you need them changed for testing, please
@@ -134,6 +136,7 @@ function update() {
 	if (jumpKey.isDown && jumping === false)
     {
     	jumping = true;
+    	
         player.body.velocity.y = -250;
         player.body.velocity.x = velocity;
     }
@@ -145,23 +148,27 @@ function update() {
 	if (leftKey.isDown && jumping === false)
     {
 		facing_right = false;
+		player.scale.x = -1;
+    	player.anchor.setTo(0.2, 0);
 		player.body.velocity.x = -250;
-    	player.animations.play('run left', 10);
+    	player.animations.play('run right', 10);
         velocity = player.body.velocity.x;
     }
     else if (rightKey.isDown && jumping === false)
     {
     	facing_right = true;
+    	player.scale.x = 1;
+    	player.anchor.setTo(0, 0);
     	player.body.velocity.x = 250;
     	player.animations.play('run right', 10);
     	velocity = player.body.velocity.x;
     }
-    else if (fireKey.isDown){
+    else if (fireKey.isDown) {
 		
     	if (facing_right) {
     		player.animations.play('shoot right', 15);
     	} else {
-    		player.animations.play('shoot left', 15);
+    		player.animations.play('shoot right', 15);
     	}
 
 	}
@@ -169,7 +176,7 @@ function update() {
     	if (facing_right) {
     		player.animations.play('idle right', 10);
     	} else {
-    		player.animations.play('idle left', 10);
+    		player.animations.play('idle right', 10);
     	}
     	
     	player.body.velocity.x = 0;

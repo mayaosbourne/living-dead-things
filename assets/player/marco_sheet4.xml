@@ -1,8 +1,8 @@
 <TextureAtlas imagePath="marco_sheet4.png">
 <SubTexture name="shoot-1-00.png" x="0" y="0" width="60" height="41"/>
-<SubTexture name="shoot-1-01.png" x="60" y="0" width="60" height="41"/>
-<SubTexture name="shoot-1-02.png" x="120" y="0" width="60" height="41"/>
-<SubTexture name="shoot-1-03.png" x="180" y="0" width="60" height="41"/>
+<SubTexture name="shoot-1-01.png" x="67" y="0" width="60" height="41"/>
+<SubTexture name="shoot-1-02.png" x="142" y="0" width="60" height="41"/>
+<SubTexture name="shoot-1-03.png" x="208" y="0" width="60" height="41"/>
 
 <SubTexture name="run-1-00.png" x="293" y="0" width="42" height="41"/>
 <SubTexture name="run-1-01.png" x="345" y="0" width="42" height="41"/>
@@ -11,12 +11,21 @@
 <SubTexture name="run-1-04.png" x="486" y="0" width="42" height="41"/>
 <SubTexture name="run-1-05.png" x="533" y="0" width="50" height="41"/>
 
-<SubTexture name="idle-1-00.png" x="587" y="0" width="38" height="48"/>
-<SubTexture name="idle-1-01.png" x="633" y="0" width="38" height="48"/>
-<SubTexture name="idle-1-02.png" x="679" y="0" width="38" height="48"/>
-<SubTexture name="idle-1-03.png" x="725" y="0" width="38" height="48"/>
-<SubTexture name="idle-1-04.png" x="770" y="0" width="38" height="48"/>
-<SubTexture name="idle-1-05.png" x="815" y="0" width="38" height="48"/>
+<SubTexture name="idle-1-00.png" x="587" y="0" width="38" height="41"/>
+<SubTexture name="idle-1-01.png" x="633" y="0" width="38" height="41"/>
+<SubTexture name="idle-1-02.png" x="679" y="0" width="38" height="41"/>
+<SubTexture name="idle-1-03.png" x="725" y="0" width="38" height="41"/>
+<SubTexture name="idle-1-04.png" x="770" y="0" width="38" height="41"/>
+<SubTexture name="idle-1-05.png" x="815" y="0" width="38" height="41"/>
+
+<SubTexture name="run_shoot-1-00.png" x="0" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-01.png" x="69" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-02.png" x="137" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-03.png" x="206" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-04.png" x="275" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-05.png" x="342" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-06.png" x="410" y="46" width="60" height="42"/>
+<SubTexture name="run_shoot-1-07.png" x="481" y="46" width="60" height="42"/>
 
 <SubTexture name="bullet-1-00.png" x="817" y="115" width="30" height="5"/>
 

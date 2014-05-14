@@ -4,7 +4,7 @@
 var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 function preload() {
-	game.load.atlasXML('player', 'assets/player/marco_sheet3.png', 'assets/player/marco_sheet3.xml');
+	game.load.atlasXML('player', 'assets/player/marco_sheet4.png', 'assets/player/marco_sheet4.xml');
 	//game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
 	game.load.atlasXML ('monsters', 'assets/monsters/mj_dance.png', 'assets/monsters/mj_monster.xml');
 	game.load.image('bullet', 'assets/player/bullet.png');
@@ -107,12 +107,12 @@ function create() {
     
     //player = game.add.sprite(100, 650, 'player');
     player = game.add.sprite(3600, 650, 'player');
-    player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
-    player.animations.add('running', [6, 7, 8, 9, 10, 11], 10, true);
-    player.animations.add('idle', [12, 13, 14, 15, 16, 17], 10, true);
-    player.animations.add('shooting', [18, 19, 20, 21], 5, true);
-    player.animations.add('shoot left', [22, 23, 24, 25], 10, true);
-    player.animations.add('idle left', [26, 27, 28, 29, 30, 31], 10, true);
+    player.animations.add('shooting', [0, 1, 2, 3], 5, true);
+    player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
+    player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
+    
+    //new animations - to be tested
+    player.animations.add('run shoot', [16, 17, 18, 19, 20, 21, 22, 23], 10, true);
     
     hud = game.add.sprite(0, 0, 'hud');
     

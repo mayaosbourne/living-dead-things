@@ -57,30 +57,27 @@ function create() {
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
-	map = game.add.tilemap('map_1');
-	//map = game.add.tilemap('map_2');
+    
+    var level = 2;
+    
+    if (level === 1){
+    	map = game.add.tilemap('map_1');
+    	map.addTilesetImage('stars');
+    	map.addTilesetImage('up_cave');
+    	map.addTilesetImage('down_cave');
+    	map.addTilesetImage('tile_04');
+        map.addTilesetImage('tile_07');
+    }else if (level === 2){
+    	map = game.add.tilemap('map_2');
+    	map.addTilesetImage('stars');
+    	map.addTilesetImage('cemetary');
+        map.addTilesetImage('tile_04');
+        map.addTilesetImage('tile_05');
+        map.addTilesetImage('tile_06');
+        map.addTilesetImage('tile_07');
+        map.addTilesetImage('tile_08');
+    }
 
-	//'main' is the name of the spritesheet inside of Tiled Map Editor
-	
-	
-	map.addTilesetImage('stars');
-	
-	// Level 1 tile sets
-	map.addTilesetImage('up_cave');
-	map.addTilesetImage('down_cave');
-	map.addTilesetImage('tile_04');
-    map.addTilesetImage('tile_07');
-	
-	
-	//This is the level 2 tile set list
-//	map.addTilesetImage('cemetary');
-//    map.addTilesetImage('tile_01');
-//    map.addTilesetImage('tile_05');
-//    map.addTilesetImage('tile_06');
-//    map.addTilesetImage('tile_07');
-//    map.addTilesetImage('tile_08');
-    
-    
 	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
     bg_layer = map.createLayer('BG Layer');
     ouch_layer = map.createLayer('Ouch Layer');
@@ -90,12 +87,17 @@ function create() {
     layer.resizeWorld();
     layer.enableBody = true;
 
-//    map.setCollisionBetween(0, 1197, true, 'Platform Layer');
-//    map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+    if (level === 1){
+    	map.setCollisionBetween(0, 1197, true, 'Platform Layer');
+        map.setCollisionBetween(1, 1098, true, 'Ouch Layer');
+        map.setCollisionBetween(1101, 1665, true, 'Ouch Layer');
+    }else if (level === 2){
+    	map.setCollisionBetween(0, 1197, true, 'Platform Layer');
+        map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+    }
+    
      
-    map.setCollisionBetween(0, 1197, true, 'Platform Layer');
-    map.setCollisionBetween(1, 1098, true, 'Ouch Layer');
-    map.setCollisionBetween(1101, 1665, true, 'Ouch Layer');
+    
     
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
@@ -103,7 +105,8 @@ function create() {
     //  We will enable physics for any object that is created in this group
     platforms.enableBody = true;
     
-    player = game.add.sprite(100, 650, 'player');
+    //player = game.add.sprite(100, 650, 'player');
+    player = game.add.sprite(3600, 650, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
     player.animations.add('running', [6, 7, 8, 9, 10, 11], 10, true);
     player.animations.add('idle', [12, 13, 14, 15, 16, 17], 10, true);
@@ -123,6 +126,7 @@ function create() {
     player.body.collideWorldBounds = true;
     player.body.bounce.y = 0;
     player.body.gravity.y = 500;
+    player.health = 600;
     
     bullets = game.add.group();
 	bullets.enableBody = true;
@@ -131,21 +135,35 @@ function create() {
 	
     game.camera.follow(player);
     
-    monster_mj = game.add.sprite(3575, 675, 'monsters');
+    monster_mj = game.add.sprite(3590, 720, 'monsters');
+    
 
 	monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
+	monster_mj.health = 3;
 
     game.physics.enable(monster_mj);
+    monster_mj.body.gravity.y = 500;
 }
 
 var facing_right = true;
 var fire_delay = 0;
+var ouch_damage = 0;
 
 function update() {
     game.physics.arcade.collide(player, layer);
-    
-    if (game.physics.arcade.collide(player, ouch_layer))
-    	console.log("Player took damage");
+    if (game.physics.arcade.collide(player, ouch_layer)){
+    	ouch_damage++;
+    	if(ouch_damage % 50 === 0){
+    		player.health = player.health - 50;
+    		console.log(player.health);
+    	}
+    }
+    if (player.health === 0){
+    	console.log("Player died");
+    	player.kill();
+    }
+    if (monster_mj.health === 0)
+    	monster_mj.kill();
     game.physics.arcade.collide(monster_mj, layer);
     
     bullets.forEachExists(checkBulletCollisions, this);
@@ -217,18 +235,22 @@ function handleInput(){
 function checkBulletCollisions(sprite) {
 	if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
 		sprite.kill();
+	if (game.physics.arcade.collide(sprite, monster_mj)){
+		monster_mj.health--;
+		sprite.kill();
+	}
 }
 
 function createBullet() {
     if (facing_right === false){
     	var bullet = bullets.getFirstExists(false);
 		bullet.reset(player.x - 20, player.y + 15);
-		bullet.body.velocity.x = -500;
+		bullet.body.velocity.x = -700;
 		bullet.scale.x = -1;
 	}else {
 		var bullet = bullets.getFirstExists(false);
 		bullet.reset(player.x + 20, player.y + 15);
-		bullet.body.velocity.x = 500;
+		bullet.body.velocity.x = 700;
 		bullet.scale.x = 1;
 	}
 }

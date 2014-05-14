@@ -7,16 +7,16 @@ function preload() {
 	game.load.atlasXML('player', 'assets/player/marco_sheet3.png', 'assets/player/marco_sheet3.xml');
 	//game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
 	game.load.atlasXML ('monsters', 'assets/monsters/mj_dance.png', 'assets/monsters/mj_monster.xml');
-
+	game.load.image('bullet', 'assets/player/bullet.png');
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
     //game.load.image('stand', 'assets/player/standing.png');
     //game.load.spritesheet('player', 'assets/player/marco_sheet.png', 47, 40);
 	
 	//Load the tilemap file
-    game.load.tilemap('map', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map', 'level_2.json', null, Phaser.Tilemap.TILED_JSON);
 	//Load the spritesheet for the tilemap
-    game.load.image('tile_04', 'assets/tilesets/tile_04.png');
+    game.load.image('tile_04', 'assets/tilesets/tile_01.png');
     game.load.image('stars', 'assets/tilesets/stars.png');
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
@@ -27,6 +27,8 @@ function preload() {
 
 var hud;
 var player;
+var bullet;
+var fire;
 var jumping;
 var velocity;
 var monster_mj;
@@ -36,12 +38,9 @@ var downKey;
 var fireKey;
 
 function create() {
-	
-    
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.P2JS);
  
-
 	jumping = false;
     game.stage.backgroundColor = '#736357';
 
@@ -78,15 +77,6 @@ function create() {
  
     //  We will enable physics for any object that is created in this group
     platforms.enableBody = true;
- 
-    // Here we create the ground.
-    //var ground = platforms.create(0, game.world.height - 64, 'Platform Layer');
- 
-    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    //ground.scale.setTo(3, 3);
- 
-    //  This stops it from falling away when you jump on it
-    //ground.body.immovable = true;
     
     player = game.add.sprite(100, 650, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
@@ -124,14 +114,11 @@ var facing_right = true;
 function update() {
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(player, ouch_layer);
+    game.physics.arcade.collide(bullet, layer);
+    game.physics.arcade.collide(bullet, ouch_layer);
     game.physics.arcade.collide(monster_mj, layer);
     
-	monster_mj.animations.play('dance', 1);
-
-
-    //Fixed!! Please do not mess with these for now.
-    //If you need them changed for testing, please
-    //ask Tall Aaron for help. 
+	monster_mj.animations.play('dance', 1); 
     
 	if (jumpKey.isDown && jumping === false)
     {
@@ -164,7 +151,8 @@ function update() {
     	velocity = player.body.velocity.x;
     }
     else if (fireKey.isDown) {
-		
+    	
+    	createBullet();
     	if (facing_right) {
     		player.animations.play('shoot right', 15);
     	} else {
@@ -182,6 +170,33 @@ function update() {
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
     }
+	
+	function createBullet() {
+	    if (facing_right === false){
+    		bullet = game.add.sprite(player.body.x - 28, player.body.y + 15, 'bullet');
+    		bullet.scale.x = -1;
+        	game.physics.enable(bullet);
+        	bullet.body.bounce.y = 1;
+        	bullet.body.velocity.x = -600;
+    	}else {
+    		bullet = game.add.sprite(player.body.x + 28, player.body.y + 15, 'bullet');
+        	game.physics.enable(bullet);
+        	bullet.body.bounce.y = 1;
+        	bullet.body.velocity.x = 600;
+    	}
+    	
+//	    // Get new instance from the bullet group via recycle
+//	    var bullet = game.add.sprite; 
+//	    // reset exists flag if it went off stage of collided with a zombie
+//	    bullet.exists = true;
+//	    // offset so it looks like the bullet comes out of the gun and isn't spawned inside of the player
+//	    bullet.x = player.x + (player.flipped ? 0 : player.width); 
+//	    bullet.y = player.y + 25;
+//	    bullet.flipped = player.flipped;
+//	    bullet.velocity.x = bullet.flipped ? -600 : 600;
+//	    bullet.loadGraphic("entities");
+//	    bullet.animations.frameName = "bullet-gun.png";
+	}
 	
 	
 

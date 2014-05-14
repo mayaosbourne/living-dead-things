@@ -58,7 +58,7 @@ function create() {
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
 	map = game.add.tilemap('map_1');
-	map = game.add.tilemap('map_2');
+	//map = game.add.tilemap('map_2');
 
 	//'main' is the name of the spritesheet inside of Tiled Map Editor
 	
@@ -97,7 +97,7 @@ function create() {
      * map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
      */
     map.setCollisionBetween(0, 1197, true, 'Platform Layer');
-    map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+    map.setCollisionBetween(1, 1662, true, 'Ouch Layer');
     
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
@@ -129,7 +129,7 @@ function create() {
     bullets = game.add.group();
 	bullets.enableBody = true;
 	bullets.physicsBodyType = Phaser.Physics.ARCADE;
-	bullets.createMultiple(30, 'bullet', 0, false);
+	bullets.createMultiple(100, 'bullet', 0, false);
 	
     game.camera.follow(player);
     
@@ -145,25 +145,28 @@ var fire_delay = 0;
 
 function update() {
     game.physics.arcade.collide(player, layer);
-    game.physics.arcade.collide(player, ouch_layer);
-    game.physics.arcade.collide(bullets, layer);
-    game.physics.arcade.collide(bullets, ouch_layer);
+    
+    if (game.physics.arcade.collide(player, ouch_layer))
+    	console.log("Player took damage");
     game.physics.arcade.collide(monster_mj, layer);
     
-    var animation = player.animations.getAnimation('shooting');
+    bullets.forEachExists(checkBulletCollisions, this);
+    monster_mj.animations.play('dance', 1); 
     
-    if (fire_delay === 20 || fire_delay === 0)
+    handleInput();
+}
+
+function handleInput(){
+	if (fire_delay === 20 || fire_delay === 0)
     	fire_delay = 0;
     else
     	fire_delay++;
-    
-	monster_mj.animations.play('dance', 1); 
     
 	if (jumpKey.isDown && jumping === false)
     {
     	jumping = true;
     	
-        player.body.velocity.y = -250;
+        player.body.velocity.y = -300;
         player.body.velocity.x = velocity;
     }
 	if (player.body.onFloor()){
@@ -211,23 +214,25 @@ function update() {
     	}
 
 	}
-	
-	function createBullet() {
-	    if (facing_right === false){
-	    	var bullet = bullets.getFirstExists(false);
-    		bullet.reset(player.x - 20, player.y + 15);
-    		bullet.body.velocity.x = -500;
-    		bullet.scale.x = -1;
-	   
-        	bullet.body.bounce.x = 1.2;
-    	}else {
-    		var bullet = bullets.getFirstExists(false);
-    		bullet.reset(player.x + 20, player.y + 15);
-    		bullet.body.velocity.x = 500;
-        	bullet.body.bounce.x = 1.2;
-    	}
-	}
-	
-	
-
 }
+
+function checkBulletCollisions(sprite) {
+	if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
+		sprite.kill();
+}
+
+function createBullet() {
+    if (facing_right === false){
+    	var bullet = bullets.getFirstExists(false);
+		bullet.reset(player.x - 20, player.y + 15);
+		bullet.body.velocity.x = -500;
+		bullet.scale.x = -1;
+	}else {
+		var bullet = bullets.getFirstExists(false);
+		bullet.reset(player.x + 20, player.y + 15);
+		bullet.body.velocity.x = 500;
+		bullet.scale.x = 1;
+	}
+}
+
+

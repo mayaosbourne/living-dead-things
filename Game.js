@@ -107,9 +107,9 @@ function create() {
     
     player = game.add.sprite(100, 650, 'player');
     player.animations.add('run left', [0, 1, 2, 3, 4, 5], 10, true);
-    player.animations.add('run right', [6, 7, 8, 9, 10, 11], 10, true);
-    player.animations.add('idle right', [12, 13, 14, 15, 16, 17], 10, true);
-    player.animations.add('shoot right', [18, 19, 20, 21], 5, true);
+    player.animations.add('running', [6, 7, 8, 9, 10, 11], 10, true);
+    player.animations.add('idle', [12, 13, 14, 15, 16, 17], 10, true);
+    player.animations.add('shooting', [18, 19, 20, 21], 5, true);
     player.animations.add('shoot left', [22, 23, 24, 25], 10, true);
     player.animations.add('idle left', [26, 27, 28, 29, 30, 31], 10, true);
     
@@ -126,6 +126,10 @@ function create() {
     player.body.bounce.y = 0;
     player.body.gravity.y = 500;
     
+    bullets = game.add.group();
+	bullets.enableBody = true;
+	bullets.physicsBodyType = Phaser.Physics.ARCADE;
+	bullets.createMultiple(30, 'bullet', 0, false);
 	
     game.camera.follow(player);
     
@@ -137,13 +141,21 @@ function create() {
 }
 
 var facing_right = true;
+var fire_delay = 0;
 
 function update() {
     game.physics.arcade.collide(player, layer);
     game.physics.arcade.collide(player, ouch_layer);
-    game.physics.arcade.collide(bullet, layer);
-    game.physics.arcade.collide(bullet, ouch_layer);
+    game.physics.arcade.collide(bullets, layer);
+    game.physics.arcade.collide(bullets, ouch_layer);
     game.physics.arcade.collide(monster_mj, layer);
+    
+    var animation = player.animations.getAnimation('shooting');
+    
+    if (fire_delay === 20 || fire_delay === 0)
+    	fire_delay = 0;
+    else
+    	fire_delay++;
     
 	monster_mj.animations.play('dance', 1); 
     
@@ -165,7 +177,7 @@ function update() {
 		player.scale.x = -1;
     	player.anchor.setTo(0.2, 0);
 		player.body.velocity.x = -250;
-    	player.animations.play('run right', 10);
+    	player.animations.play('running', 10);
         velocity = player.body.velocity.x;
     }
     else if (rightKey.isDown && jumping === false)
@@ -174,55 +186,46 @@ function update() {
     	player.scale.x = 1;
     	player.anchor.setTo(0, 0);
     	player.body.velocity.x = 250;
-    	player.animations.play('run right', 10);
+    	player.animations.play('running', 10);
     	velocity = player.body.velocity.x;
     }
-    else if (fireKey.isDown) {
-    	
-    	createBullet();
+    else if (jumping === false && fire_delay === 0) {
     	if (facing_right) {
-    		player.animations.play('shoot right', 15);
+    		player.animations.play('idle', 10);
     	} else {
-    		player.animations.play('shoot right', 15);
-    	}
-
-	}
-    else if (jumping === false) {
-    	if (facing_right) {
-    		player.animations.play('idle right', 10);
-    	} else {
-    		player.animations.play('idle right', 10);
+    		player.animations.play('idle', 10);
     	}
     	
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
     }
+	if (fireKey.isDown) {
+    	if (fire_delay === 0){
+    		createBullet();
+    		fire_delay++;
+    	}
+    	if (facing_right) {
+    		player.animations.play('shooting', 15, false);
+    	} else {
+    		player.animations.play('shooting', 15, false);
+    	}
+
+	}
 	
 	function createBullet() {
 	    if (facing_right === false){
-    		bullet = game.add.sprite(player.body.x - 28, player.body.y + 15, 'bullet');
+	    	var bullet = bullets.getFirstExists(false);
+    		bullet.reset(player.x - 20, player.y + 15);
+    		bullet.body.velocity.x = -500;
     		bullet.scale.x = -1;
-        	game.physics.enable(bullet);
-        	bullet.body.bounce.y = 1;
-        	bullet.body.velocity.x = -600;
+	   
+        	bullet.body.bounce.x = 1.2;
     	}else {
-    		bullet = game.add.sprite(player.body.x + 28, player.body.y + 15, 'bullet');
-        	game.physics.enable(bullet);
-        	bullet.body.bounce.y = 1;
-        	bullet.body.velocity.x = 600;
+    		var bullet = bullets.getFirstExists(false);
+    		bullet.reset(player.x + 20, player.y + 15);
+    		bullet.body.velocity.x = 500;
+        	bullet.body.bounce.x = 1.2;
     	}
-    	
-//	    // Get new instance from the bullet group via recycle
-//	    var bullet = game.add.sprite; 
-//	    // reset exists flag if it went off stage of collided with a zombie
-//	    bullet.exists = true;
-//	    // offset so it looks like the bullet comes out of the gun and isn't spawned inside of the player
-//	    bullet.x = player.x + (player.flipped ? 0 : player.width); 
-//	    bullet.y = player.y + 25;
-//	    bullet.flipped = player.flipped;
-//	    bullet.velocity.x = bullet.flipped ? -600 : 600;
-//	    bullet.loadGraphic("entities");
-//	    bullet.animations.frameName = "bullet-gun.png";
 	}
 	
 	

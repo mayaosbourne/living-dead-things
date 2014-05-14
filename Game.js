@@ -15,12 +15,19 @@ function preload() {
 	
 	//Load the tilemap file
     game.load.tilemap('map', 'level_2.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map_2', 'level_2.json', null, Phaser.Tilemap.TILED_JSON);
 	//Load the spritesheet for the tilemap
-    game.load.image('tile_04', 'assets/tilesets/tile_01.png');
-    game.load.image('stars', 'assets/tilesets/stars.png');
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
+    game.load.image('stars', 'assets/tilesets/stars.png');
+    game.load.image('cemetary', 'assets/tilesets/cemetary.png');
+    game.load.image('tile_01', 'assets/tilesets/tile_01.png');
+    game.load.image('tile_04', 'assets/tilesets/tile_04.png');
+    game.load.image('tile_05', 'assets/tilesets/tile_05.png');
+    game.load.image('tile_06', 'assets/tilesets/tile_06.png');
     game.load.image('tile_07', 'assets/tilesets/tile_07.png');
+    game.load.image('tile_08', 'assets/tilesets/tile_08.png');
 	game.load.image('hud', 'assets/hud.png');
     
 }
@@ -50,15 +57,29 @@ function create() {
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
-	map = game.add.tilemap('map');
+	map = game.add.tilemap('map_1');
+	//map = game.add.tilemap('map_2');
 
 	//'main' is the name of the spritesheet inside of Tiled Map Editor
 	
-    map.addTilesetImage('tile_04');
-    map.addTilesetImage('stars');
-    map.addTilesetImage('up_cave');
+	
+	map.addTilesetImage('stars');
+	
+	// Level 1 tile sets
+	map.addTilesetImage('up_cave');
     map.addTilesetImage('down_cave');
+    map.addTilesetImage('tile_04');
     map.addTilesetImage('tile_07');
+	
+	/*
+	This is the level 2 tile set list
+	map.addTilesetImage('cemetary');
+    map.addTilesetImage('tile_01');
+    map.addTilesetImage('tile_05');
+    map.addTilesetImage('tile_06');
+    map.addTilesetImage('tile_07');
+    map.addTilesetImage('tile_08');
+    /*/
     
 	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
     bg_layer = map.createLayer('BG Layer');
@@ -69,7 +90,13 @@ function create() {
     layer.resizeWorld();
     layer.enableBody = true;
 
-    map.setCollisionBetween(70, 97, true, 'Platform Layer');
+    /*
+     * Level two collision checks. 
+     * 
+     * map.setCollisionBetween(0, 1197, true, 'Platform Layer');
+     * map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+     */
+    map.setCollisionBetween(0, 1197, true, 'Platform Layer');
     map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
     
     //  The platforms group contains the ground and the 2 ledges we can jump on

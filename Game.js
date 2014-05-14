@@ -58,7 +58,7 @@ function create() {
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 
 	map = game.add.tilemap('map_1');
-	//map = game.add.tilemap('map_2');
+	map = game.add.tilemap('map_2');
 
 	//'main' is the name of the spritesheet inside of Tiled Map Editor
 	

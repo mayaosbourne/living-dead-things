@@ -67,19 +67,19 @@ function create() {
 	
 	// Level 1 tile sets
 	map.addTilesetImage('up_cave');
-    map.addTilesetImage('down_cave');
-    map.addTilesetImage('tile_04');
+	map.addTilesetImage('down_cave');
+	map.addTilesetImage('tile_04');
     map.addTilesetImage('tile_07');
 	
-	/*
-	This is the level 2 tile set list
-	map.addTilesetImage('cemetary');
-    map.addTilesetImage('tile_01');
-    map.addTilesetImage('tile_05');
-    map.addTilesetImage('tile_06');
-    map.addTilesetImage('tile_07');
-    map.addTilesetImage('tile_08');
-    /*/
+	
+	//This is the level 2 tile set list
+//	map.addTilesetImage('cemetary');
+//    map.addTilesetImage('tile_01');
+//    map.addTilesetImage('tile_05');
+//    map.addTilesetImage('tile_06');
+//    map.addTilesetImage('tile_07');
+//    map.addTilesetImage('tile_08');
+    
     
 	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
     bg_layer = map.createLayer('BG Layer');
@@ -90,14 +90,12 @@ function create() {
     layer.resizeWorld();
     layer.enableBody = true;
 
-    /*
-     * Level two collision checks. 
-     * 
-     * map.setCollisionBetween(0, 1197, true, 'Platform Layer');
-     * map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
-     */
+//    map.setCollisionBetween(0, 1197, true, 'Platform Layer');
+//    map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+     
     map.setCollisionBetween(0, 1197, true, 'Platform Layer');
-    map.setCollisionBetween(1, 1662, true, 'Ouch Layer');
+    map.setCollisionBetween(1, 1098, true, 'Ouch Layer');
+    map.setCollisionBetween(1101, 1665, true, 'Ouch Layer');
     
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
@@ -166,7 +164,7 @@ function handleInput(){
     {
     	jumping = true;
     	
-        player.body.velocity.y = -300;
+        player.body.velocity.y = -250;
         player.body.velocity.x = velocity;
     }
 	if (player.body.onFloor()){

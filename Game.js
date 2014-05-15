@@ -172,6 +172,9 @@ function update() {
     handleInput();
 }
 
+var running = false;
+var firing = false;
+
 function handleInput(){
 	if (fire_delay === 20 || fire_delay === 0)
     	fire_delay = 0;
@@ -190,46 +193,98 @@ function handleInput(){
     }else{
     	player.body.velocity.x = velocity;
     }
-	if (leftKey.isDown && jumping === false)
+	
+	if(fireKey.isDown)
+		firing = true;
+	else 
+		firing = false; 
+	if(leftKey.isDown || rightKey.isDown){
+		if (leftKey.isDown){
+			running = true;
+			facing_right = false;
+		}else{
+			running = true;
+	    	facing_right = true;
+		}	
+	}else 
+		running = false;
+	
+	if (running && firing && !jumping){
+		if (fire_delay === 0){
+	    	createBullet();
+	    	fire_delay++;
+	    }
+		if (facing_right){
+			player.scale.x = 1;
+			player.animations.play('run shoot', 10);
+			player.anchor.setTo(0.2, 0);
+			player.body.velocity.x = 250;
+			velocity = player.body.velocity.x;
+		}
+		else {
+			player.scale.x = -1;
+			player.animations.play('run shoot', 10);
+			player.anchor.setTo(0.2, 0);
+			player.body.velocity.x = -250;
+			velocity = player.body.velocity.x;
+		}	
+	}
+	else if (running && !jumping && !firing)
     {
-		facing_right = false;
-		player.scale.x = -1;
-    	player.anchor.setTo(0.2, 0);
-		player.body.velocity.x = -250;
-    	player.animations.play('running', 10);
-        velocity = player.body.velocity.x;
+		firing = false;
+		if (!facing_right){
+			player.scale.x = -1;
+	    	player.anchor.setTo(0.2, 0);
+			player.body.velocity.x = -250;
+	    	player.animations.play('running', 10);
+	        velocity = player.body.velocity.x;
+		}else{
+	    	player.scale.x = 1;
+	    	player.anchor.setTo(0, 0);
+	    	player.body.velocity.x = 250;
+	    	player.animations.play('running', 10);
+	    	velocity = player.body.velocity.x;	
+		}	
     }
-    else if (rightKey.isDown && jumping === false)
-    {
-    	facing_right = true;
-    	player.scale.x = 1;
-    	player.anchor.setTo(0, 0);
-    	player.body.velocity.x = 250;
-    	player.animations.play('running', 10);
-    	velocity = player.body.velocity.x;
-    }
-    else if (jumping === false && fire_delay === 0) {
-    	if (facing_right) {
-    		player.animations.play('idle', 10);
-    	} else {
-    		player.animations.play('idle', 10);
-    	}
-    	
-    	player.body.velocity.x = 0;
-    	velocity = player.body.velocity.x;
-    }
-	if (fireKey.isDown) {
+	else if (firing && jumping) {
     	if (fire_delay === 0){
     		createBullet();
     		fire_delay++;
     	}
     	if (facing_right) {
+    		player.scale.x = 1;
     		player.animations.play('shooting', 15, false);
     	} else {
+    		player.scale.x = -1;
     		player.animations.play('shooting', 15, false);
     	}
-
 	}
+    else if (firing && !running) {
+    	if (fire_delay === 0){
+    		createBullet();
+    		fire_delay++;
+    	}
+    	if (facing_right) {
+    		player.scale.x = 1;
+    		player.animations.play('shooting', 15, false);
+    	} else {
+    		player.scale.x = -1;
+    		player.animations.play('shooting', 15, false);
+    	}
+    	player.body.velocity.x = 0;
+    	velocity = player.body.velocity.x;
+	}
+    else if (!jumping && fire_delay === 0 && !running) {
+    	firing = false;
+    	if (facing_right) {
+    		player.animations.play('idle', 10);
+    	} else {
+    		player.animations.play('idle', 10);
+    	}
+    	player.body.velocity.x = 0;
+    	velocity = player.body.velocity.x;
+    }
+	
 }
 
 function checkBulletCollisions(sprite) {

@@ -367,6 +367,7 @@ function checkBulletCollisions(sprite) {
 		sprite.kill();
 	if (game.physics.arcade.collide(sprite, monster_mj)){
 		monster_mj.health--;
+		monster_mj.body.velocity.x = 0;
 		sprite.kill();
 	}
 }

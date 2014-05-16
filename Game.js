@@ -34,6 +34,9 @@ function preload() {
 
 var hud;
 var player;
+var monsters;
+var monster_index = 0;
+var weapon = 0;
 var bullet;
 var fire;
 var jumping;
@@ -45,13 +48,13 @@ var downKey;
 var fireKey;
 
 function create() {
-    //  We're going to be using physics, so enable the Arcade Physics system
+    // Enable physics for the game
     game.physics.startSystem(Phaser.Physics.P2JS);
  
 	jumping = false;
     game.stage.backgroundColor = '#736357';
 
-    //  In this example we'll create 4 specific keys (up, down, left, right) and monitor them in our update function
+    // Add input keys
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -96,9 +99,6 @@ function create() {
         map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
     }
     
-     
-    
-    
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
  
@@ -126,7 +126,7 @@ function create() {
     player.body.collideWorldBounds = true;
     player.body.bounce.y = 0;
     player.body.gravity.y = 500;
-    player.health = 600;
+    player.health = 6;
     
     bullets = game.add.group();
 	bullets.enableBody = true;
@@ -139,29 +139,50 @@ function create() {
     
 
 	monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
-	monster_mj.health = 3;
+	monster_mj.health = 8;
 
     game.physics.enable(monster_mj);
     monster_mj.body.gravity.y = 500;
+    
+    monsters = new Array(10);
+    monsters[monster_index] = monster_mj;
+    monster_index++;
+    
 }
 
 var facing_right = true;
 var fire_delay = 0;
-var ouch_damage = 0;
+var ouch_timer = 0;
 
 function update() {
+	monster_mj.body.velocity.x = 0;
+	if (ouch_timer === 60 || ouch_timer === 0){
+		ouch_timer = 0;
+	}
+    else
+    	ouch_timer++;
+	
     game.physics.arcade.collide(player, layer);
     if (game.physics.arcade.collide(player, ouch_layer)){
-    	ouch_damage++;
-    	if(ouch_damage % 50 === 0){
-    		player.health = player.health - 50;
+    	if (ouch_timer === 0){
     		console.log(player.health);
+    		player.health--;
+    		ouch_timer++;
+    	}	
+    }
+    var i = 0;
+    while (i < monster_index){
+    	if (game.physics.arcade.collide(monsters[i], player)){
+    		if (ouch_timer === 0){
+        		console.log(player.health);
+        		player.health--;
+        		ouch_timer++;
+        	}		
     	}
+    	i++;
     }
-    if (player.health === 0){
-    	console.log("Player died");
-    	player.kill();
-    }
+    
+    handleHealth();
     if (monster_mj.health === 0)
     	monster_mj.kill();
     game.physics.arcade.collide(monster_mj, layer);
@@ -174,6 +195,26 @@ function update() {
 
 var running = false;
 var firing = false;
+
+function handleHealth(){
+	 if(player.health === 6){
+		 
+	 }else if(player.health === 5){
+		 
+	 }else if(player.health === 4){
+		 
+	 }else if(player.health === 3){
+		 
+	 }else if(player.health === 2){
+		 
+	 }else if(player.health === 1){
+		 
+	 }else if (player.health === 0){
+		console.log("Player died");
+		player.destroy();
+		fire_delay = 21;
+	 } 
+}
 
 function handleInput(){
 	if (fire_delay === 20 || fire_delay === 0)

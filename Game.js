@@ -13,6 +13,8 @@ function preload() {
     //game.load.image('stand', 'assets/player/standing.png');
     //game.load.spritesheet('player', 'assets/player/marco_sheet.png', 47, 40);
 	
+	game.load.image('item_box', 'assets/item_box.png');
+	
 	//Load the tilemap file
     game.load.tilemap('map', 'level_2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -32,6 +34,10 @@ function preload() {
     
 }
 
+var GUN = 1;
+var GRENADES = 2;
+
+var item;
 var hud;
 var player;
 var monsters;
@@ -127,13 +133,16 @@ function create() {
     player.body.bounce.y = 0;
     player.body.gravity.y = 500;
     player.health = 6;
+    game.camera.follow(player);
+    weapon = GUN;
     
     bullets = game.add.group();
 	bullets.enableBody = true;
 	bullets.physicsBodyType = Phaser.Physics.ARCADE;
 	bullets.createMultiple(100, 'bullet', 0, false);
 	
-    game.camera.follow(player);
+    item = game.add.sprite(2404, 514, 'item_box');
+    game.physics.enable(item);
     
     monster_mj = game.add.sprite(3590, 720, 'monsters');
     
@@ -153,9 +162,17 @@ function create() {
 var facing_right = true;
 var fire_delay = 0;
 var ouch_timer = 0;
+var text_timeout;
+var t;
 
 function update() {
+	//console.log(player.y);
 	monster_mj.body.velocity.x = 0;
+	if (text_timeout === 80){
+		t.destroy();
+	}
+    else
+    	text_timeout++;
 	if (ouch_timer === 60 || ouch_timer === 0){
 		ouch_timer = 0;
 	}
@@ -181,6 +198,15 @@ function update() {
     	}
     	i++;
     }
+    if (game.physics.arcade.collide(item, player)){
+    	weapon = GRENADES;
+    	item.destroy();
+    	var text = "Grenades acquired";
+    	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+    	t = game.add.text(player.x - 100, player.y - 100, text, style);
+    	text_timeout = 0;
+    }
+    
     
     handleHealth();
     if (monster_mj.health === 0)
@@ -212,15 +238,23 @@ function handleHealth(){
 	 }else if (player.health === 0){
 		console.log("Player died");
 		player.destroy();
-		fire_delay = 21;
+		fire_delay = 100;
 	 } 
 }
 
 function handleInput(){
-	if (fire_delay === 20 || fire_delay === 0)
-    	fire_delay = 0;
-    else
-    	fire_delay++;
+	
+	if (weapon === GUN){
+		if (fire_delay === 20 || fire_delay === 0)
+	    	fire_delay = 0;
+	    else
+	    	fire_delay++;
+	}else if (weapon === GRENADES){
+		if (fire_delay === 60 || fire_delay === 0)
+	    	fire_delay = 0;
+	    else
+	    	fire_delay++;
+	}
     
 	if (jumpKey.isDown && jumping === false)
     {

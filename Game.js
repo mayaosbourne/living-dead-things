@@ -35,9 +35,7 @@ function preload() {
 	game.load.image('hud', 'assets/hud2.png');
 	game.load.image('lantern', 'assets/lantern6.png');
 	game.load.image('lantern overlay', 'assets/lantern_overlay2.png');
-	
-	game.load.spritesheet('rain', 'assets/rain.png', 17, 17);
-	
+
 	game.load.audio('music', 'assets/sound/bg_music.mp3');
 	game.load.audio('single shot', 'assets/sound/single_shot.mp3');
 

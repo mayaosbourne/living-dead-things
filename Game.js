@@ -38,6 +38,7 @@ function preload() {
 
 	game.load.audio('music', 'assets/sound/bg_music.mp3');
 	game.load.audio('single shot', 'assets/sound/single_shot.mp3');
+	game.load.audio('explosion', 'assets/sound/explosion.mp3');
 
 }
 
@@ -64,6 +65,7 @@ var fireKey;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
+	explosion = game.add.audio('explosion');
 	music = game.add.audio('music');
 	music.play('', 0, 1, true);
     // Enable physics for the game
@@ -515,6 +517,8 @@ function handleInput(){
 function checkGrenadeCollisions(sprite){
 	if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer)){
 		sprite.animations.play('explosion', 20, false);
+		explosion.volume = 0.1;
+		explosion.play();
 		sprite.body.velocity.x = 0;
 	}
 	
@@ -531,6 +535,7 @@ function checkBulletCollisions(sprite) {
 }
 
 function createGrenade(){
+	
 	if (facing_right){
 		var grenade = grenades.getFirstExists(false);
 		grenade.animations.add('grenade', [34], 10, true);

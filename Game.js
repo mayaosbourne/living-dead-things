@@ -20,6 +20,7 @@ function preload() {
     game.load.tilemap('map', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_1', 'level_14.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
+    
 	//Load the spritesheet for the tilemap
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
@@ -127,7 +128,7 @@ function create() {
     //  We will enable physics for any object that is created in this group
     platforms.enableBody = true;
     
-    player = game.add.sprite(3000, 100, 'player');
+    player = game.add.sprite(600, 100, 'player');
     //player = game.add.sprite(600, 600, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
@@ -196,8 +197,8 @@ function create() {
     game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
-    //lantern_overlay.fixedToCamera = true;
-    //lantern.fixedToCamera = true;
+    lantern_overlay.fixedToCamera = true;
+    lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;

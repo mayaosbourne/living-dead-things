@@ -43,6 +43,7 @@ function preload() {
 
 var GUN = 1;
 var GRENADES = 2;
+var points = 0;
 
 var grenades;
 var item;
@@ -76,9 +77,11 @@ function create() {
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    yesKey = game.input.keyboard.addKey(Phaser.Keyboard.Y);
+    noKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
 
     
-    var level = 2;
+    var level = 1;
     
     if (level === 1){
     	map = game.add.tilemap('map_1');
@@ -126,28 +129,7 @@ function create() {
     //  We will enable physics for any object that is created in this group
     platforms.enableBody = true;
     
-    player = game.add.sprite(600, 100, 'player');
-    //player = game.add.sprite(600, 600, 'player');
-    player.animations.add('shooting', [0, 1, 2, 3], 5, true);
-    player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
-    player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
-    //grenade animations
-    player.animations.add('jump grenade', [60, 61, 62, 63, 64, 65, 66, 67, 68, 69], 10, true);
-    player.animations.add('idle grenade', [28, 29, 30, 31, 32, 33], 10, true);
-    player.animations.add('run grenade', [47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 10, true);
-    
-    //new animations - to be tested
-    player.animations.add('run shoot', [16, 17, 18, 19, 20, 21, 22, 23], 10, true);
-    player.animations.add('bullet', [24], 10, true);
-    player.animations.add('health', [25, 26, 27], 10, true);
-    //player.animations.add('grenade', [34], 10, true);
-    player.animations.add('jump shoot', [35, 36, 37, 38, 39, 40, 41, 42], 10, true);
-    player.animations.add('jump', [43, 44, 45, 46], 10, true);
-    
-   
-    player.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
-    player.animations.add('radio', [92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113], 10, true);
-    
+    initPlayer();
 
     game.physics.enable(player);
     
@@ -189,14 +171,14 @@ function create() {
     lantern = game.add.sprite(0, 0, 'lantern');
     lantern.alpha = 0.86;
     
-    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-    lantern_overlay.alpha = 0.8;
+    //lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+    //lantern_overlay.alpha = 0.8;
     
-    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+    //game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
-    lantern_overlay.fixedToCamera = true;
-    lantern.fixedToCamera = true;
+    //lantern_overlay.fixedToCamera = true;
+    //lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;
@@ -213,6 +195,13 @@ function create() {
     health3.animations.add('full', [25]);
     health3.animations.add('half', [26]);
     health3.animations.add('empty', [27]);
+    
+    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+    var text = game.add.text(player.x, player.y, "the stupid score needs to follow the camera", style);
+
+    text.anchor.set(0.5);
+    text.fixedToCamera = true;
+
 }
 
 var facing_right = true;
@@ -223,8 +212,9 @@ var text_timeout;
 var t;
 
 function update() {
-	//console.log(player.y);
-	//console.log(player.x);
+
+	handleXP();
+	
 	grenades.forEachExists(checkGrenadeCollisions, this);
 
 	monster_mj.body.velocity.x = 0;
@@ -264,7 +254,7 @@ function update() {
     	var text = "Grenades acquired";
     	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
     	t = game.add.text(player.x - 100, player.y - 100, text, style);
-    	text_timeout = 0;
+    	//text_timeout = 0;
     }
     
     
@@ -279,8 +269,40 @@ function update() {
     handleInput();
 }
 
+
+function handleXP() {
+	//score.setText(points + " XP");
+}
+
+function initPlayer() {
+	
+    player = game.add.sprite(2500, 100, 'player');
+    //player = game.add.sprite(600, 600, 'player');
+    player.animations.add('shooting', [0, 1, 2, 3], 5, true);
+    player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
+    player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
+    //grenade animations
+    player.animations.add('jump grenade', [60, 61, 62, 63, 64, 65, 66, 67, 68, 69], 10, true);
+    player.animations.add('idle grenade', [28, 29, 30, 31, 32, 33], 10, true);
+    player.animations.add('run grenade', [47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59], 10, true);
+    
+    //new animations - to be tested
+    player.animations.add('run shoot', [16, 17, 18, 19, 20, 21, 22, 23], 10, true);
+    player.animations.add('bullet', [24], 10, true);
+    player.animations.add('health', [25, 26, 27], 10, true);
+    //player.animations.add('grenade', [34], 10, true);
+    player.animations.add('jump shoot', [35, 36, 37, 38, 39, 40, 41, 42], 10, true);
+    player.animations.add('jump', [43, 44, 45, 46], 10, true);
+    
+   
+    player.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
+    player.animations.add('radio', [92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113], 10, true);
+    
+}
+
 var running = false;
 var firing = false;
+
 
 function handleHealth(){
 	 if(player.health === 6){
@@ -288,32 +310,30 @@ function handleHealth(){
 		 health2.animations.play('full', 1);
 		 health3.animations.play('full', 1);
 	 }else if(player.health === 5){
-		 health1.animations.play('full', 1);
-		 health2.animations.play('full', 1);
 		 health3.animations.play('half', 1);
 	 }else if(player.health === 4){
-		 health1.animations.play('full', 1);
-		 health2.animations.play('full', 1);
 		 health3.animations.play('empty', 1);
 	 }else if(player.health === 3){
-		 health1.animations.play('full', 1);
 		 health2.animations.play('half', 1);
-		 health3.animations.play('empty', 1);
 	 }else if(player.health === 2){
-		 health1.animations.play('full', 1);
 		 health2.animations.play('empty', 1);
-		 health3.animations.play('empty', 1);
 	 }else if(player.health === 1){
 		 health1.animations.play('half', 1);
-		 health2.animations.play('empty', 1);
-		 health3.animations.play('empty', 1);
 	 }else if (player.health === 0){
 		 health1.animations.play('empty', 1);
-		 health2.animations.play('empty', 1);
-		 health3.animations.play('empty', 1);
 		console.log("Player died");
 		player.destroy();
 		fire_delay = 100;
+    	var death = "You Died!\n" +
+    			"Restart? (Type Y or N)";
+    	var style = { font: "65px Arial", fill: "#FF0000", align: "center" };
+    	t = game.add.text(player.x - 250, player.y - 100, death, style);
+    	text_timeout = 0;
+    	if (yesKey.isDown) {
+    		//do something
+    	} else if (noKey.isDown) {
+    		//do nothing
+    	}
 	 } 
 }
 
@@ -516,23 +536,27 @@ function createGrenade(){
 		grenade.animations.add('grenade', [34], 10, true);
 		var explode = grenade.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
 		explode.killOnComplete = true;
+		grenade.anchor.setTo(1,1);
 		grenade.reset(player.x + 20, player.y);
 		grenade.body.velocity.x = 400;
 		grenade.body.velocity.y = -250;
 		grenade.body.gravity.y = 500;
 		grenade.animations.play('grenade', 10, true);
-		grenade.scale.x = 3;
+		grenade.scale.x = 1;
+		grenade.scale.y = 1;
 	}else{
 		var grenade = grenades.getFirstExists(false);
 		grenade.animations.add('grenade', [34], 10, true);
 		var explode = grenade.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
 		explode.killOnComplete = true;
+		grenade.anchor.setTo(1,1);
 		grenade.reset(player.x - 10, player.y);
 		grenade.body.velocity.x = -400;
 		grenade.body.velocity.y = -250;
 		grenade.body.gravity.y = 500;
 		grenade.animations.play('grenade', 10, true);
-		grenade.scale.x = -3;
+		grenade.scale.x = -1;
+		grenade.scale.y = 1;
 	}
 	
 }

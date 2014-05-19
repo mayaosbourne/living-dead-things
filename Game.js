@@ -219,10 +219,10 @@ function create() {
     health3.animations.add('half', [26]);
     health3.animations.add('empty', [27]);
     
-    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
-    var text = game.add.text(player.x, player.y, "the stupid score needs to follow the camera", style);
+    var style = { font: "bold 12px Arial", fill: "#ff0044", align: "right"};
+    var text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
 
-    text.anchor.set(0.5);
+    text.anchor.set(1,0);
     text.fixedToCamera = true;
 
 }

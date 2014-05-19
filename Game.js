@@ -8,6 +8,8 @@ function preload() {
 	//game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
 	game.load.atlasXML ('monsters', 'assets/monsters/mj_dance.png', 'assets/monsters/mj_monster.xml');
 	game.load.image('bullet', 'assets/player/bullet.png');
+	game.load.atlasXML('level1boss', 'assets/monsters/level1boss.png', 'assets/monsters/level1boss.xml');
+	game.load.atlasXML('fireball', 'assets/monsters/fireball.png', 'assets/monsters/fireball.xml');
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
     //game.load.image('stand', 'assets/player/standing.png');
@@ -62,6 +64,10 @@ var platforms;
 var upKey;
 var downKey;
 var fireKey;
+
+var level1boss;
+var fireball;
+var fb_explosion;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -154,7 +160,11 @@ function create() {
 	grenades.physicsBodyType = Phaser.Physics.ARCADE;
 	grenades.createMultiple(100, 'player', 0, false);
 
-   
+
+	fireballs = game.add.group();
+	fireballs.enableBody = true;
+	fireballs.physicsBodyType = Phaser.Physics.ARCADE;
+	fireballs.createMultiple(100, 'fireball', 2, false);
     
     monster_mj = game.add.sprite(3590, 720, 'monsters');
     
@@ -169,6 +179,17 @@ function create() {
     monsters[monster_index] = monster_mj;
     monster_index++;
     
+
+    if (level === 1) {
+        level1boss = game.add.sprite(2850, 100, 'level1boss');
+        level1boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
+        game.physics.enable(level1boss);
+
+        //  Player physics properties.
+        level1boss.body.collideWorldBounds = true;
+        level1boss.body.bounce.y = 0;
+        level1boss.body.gravity.y = 500;
+    }
 
     lantern = game.add.sprite(0, 0, 'lantern');
     lantern.alpha = 0.86;
@@ -198,10 +219,10 @@ function create() {
     health3.animations.add('half', [26]);
     health3.animations.add('empty', [27]);
     
-    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
-    var text = game.add.text(player.x, player.y, "the stupid score needs to follow the camera", style);
+    var style = { font: "bold 12px Arial", fill: "#ff0044", align: "right"};
+    var text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
 
-    text.anchor.set(0.5);
+    text.anchor.set(1,0);
     text.fixedToCamera = true;
 
 }
@@ -213,8 +234,12 @@ var ouch_timer = 0;
 var text_timeout;
 var t;
 
-function update() {
+var fireball_delay = 0;
 
+function update() {
+    if (!(player.health === 0)) {
+        level1boss.animations.play('move', 5);
+    }
 	handleXP();
 	
 	grenades.forEachExists(checkGrenadeCollisions, this);
@@ -264,10 +289,10 @@ function update() {
     if (monster_mj.health === 0)
     	monster_mj.kill();
     game.physics.arcade.collide(monster_mj, layer);
-    
+    game.physics.arcade.collide(level1boss, layer);
     bullets.forEachExists(checkBulletCollisions, this);
     monster_mj.animations.play('dance', 1); 
-    
+    fireballs.forEachExists(checkFireballCollisions, this);
     handleInput();
 }
 
@@ -342,6 +367,22 @@ function handleHealth(){
 
 function handleInput(){
 	
+    
+    if (fireball_delay === 90 || fireball_delay === 0)
+        fireball_delay = 0;
+    else
+        fireball_delay++;
+
+    if (fireball_delay === 0 && !(player.health === 0)) {
+        createFireBall();
+        fireball_delay++;
+    }
+    if (player.x < level1boss.x) {
+        level1boss.scale.x = 1;
+    } else
+        level1boss.scale.x = -1;
+
+
 	if (weapon === GUN){
 		if (fire_delay === 20 || fire_delay === 0)
 	    	fire_delay = 0;
@@ -536,7 +577,16 @@ function checkBulletCollisions(sprite) {
 		sprite.kill();
 	}
 }
-
+function checkFireballCollisions(sprite) 
+{
+    if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
+        sprite.kill();
+    if (game.physics.arcade.collide(sprite, player)) {
+        player.health--;
+        player.body.velocity.x = 0;
+        sprite.kill();
+    }
+}
 function createGrenade(){
 	
 	if (facing_right){
@@ -584,5 +634,19 @@ function createBullet() {
 		bullet.scale.x = 1;
 	}
 }
+function createFireBall() {
+    if (player.x < level1boss.x) {
+        var fireball = fireballs.getFirstExists(false);
+        fireball.reset(level1boss.x - 20, level1boss.y + 15);
+        fireball.body.velocity.x = -300;
+        fireball.scale.x = -1;
+    } else {
+        var fireball = fireballs.getFirstExists(false);
+        fireball.reset(level1boss.x + 20, level1boss.y + 15);
+        fireball.body.velocity.x = 300;
+        fireball.scale.x = 1;
+    }
+}
+
 
 

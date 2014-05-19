@@ -1,0 +1,10 @@
+<TextureAtlas imagePath="level1boss.png">
+<SubTexture name="move-1-00.png" x="0" y="0" width="64" height="62"/>
+<SubTexture name="move-1-01.png" x="71" y="0" width="62" height="62"/>
+<SubTexture name="move-1-02.png" x="143" y="0" width="61" height="62"/>      
+<SubTexture name="move-1-03.png" x="215" y="0" width="62" height="62"/>
+<SubTexture name="move-1-04.png" x="282" y="0" width="63" height="62"/>
+<SubTexture name="puff-1-05.png" x="352" y="0" width="21" height="62"/>
+<SubTexture name="puff-1-06.png" x="377" y="0" width="23" height="62"/>
+<SubTexture name="puff-1-07.png" x="405" y="0" width="15" height="62"/>
+</TextureAtlas>

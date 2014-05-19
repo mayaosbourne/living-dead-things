@@ -224,6 +224,7 @@ function create() {
 
     text.anchor.set(1,0);
     text.fixedToCamera = true;
+    
 
 }
 
@@ -235,6 +236,7 @@ var text_timeout;
 var t;
 
 var fireball_delay = 0;
+
 
 function update() {
     if (!(player.health === 0)) {
@@ -294,6 +296,15 @@ function update() {
     monster_mj.animations.play('dance', 1); 
     fireballs.forEachExists(checkFireballCollisions, this);
     handleInput();
+    
+    if (monster_mj.health === 0) {
+    	if (player.x >= 5088 && player.x <= 5120 && player.y === 630){
+        	var text = "You Won!";
+        	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+        	t = game.add.text(500, 250, text, style);
+        	t.fixedToCamera = true;
+    	}
+    }
 }
 
 
@@ -329,6 +340,7 @@ function initPlayer() {
 
 var running = false;
 var firing = false;
+var choice = false;
 
 
 function handleHealth(){
@@ -346,7 +358,7 @@ function handleHealth(){
 		 health2.animations.play('empty', 1);
 	 }else if(player.health === 1){
 		 health1.animations.play('half', 1);
-	 }else if (player.health === 0){
+	 }else if (player.health === 0 && !choice){
 		 health1.animations.play('empty', 1);
 		console.log("Player died");
 		player.destroy();
@@ -357,11 +369,23 @@ function handleHealth(){
     	t = game.add.text(player.x - 250, player.y - 100, death, style);
     	text_timeout = 0;
     	if (yesKey.isDown) {
-    		//do something
+    		t.destroy();
+    		music.stop();
+    		reset();
+    		create();
     	} else if (noKey.isDown) {
-    		//do nothing
+    		t.destroy();
+    		choice = true;
     	}
-	 } 
+	 } else if (player.health === 0 && choice){
+		 //So the Final message does not get overwritten
+    	var style = { font: "70px Arial", fill: "#FFFFFF", align: "center", shadowColor: "#000000", shadowOffsetX: 4, shadowOffsetY: 4};
+    	var thank = "Thank You For Playing!";
+    	t = game.add.text(500, 250, thank, style);
+    	t.anchor.set(.5, .5);
+    	t.fixedToCamera = true;
+    	
+	 }
 }
 
 
@@ -648,5 +672,18 @@ function createFireBall() {
     }
 }
 
+function reset() {
+	running = false;
+	firing = false;
+	choice = false;
+	fire_dealy = 0;
+	ouch_timer = 0;
+	facing_right = true;
+	weapon = 0;
+	monster_index = 0;
+	points = 0;
+	fireball_delay = 0;
+	fire_delay = 0;
+	velocity = 0;
 
-
+}

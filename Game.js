@@ -173,14 +173,14 @@ function create() {
     lantern = game.add.sprite(0, 0, 'lantern');
     lantern.alpha = 0.86;
     
-    //lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-    //lantern_overlay.alpha = 0.8;
+    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+    lantern_overlay.alpha = 0.8;
     
-    //game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
-    //lantern_overlay.fixedToCamera = true;
-    //lantern.fixedToCamera = true;
+    lantern_overlay.fixedToCamera = true;
+    lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;
@@ -517,9 +517,12 @@ function handleInput(){
 function checkGrenadeCollisions(sprite){
 	if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer)){
 		sprite.animations.play('explosion', 20, false);
-		explosion.volume = 0.1;
-		explosion.play();
 		sprite.body.velocity.x = 0;
+		if (sprite.health = 0){
+			explosion.volume = 2;
+			explosion.play();
+			justExploded = false;
+		}
 	}
 	
 }
@@ -549,6 +552,7 @@ function createGrenade(){
 		grenade.animations.play('grenade', 10, true);
 		grenade.scale.x = 1;
 		grenade.scale.y = 1;
+		justExploded = true;
 	}else{
 		var grenade = grenades.getFirstExists(false);
 		grenade.animations.add('grenade', [34], 10, true);
@@ -562,6 +566,7 @@ function createGrenade(){
 		grenade.animations.play('grenade', 10, true);
 		grenade.scale.x = -1;
 		grenade.scale.y = 1;
+		justExploded = true;
 	}
 	
 }

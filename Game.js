@@ -297,14 +297,14 @@ function update() {
     fireballs.forEachExists(checkFireballCollisions, this);
     handleInput();
     
-   // if (!monster_mj.exists()) {
+    if (monster_mj.health === 0) {
     	if (player.x >= 5088 && player.x <= 5120 && player.y === 630){
         	var text = "You Won!";
         	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
         	t = game.add.text(500, 250, text, style);
         	t.fixedToCamera = true;
     	}
-   // }
+    }
 }
 
 

@@ -16,11 +16,12 @@ function preload() {
     //game.load.spritesheet('player', 'assets/player/marco_sheet.png', 47, 40);
 	
 	game.load.image('item_box', 'assets/item_box2.png');
+	game.load.spritesheet('finish', 'assets/coin.png', 44, 40, 10);
 	game.load.image('grenade', 'assets/player/grenade.png');
 	
 	//Load the tilemap file
     game.load.tilemap('map', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.tilemap('map_1', 'level_14.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     
 	//Load the spritesheet for the tilemap
@@ -69,6 +70,10 @@ var fireKey;
 var level1boss;
 var fireball;
 var fb_explosion;
+
+var bossDestroyed = false;
+
+var hasAcquiredFinishToken = false;
 
 var level = 1;
 
@@ -125,6 +130,10 @@ function create() {
         map.setCollisionBetween(1101, 1665, true, 'Ouch Layer');
         item = game.add.sprite(3071, 256, 'item_box');
         game.physics.enable(item);
+        finish = game.add.sprite(5100, 665, 'finish');
+        finish.animations.add('spin');
+        finish.animations.play('spin', 30, true);
+        game.physics.enable(finish);
     }else if (level === 2){
     	map.setCollisionBetween(0, 1197, true, 'Platform Layer');
         map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
@@ -263,9 +272,9 @@ var fire_delay = 0;
 var ouch_timer = 0;
 var text_timeout = 0;
 var t;
+var t3;
 
 var fireball_delay = 0;
-
 
 function update() {
 	
@@ -287,7 +296,6 @@ function update() {
 
 	grenades.forEachExists(checkGrenadeCollisions, this);
 
-	
 	if (text_timeout === 80){
 		t.destroy();
 	}
@@ -314,10 +322,15 @@ function update() {
     	weapon = GRENADES;
     	hasGrenades = true;
     	item.destroy();
-    	var text = "Grenades acquired";
-    	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-    	t = game.add.text(player.x - 100, player.y - 100, text, style);
+    	var text = "Grenades Acquired!";
+    	var style1 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+    	t = game.add.text(player.x - 100, player.y - 100, text, style1);
     	text_timeout++;
+    }
+    
+    if (game.physics.arcade.collide(finish, player)){
+    	finish.destroy();
+    	hasAcquiredFinishToken = true;
     }
 
     handleMonsters();
@@ -328,17 +341,19 @@ function update() {
     fireballs.forEachExists(checkFireballCollisions, this);
     handleInput();
     
-    if (level1boss.health === 0) {
-    	if (player.x >= 5088 && player.x <= 5120 && player.y === 630){
-        	var text = "You Won!";
-        	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-        	t = game.add.text(500, 250, text, style);
-        	t.fixedToCamera = true;
-        	t.destroy();
+    if (!level1boss.exists) {
+    	if (hasAcquiredFinishToken){
+    		hasAcquiredFinishToken = false;
+        	var text4 = "You Won!";
+        	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+        	t4 = game.add.text(500, 250, text4, style4);
+        	t4.fixedToCamera = true;
+        	t4.destroy();
     		music.stop();
     		reset();
     		level++;
     		create();
+    		
     	}
     }
 }
@@ -405,7 +420,7 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    player = game.add.sprite(3000, 100, 'player');
+    player = game.add.sprite(5000, 600, 'player');
     //player = game.add.sprite(600, 600, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
@@ -470,28 +485,29 @@ function handleHealth(){
 		console.log("Player died");
 		player.destroy();
 		fire_delay = 100;
-    	var death = "You Died!\n" +
-    			"Restart? (Type Y or N)";
-    	var style = { font: "65px Arial", fill: "#FF0000", align: "center" };
-    	var t3 = game.add.text(player.x - 250, player.y - 100, death, style);
+		music.stop();
+    	t3 = game.add.text(player.x - 250, player.y - 100, "Thank You for Playing!\n" +
+    			"Press 'Y' to Play Again!", { font: "65px Arial", fill: "#FFFFFF", align: "center" });
     	text_timeout = 0;
+
+    	
+    	
+    	
+    	
+    	
+    	
+    	//destroy all monsters here
+    	
+    	
+    	
+    	
+    	
+    	
     	if (yesKey.isDown) {
     		t3.destroy();
-    		music.stop();
     		reset();
     		create();
-    	} else if (noKey.isDown) {
-    		t3.destroy();
-    		choice = true;
     	}
-	 } else if (player.health === 0 && choice){
-		 //So the Final message does not get overwritten
-    	var style = { font: "70px Arial", fill: "#FFFFFF", align: "center", shadowColor: "#000000", shadowOffsetX: 4, shadowOffsetY: 4};
-    	var thank = "Thank You For Playing!";
-    	var t2 = game.add.text(500, 250, thank, style);
-    	t2.anchor.set(.5, .5);
-    	t2.fixedToCamera = true;
-    	
 	 }
 }
 

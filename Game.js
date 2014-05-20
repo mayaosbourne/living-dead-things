@@ -46,6 +46,7 @@ function preload() {
 
 var GUN = 1;
 var GRENADES = 2;
+var hasGrenades = false;
 var points = 0;
 
 var grenades;
@@ -89,6 +90,7 @@ function create() {
     fireKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     yesKey = game.input.keyboard.addKey(Phaser.Keyboard.Y);
     noKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
+    weaponKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
     
     if (level === 1){
     	map = game.add.tilemap('map_1');
@@ -310,6 +312,7 @@ function update() {
    
     if (game.physics.arcade.collide(item, player)){
     	weapon = GRENADES;
+    	hasGrenades = true;
     	item.destroy();
     	var text = "Grenades acquired";
     	var style = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
@@ -664,6 +667,15 @@ function handleInput(){
     	velocity = player.body.velocity.x;
     }
 	
+	if (weaponKey.isDown && hasGrenades){
+		if (weapon === GUN){
+			weapon = GRENADES;
+		}
+		else if(weapon === GRENADES){
+			weapon = GUN;
+		}
+	}
+	
 }
 
 function checkGrenadeCollisions(sprite){
@@ -792,7 +804,7 @@ function reset() {
 	fire_dealy = 0;
 	ouch_timer = 0;
 	facing_right = true;
-	weapon = 0;
+	weapon = GUN;
 	monster_index = 0;
 	points = 0;
 	fireball_delay = 0;

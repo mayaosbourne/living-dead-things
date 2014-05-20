@@ -49,6 +49,7 @@ var GUN = 1;
 var GRENADES = 2;
 var hasGrenades = false;
 var points = 0;
+var text;
 
 var grenades;
 var item;
@@ -221,21 +222,18 @@ function create() {
 	    monster_index++;
     }
     
-    
-    
-	
 
-//    lantern = game.add.sprite(0, 0, 'lantern');
-//    lantern.alpha = 0.86;
-//    
-//    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-//    lantern_overlay.alpha = 0.8;
-//    
-//    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+    lantern = game.add.sprite(0, 0, 'lantern');
+    lantern.alpha = 0.86;
+    
+    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+    lantern_overlay.alpha = 0.8;
+    
+    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
-    //lantern_overlay.fixedToCamera = true;
-    //lantern.fixedToCamera = true;
+    lantern_overlay.fixedToCamera = true;
+    lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;
@@ -254,7 +252,7 @@ function create() {
     health3.animations.add('empty', [27]);
     
     var style = { font: "bold 12px Arial", fill: "#ff0044", align: "right"};
-    var text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
+    text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
 
     text.anchor.set(1,0);
     text.fixedToCamera = true;
@@ -291,7 +289,7 @@ function update() {
         game.physics.arcade.collide(monster_mj, layer);
         monster_mj.animations.play('dance', 1); 
 	}
-	handleXP();
+
 	handleHealth();
 
 	grenades.forEachExists(checkGrenadeCollisions, this);
@@ -321,6 +319,7 @@ function update() {
     if (game.physics.arcade.collide(item, player)){
     	weapon = GRENADES;
     	hasGrenades = true;
+    	handleXP(200);
     	item.destroy();
     	var text = "Grenades Acquired!";
     	var style1 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
@@ -331,6 +330,7 @@ function update() {
     if (game.physics.arcade.collide(finish, player)){
     	finish.destroy();
     	hasAcquiredFinishToken = true;
+    	handleXP(player.health * 100);
     }
 
     handleMonsters();
@@ -358,8 +358,16 @@ function update() {
     }
 }
 
-function handleXP() {
-	//score.setText(points + " XP");
+function handleXP(score) {	
+	points += score;
+	
+	text.destroy();
+	var style = { font: "bold 12px Arial", fill: "#ff0044", align: "right"};
+    text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
+
+    text.anchor.set(1,0);
+    text.fixedToCamera = true;
+	
 }
 
 var monster_move = 0;
@@ -397,8 +405,9 @@ function handleMonsters(){
     
     var j = 0;
     while (j < monster_index){
-    	if (monsters[j].health === 0)
+    	if (monsters[j].health === 0){
     		monsters[j].destroy();
+    	}
     	j++;
     }
     monster_move++;
@@ -420,8 +429,8 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    player = game.add.sprite(5000, 600, 'player');
-    //player = game.add.sprite(600, 600, 'player');
+    //player = game.add.sprite(3000, 200, 'player');
+    player = game.add.sprite(600, 600, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
@@ -444,10 +453,17 @@ function initPlayer() {
     
 }
 
+var once = true;
+
 function handleLevel1Boss(){
 	
-	if (level1boss.health === 0)
+	if (level1boss.health === 0){
     	level1boss.destroy();
+    	if (once){
+    		handleXP(1000);
+    		once = false;
+    	}
+	}
 	if (level1boss.exists){
    	 if (fireball_delay === 90 || fireball_delay === 0)
    	        fireball_delay = 0;
@@ -490,18 +506,11 @@ function handleHealth(){
     			"Press 'Y' to Play Again!", { font: "65px Arial", fill: "#FFFFFF", align: "center" });
     	text_timeout = 0;
 
-    	
-    	
-    	
-    	
-    	
-    	
-    	//destroy all monsters here
-    	
-    	
-    	
-    	
-    	
+    	var i = 0;
+	    while (i < monster_index){
+	    	monsters[i].destroy();
+	    	i++;
+	    }
     	
     	if (yesKey.isDown) {
     		t3.destroy();
@@ -831,9 +840,10 @@ function reset() {
 	facing_right = true;
 	weapon = GUN;
 	monster_index = 0;
-	points = 0;
 	fireball_delay = 0;
 	fire_delay = 0;
 	velocity = 0;
+	hasAcquiredFinishToken = false;
+	bossDestroyed = false;
 
 }

@@ -5,7 +5,7 @@ var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, c
 
 function preload() {
 	game.load.atlasXML('player', 'assets/player/marco_sheet4.png', 'assets/player/marco_sheet4.xml');
-	//game.load.atlasXML ('monsters', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
+	//game.load.atlasXML ('monster', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
 	game.load.atlasXML ('monsters', 'assets/monsters/mj_dance.png', 'assets/monsters/mj_monster.xml');
 	game.load.image('bullet', 'assets/player/bullet.png');
 	game.load.atlasXML('level1boss', 'assets/monsters/level1boss.png', 'assets/monsters/level1boss.xml');
@@ -179,6 +179,25 @@ function create() {
         
         monsters[monster_index] = level1boss;
         monster_index++;
+        
+        monster1 = game.add.sprite(1000, 100, 'monsters');
+        game.physics.enable(monster1);
+        monster1.body.collideWorldBounds = true;
+        monster1.body.gravity.y = 500;
+        monster1.health = 2;
+        monsters[monster_index] = monster1;
+        monster_index++;
+        
+        monster2 = game.add.sprite(2000, 100, 'monsters');
+        game.physics.enable(monster2);
+        monster2.body.collideWorldBounds = true;
+        monster2.body.gravity.y = 500;
+        monster2.health = 2;
+        monsters[monster_index] = monster2;
+        monster_index++;
+        
+        
+        
     }else if (level === 2){
     	monster_mj = game.add.sprite(3700, 720, 'monsters');
 		monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
@@ -190,6 +209,9 @@ function create() {
 	    monsters[monster_index] = monster_mj;
 	    monster_index++;
     }
+    
+    
+    
 	
 
 //    lantern = game.add.sprite(0, 0, 'lantern');
@@ -295,7 +317,8 @@ function update() {
     	text_timeout++;
     }
 
-
+    handleMonsters();
+    
     game.physics.arcade.collide(level1boss, layer);
     bullets.forEachExists(checkBulletCollisions, this);
   
@@ -321,6 +344,48 @@ function handleXP() {
 	//score.setText(points + " XP");
 }
 
+var monster_move = 0;
+var right = true;
+
+function handleMonsters(){
+	
+	if (monster_move % 80 === 0){
+		if (right === true)
+			right = false;
+		else if (right === false)
+			right = true;
+	}
+		
+	if (right){
+		var k = 0;
+	    while (k < monster_index){
+	    	monsters[k].body.velocity.x = -500;
+	    	k++;
+	    }
+	}
+    else {
+    	var l = 0;
+	    while (l < monster_index){
+	    	monsters[l].body.velocity.x = 500;
+	    	l++;
+	    }
+    }
+	
+	var i = 0;
+    while (i < monster_index){
+    	game.physics.arcade.collide(monsters[i], layer)
+    	i++;
+    }
+    
+    var j = 0;
+    while (j < monster_index){
+    	if (monsters[j].health === 0)
+    		monsters[j].destroy();
+    	j++;
+    }
+    monster_move++;
+}
+
 function handlePlayerMonsterCollision(){
 	 var i = 0;
 	    while (i < monster_index){
@@ -337,7 +402,7 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    player = game.add.sprite(3800, 100, 'player');
+    player = game.add.sprite(3000, 100, 'player');
     //player = game.add.sprite(600, 600, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
@@ -405,24 +470,24 @@ function handleHealth(){
     	var death = "You Died!\n" +
     			"Restart? (Type Y or N)";
     	var style = { font: "65px Arial", fill: "#FF0000", align: "center" };
-    	t = game.add.text(player.x - 250, player.y - 100, death, style);
+    	var t3 = game.add.text(player.x - 250, player.y - 100, death, style);
     	text_timeout = 0;
     	if (yesKey.isDown) {
-    		t.destroy();
+    		t3.destroy();
     		music.stop();
     		reset();
     		create();
     	} else if (noKey.isDown) {
-    		t.destroy();
+    		t3.destroy();
     		choice = true;
     	}
 	 } else if (player.health === 0 && choice){
 		 //So the Final message does not get overwritten
     	var style = { font: "70px Arial", fill: "#FFFFFF", align: "center", shadowColor: "#000000", shadowOffsetX: 4, shadowOffsetY: 4};
     	var thank = "Thank You For Playing!";
-    	t = game.add.text(500, 250, thank, style);
-    	t.anchor.set(.5, .5);
-    	t.fixedToCamera = true;
+    	var t2 = game.add.text(500, 250, thank, style);
+    	t2.anchor.set(.5, .5);
+    	t2.fixedToCamera = true;
     	
 	 }
 }

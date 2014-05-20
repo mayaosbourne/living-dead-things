@@ -376,7 +376,7 @@ function handleMonsters(){
 	
 	var i = 0;
     while (i < monster_index){
-    	game.physics.arcade.collide(monsters[i], layer)
+    	game.physics.arcade.collide(monsters[i], layer);
     	i++;
     }
     
@@ -495,8 +495,14 @@ function handleHealth(){
 	 }
 }
 
+var switched = 0;
 
 function handleInput(){
+	if (switched === 30 || switched === 0)
+		switched = 0
+	else
+		switched++;
+	
 	if (weapon === GUN){
 		if (fire_delay === 20 || fire_delay === 0)
 	    	fire_delay = 0;
@@ -509,6 +515,19 @@ function handleInput(){
 	    	fire_delay++;
 	}
     
+	if (weaponKey.isDown && hasGrenades && switched === 0){
+		if (weapon === GUN){
+			console.log("Grenades!");
+			weapon = GRENADES;
+			switched++;
+		}
+		else if(weapon === GRENADES){
+			console.log("Gun!");
+			weapon = GUN;
+			switched++;
+		}
+	}
+	
 	if (jumpKey.isDown && jumping === false)
     {
     	jumping = true;
@@ -665,17 +684,7 @@ function handleInput(){
     	}
     	player.body.velocity.x = 0;
     	velocity = player.body.velocity.x;
-    }
-	
-	if (weaponKey.isDown && hasGrenades){
-		if (weapon === GUN){
-			weapon = GRENADES;
-		}
-		else if(weapon === GRENADES){
-			weapon = GUN;
-		}
-	}
-	
+    }	
 }
 
 function checkGrenadeCollisions(sprite){

@@ -35,7 +35,7 @@ function preload() {
     game.load.image('tile_06', 'assets/tilesets/tile_06.png');
     game.load.image('tile_07', 'assets/tilesets/tile_07.png');
     game.load.image('tile_08', 'assets/tilesets/tile_08.png');
-	game.load.image('hud', 'assets/hud2.png');
+	game.load.image('hud', 'assets/hud.png');
 	game.load.image('lantern', 'assets/lantern6.png');
 	game.load.image('lantern overlay', 'assets/lantern_overlay2.png');
 
@@ -115,7 +115,7 @@ function create() {
         map.addTilesetImage('tile_07');
         map.addTilesetImage('tile_08');
     }
-
+    
 	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
     bg_layer = map.createLayer('BG Layer');
     ouch_layer = map.createLayer('Ouch Layer');
@@ -452,8 +452,8 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    //player = game.add.sprite(3000, 200, 'player');
-    player = game.add.sprite(600, 600, 'player');
+    player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(600, 600, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);

@@ -96,6 +96,25 @@
 <SubTexture name="brain_player_impact-1-14.png" x="664" y="537" width="48" height="48"/>
 <SubTexture name="brain_player_impact-1-15.png" x="728" y="537" width="49" height="48"/>
 
-<!-- Brain-Ground Collision: frames 86 to 
+<!-- Brain-Ground Collision: frames 86 to 103 -->
+<SubTexture name="brain_ground_impact-1-00.png" x="11" y="607" width="21" height="49"/>
+<SubTexture name="brain_ground_impact-1-01.png" x="48" y="607" width="17" height="49"/>
+<SubTexture name="brain_ground_impact-1-02.png" x="79" y="607" width="16" height="49"/>
+<SubTexture name="brain_ground_impact-1-03.png" x="108" y="607" width="16" height="49"/>
+<SubTexture name="brain_ground_impact-1-04.png" x="135" y="607" width="16" height="49"/>
+<SubTexture name="brain_ground_impact-1-05.png" x="160" y="607" width="18" height="49"/>
+<SubTexture name="brain_ground_impact-1-06.png" x="188" y="607" width="16" height="49"/>
+<SubTexture name="brain_ground_impact-1-07.png" x="215" y="607" width="20" height="49"/>
+<SubTexture name="brain_ground_impact-1-08.png" x="247" y="607" width="22" height="49"/>
+<SubTexture name="brain_ground_impact-1-09.png" x="280" y="607" width="24" height="49"/>
+<SubTexture name="brain_ground_impact-1-10.png" x="350" y="607" width="30" height="49"/>
+<SubTexture name="brain_ground_impact-1-11.png" x="392" y="607" width="35" height="49"/>
+<SubTexture name="brain_ground_impact-1-12.png" x="444" y="607" width="42" height="49"/>
+<SubTexture name="brain_ground_impact-1-13.png" x="498" y="607" width="46" height="49"/>
+<SubTexture name="brain_ground_impact-1-14.png" x="555" y="607" width="48" height="49"/>
+<SubTexture name="brain_ground_impact-1-15.png" x="617" y="607" width="47" height="49"/>
+<SubTexture name="brain_ground_impact-1-16.png" x="676" y="607" width="47" height="49"/>
+<SubTexture name="brain_ground_impact-1-17.png" x="742" y="607" width="35" height="49"/>
 
+<!-- Zombie Explode: frames 104 to -->
 </TextureAtlas>

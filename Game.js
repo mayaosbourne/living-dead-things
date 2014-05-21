@@ -497,7 +497,7 @@ function handleLevel1Boss(){
    	    else
    	        fireball_delay++;
 
-   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 250)) {
+   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 300)) {
    	        createFireBall();
    	        fireball_delay++;
    	    }

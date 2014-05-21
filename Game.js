@@ -6,7 +6,7 @@ var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, c
 function preload() {
 	game.load.atlasXML('player', 'assets/player/marco_sheet4.png', 'assets/player/marco_sheet4.xml');
 	//game.load.atlasXML ('monster', 'assets/monsters/mj_standing.png', 'assets/monsters/mj_monster.xml');
-	game.load.atlasXML ('monsters', 'assets/monsters/mj_dance.png', 'assets/monsters/mj_monster.xml');
+	game.load.atlasXML ('monsters', 'assets/monsters/zombieSprites.png', 'assets/monsters/zombieSprites.xml');
 	game.load.image('bullet', 'assets/player/bullet.png');
 	game.load.atlasXML('level1boss', 'assets/monsters/level1boss.png', 'assets/monsters/level1boss.xml');
 	game.load.atlasXML('fireball', 'assets/monsters/fireball.png', 'assets/monsters/fireball.xml');
@@ -193,6 +193,11 @@ function create() {
         monster_index++;
         
         monster1 = game.add.sprite(1000, 100, 'monsters');
+        monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster1.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster1.animations.play('walk', 7, true);
+        //monster1.animations.play('attack', 10, true);
         game.physics.enable(monster1);
         monster1.body.collideWorldBounds = true;
         monster1.body.gravity.y = 500;
@@ -201,11 +206,29 @@ function create() {
         monster_index++;
         
         monster2 = game.add.sprite(2000, 100, 'monsters');
+        monster2.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster2.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster2.animations.play('walk', 7, true);
+        //monster2.animations.play('attack', 10, true);
         game.physics.enable(monster2);
         monster2.body.collideWorldBounds = true;
         monster2.body.gravity.y = 500;
         monster2.health = 2;
         monsters[monster_index] = monster2;
+        monster_index++;
+        
+        monster3 = game.add.sprite(1500, 600, 'monsters');
+        monster3.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster3.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster3.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster3);
+        monster3.body.collideWorldBounds = true;
+        monster3.body.gravity.y = 500;
+        monster3.health = 2;
+        monsters[monster_index] = monster3;
         monster_index++;
         
         
@@ -310,7 +333,6 @@ function update() {
     game.physics.arcade.collide(player, layer);
     if (game.physics.arcade.collide(player, ouch_layer)){
     	if (ouch_timer === 0){
-    		console.log(player.health);
     		player.health--;
     		ouch_timer++;
     	}	
@@ -375,7 +397,7 @@ var right = true;
 
 function handleMonsters(){
 	
-	if (monster_move % 80 === 0){
+	if (monster_move % 60 === 0){
 		if (right === true)
 			right = false;
 		else if (right === false)
@@ -385,14 +407,16 @@ function handleMonsters(){
 	if (right){
 		var k = 0;
 	    while (k < monster_index){
-	    	monsters[k].body.velocity.x = -500;
+	    	monsters[k].scale.x = 1;
+	    	monsters[k].body.velocity.x = -300;
 	    	k++;
 	    }
 	}
     else {
     	var l = 0;
 	    while (l < monster_index){
-	    	monsters[l].body.velocity.x = 500;
+	    	monsters[l].scale.x = -1;
+	    	monsters[l].body.velocity.x = 300;
 	    	l++;
 	    }
     }
@@ -418,7 +442,6 @@ function handlePlayerMonsterCollision(){
 	    while (i < monster_index){
 	    	if (game.physics.arcade.collide(monsters[i], player)){
 	    		if (ouch_timer === 0){
-	        		console.log(player.health);
 	        		player.health--;
 	        		ouch_timer++;
 	        	}		
@@ -498,7 +521,6 @@ function handleHealth(){
 		 health1.animations.play('half', 1);
 	 }else if (player.health === 0 && !choice){
 		 health1.animations.play('empty', 1);
-		console.log("Player died");
 		player.destroy();
 		fire_delay = 100;
 		music.stop();

@@ -187,6 +187,7 @@ function create() {
         level1boss.body.collideWorldBounds = true;
         level1boss.body.bounce.y = 0;
         level1boss.body.gravity.y = 500;
+        level1boss.anchor.set(0.5, 0.5);
         level1boss.health = 6;
         
         monsters[monster_index] = level1boss;

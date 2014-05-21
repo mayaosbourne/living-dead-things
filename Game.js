@@ -230,9 +230,7 @@ function create() {
         monster3.health = 2;
         monsters[monster_index] = monster3;
         monster_index++;
-        
-        
-        
+  
     }else if (level === 2){
     	monster_mj = game.add.sprite(3700, 720, 'monsters');
 		monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
@@ -401,7 +399,7 @@ var right = true;
 
 function handleMonsters(){
 	
-	if (monster_move % 60 === 0){
+	if (monster_move % 500 === 0){
 		if (right === true)
 			right = false;
 		else if (right === false)
@@ -497,7 +495,7 @@ function handleLevel1Boss(){
    	    else
    	        fireball_delay++;
 
-   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 300)) {
+   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 500)) {
    	        createFireBall();
    	        fireball_delay++;
    	    }

@@ -23,7 +23,7 @@ function preload() {
     game.load.tilemap('map', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
-    
+  
 	//Load the spritesheet for the tilemap
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
@@ -396,9 +396,15 @@ function handleXP(score) {
 
 var monster_move = 0;
 var right = true;
+var monsterIsKilled = false;
+var explode_delay = 0;
+var monsterExplode;
+var monsterDeadIndex;
 
 function handleMonsters(){
-	
+    if (monsterIsKilled === true) {
+        explode_delay++;
+    }
 	if (monster_move % 500 === 0){
 		if (right === true)
 			right = false;
@@ -431,9 +437,24 @@ function handleMonsters(){
     
     var j = 0;
     while (j < monster_index){
-    	if (monsters[j].health === 0){
-    		monsters[j].destroy();
-    	}
+        if (monsters[j].health === 0) {
+            monsterIsKilled = true;
+            var x = monsters[j].x;
+            var y = monsters[j].y;
+            monsters[j].health++;
+            monsters[j].destroy();
+            monsterExplode = game.add.sprite(x, y, 'monsters');
+            monsterExplode.animations.add('explode', [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+                                     122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144], true);
+
+            monsterExplode.anchor.set(0.43, 0.43);
+            monsterExplode.animations.play('explode', 5, true);
+        }
+        if (explode_delay === 490) {
+            monsterIsKilled = false;
+            explode_delay = 0;
+            monsterExplode.destroy();
+        }
     	j++;
     }
     monster_move++;

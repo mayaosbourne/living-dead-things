@@ -116,5 +116,48 @@
 <SubTexture name="brain_ground_impact-1-16.png" x="676" y="607" width="47" height="49"/>
 <SubTexture name="brain_ground_impact-1-17.png" x="742" y="607" width="35" height="49"/>
 
-<!-- Zombie Explode: frames 104 to -->
+<!-- Zombie Explode: frames 104 to (41) -->
+<SubTexture name="zombie_explode-1-00.png" x="11" y="693" width="49" height="65"/>
+<SubTexture name="zombie_explode-1-01.png" x="76" y="693" width="54" height="65"/>
+<SubTexture name="zombie_explode-1-02.png" x="145" y="693" width="51" height="65"/>
+<SubTexture name="zombie_explode-1-03.png" x="222" y="693" width="52" height="65"/>
+<SubTexture name="zombie_explode-1-04.png" x="295" y="693" width="53" height="65"/>
+<SubTexture name="zombie_explode-1-05.png" x="367" y="693" width="53" height="65"/>
+<SubTexture name="zombie_explode-1-06.png" x="432" y="693" width="54" height="65"/>
+<SubTexture name="zombie_explode-1-07.png" x="505" y="693" width="50" height="65"/>
+<SubTexture name="zombie_explode-1-08.png" x="571" y="693" width="46" height="65"/>
+<SubTexture name="zombie_explode-1-09.png" x="633" y="693" width="46" height="65"/>
+<SubTexture name="zombie_explode-1-10.png" x="695" y="693" width="48" height="65"/>
+
+<SubTexture name="zombie_explode-1-11.png" x="573" y="693" width="36" height="57"/>
+
+<SubTexture name="zombie_explode-1-12.png" x="623" y="693" width="39" height="57"/>
+<SubTexture name="zombie_explode-1-13.png" x="677" y="693" width="41" height="57"/>
+<SubTexture name="zombie_explode-1-14.png" x="12" y="360" width="42" height="62"/>
+<SubTexture name="zombie_explode-1-15.png" x="70" y="360" width="44" height="62"/>
+<SubTexture name="zombie_explode-1-16.png" x="125" y="360" width="46" height="62"/>
+<SubTexture name="zombie_explode-1-17.png" x="185" y="360" width="47" height="62"/>
+<SubTexture name="zombie_explode-1-18.png" x="247" y="360" width="48" height="62"/>
+<SubTexture name="zombie_explode-1-19.png" x="310" y="360" width="48" height="62"/>
+<SubTexture name="zombie_explode-1-20.png" x="374" y="360" width="50" height="62"/>
+<SubTexture name="zombie_explode-1-21.png" x="445" y="382" width="28" height="40"/>
+<SubTexture name="zombie_explode-1-22.png" x="489" y="382" width="25" height="40"/>
+<SubTexture name="zombie_explode-1-23.png" x="534" y="382" width="25" height="40"/>
+<SubTexture name="zombie_explode-1-24.png" x="575" y="382" width="25" height="40"/>
+<SubTexture name="zombie_explode-1-25.png" x="614" y="382" width="27" height="40"/>
+<SubTexture name="zombie_explode-1-26.png" x="656" y="382" width="28" height="40"/>
+<SubTexture name="zombie_explode-1-27.png" x="700" y="382" width="29" height="40"/>
+<SubTexture name="zombie_explode-1-28.png" x="739" y="382" width="30" height="40"/>
+<SubTexture name="zombie_explode-1-29.png" x="21" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-30.png" x="67" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-31.png" x="109" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-32.png" x="153" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-33.png" x="197" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-34.png" x="239" y="440" width="31" height="39"/>
+<SubTexture name="zombie_explode-1-35.png" x="21" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-36.png" x="67" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-37.png" x="109" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-38.png" x="153" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-39.png" x="197" y="440" width="30" height="39"/>
+<SubTexture name="zombie_explode-1-40.png" x="239" y="440" width="31" height="39"/>
 </TextureAtlas>

@@ -116,7 +116,7 @@
 <SubTexture name="brain_ground_impact-1-16.png" x="676" y="607" width="47" height="49"/>
 <SubTexture name="brain_ground_impact-1-17.png" x="742" y="607" width="35" height="49"/>
 
-<!-- Zombie Explode: frames 104 to (41) -->
+<!-- Zombie Explode: frames 104 to 144 -->
 <SubTexture name="zombie_explode-1-00.png" x="11" y="693" width="49" height="65"/>
 <SubTexture name="zombie_explode-1-01.png" x="76" y="693" width="54" height="65"/>
 <SubTexture name="zombie_explode-1-02.png" x="145" y="693" width="51" height="65"/>
@@ -128,9 +128,7 @@
 <SubTexture name="zombie_explode-1-08.png" x="571" y="693" width="46" height="65"/>
 <SubTexture name="zombie_explode-1-09.png" x="633" y="693" width="46" height="65"/>
 <SubTexture name="zombie_explode-1-10.png" x="695" y="693" width="48" height="65"/>
-
 <SubTexture name="zombie_explode-1-11.png" x="573" y="693" width="36" height="57"/>
-
 <SubTexture name="zombie_explode-1-12.png" x="623" y="693" width="39" height="57"/>
 <SubTexture name="zombie_explode-1-13.png" x="677" y="693" width="41" height="57"/>
 <SubTexture name="zombie_explode-1-14.png" x="12" y="360" width="42" height="62"/>

@@ -299,6 +299,10 @@ var fireball_delay = 0;
 
 function update() {
 	
+    if (game.physics.arcade.distanceBetween(player, level1boss) < 500) {
+        lantern_overlay.kill();
+        lantern.kill();
+    }
 	if (level === 1){
 		handleLevel1Boss();
 		if (!(player.health === 0)) {
@@ -408,7 +412,7 @@ function handleMonsters(){
 		var k = 0;
 	    while (k < monster_index){
 	    	monsters[k].scale.x = 1;
-	    	monsters[k].body.velocity.x = -300;
+	    	monsters[k].body.velocity.x = -50;
 	    	k++;
 	    }
 	}
@@ -416,7 +420,7 @@ function handleMonsters(){
     	var l = 0;
 	    while (l < monster_index){
 	    	monsters[l].scale.x = -1;
-	    	monsters[l].body.velocity.x = 300;
+	    	monsters[l].body.velocity.x = 50;
 	    	l++;
 	    }
     }
@@ -493,7 +497,7 @@ function handleLevel1Boss(){
    	    else
    	        fireball_delay++;
 
-   	    if (fireball_delay === 0 && !(player.health === 0)) {
+   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 250)) {
    	        createFireBall();
    	        fireball_delay++;
    	    }

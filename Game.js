@@ -176,8 +176,150 @@ function create() {
 	fireballs.physicsBodyType = Phaser.Physics.ARCADE;
 	fireballs.createMultiple(100, 'fireball', 2, false);
 	
+	addMonstersToLevel(level);
+    
+    lantern = game.add.sprite(0, 0, 'lantern');
+    lantern.alpha = 0.86;
+    
+    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+    lantern_overlay.alpha = 0.8;
+    
+    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+	
+    hud = game.add.sprite(0, 0, 'hud');
+    lantern_overlay.fixedToCamera = true;
+    lantern.fixedToCamera = true;
+    hud.fixedToCamera = true;
+    health1 = game.add.sprite(35, 0, 'player');
+    health1.fixedToCamera = true;
+    health1.animations.add('full', [25]);
+    health1.animations.add('half', [26]);
+    health1.animations.add('empty', [27]);
+    health2 = game.add.sprite(85, 0, 'player');
+    health2.fixedToCamera = true;
+    health2.animations.add('full', [25]);
+    health2.animations.add('half', [26]);
+    health2.animations.add('empty', [27]);
+    health3 = game.add.sprite(135, 0, 'player');
+    health3.fixedToCamera = true;
+    health3.animations.add('full', [25]);
+    health3.animations.add('half', [26]);
+    health3.animations.add('empty', [27]);
+    
+    var style = { font: "bold 12px Arial", fill: "#ff0044", align: "right"};
+    text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
+
+    text.anchor.set(1,0);
+    text.fixedToCamera = true;
+    
+
+}
+
+//Control global variables
+var facing_right = true;
+
+var running = false;
+var firing = false;
+var choice = false;
+var fire_delay = 0;
+var ouch_timer = 0;
+var text_timeout = 0;
+var t;
+var t3;
+
+var fireball_delay = 0;
+
+function update() {
+	console.log(player.y);
+	
+    if (game.physics.arcade.distanceBetween(player, level1boss) < 500) {
+        lantern_overlay.kill();
+        lantern.kill();
+    }
+	if (level === 1){
+		handleLevel1Boss();
+		if (!(player.health === 0)) {
+	        level1boss.animations.play('move', 5);
+	    }
+	}else if (level === 2){
+		monster_mj.body.velocity.x = 0;
+		if (monster_mj.health === 0)
+			monster_mj.kill();
+    
+        game.physics.arcade.collide(monster_mj, layer);
+        monster_mj.animations.play('dance', 1); 
+	}
+
+	handleHealth();
+
+	grenades.forEachExists(checkGrenadeCollisions, this);
+
+	if (text_timeout === 80){
+		t.destroy();
+	}
+    else if (text_timeout != 0)
+    	text_timeout++;
+	if (ouch_timer === 60 || ouch_timer === 0){
+		ouch_timer = 0;
+	}
+    else
+    	ouch_timer++;
+	
+	handlePlayerMonsterCollision();
+	
+    game.physics.arcade.collide(player, layer);
+    if (game.physics.arcade.collide(player, ouch_layer)){
+    	if (ouch_timer === 0){
+    		player.health--;
+    		ouch_timer++;
+    	}	
+    }
+   
+    if (game.physics.arcade.collide(item, player)){
+    	weapon = GRENADES;
+    	hasGrenades = true;
+    	handleXP(200);
+    	item.destroy();
+    	var text = "Grenades Acquired!";
+    	var style1 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+    	t = game.add.text(player.x - 100, player.y - 100, text, style1);
+    	text_timeout++;
+    }
+    
+    if (game.physics.arcade.collide(finish, player)){
+    	finish.destroy();
+    	hasAcquiredFinishToken = true;
+    	handleXP(player.health * 100);
+    }
+
+    handleMonsters();
+    
+    //game.physics.arcade.collide(level1boss, layer);
+    bullets.forEachExists(checkBulletCollisions, this);
+  
+    fireballs.forEachExists(checkFireballCollisions, this);
+    handleInput();
+    
+    if (!level1boss.exists) {
+    	if (hasAcquiredFinishToken){
+    		hasAcquiredFinishToken = false;
+        	var text4 = "You Won!";
+        	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+        	t4 = game.add.text(500, 250, text4, style4);
+        	t4.fixedToCamera = true;
+        	t4.destroy();
+    		music.stop();
+    		reset();
+    		level++;
+    		create();
+    		
+    	}
+    }
+}
+
+function addMonstersToLevel(level){
 	monsters = new Array(10);
-	    
+    
     if (level === 1) {
         level1boss = game.add.sprite(3950, 100, 'level1boss');
         level1boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
@@ -242,144 +384,71 @@ function create() {
 	    
 	    monsters[monster_index] = monster_mj;
 	    monster_index++;
-    }
-    
-
-    lantern = game.add.sprite(0, 0, 'lantern');
-    lantern.alpha = 0.86;
-    
-    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-    lantern_overlay.alpha = 0.8;
-    
-    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
-	
-    hud = game.add.sprite(0, 0, 'hud');
-    lantern_overlay.fixedToCamera = true;
-    lantern.fixedToCamera = true;
-    hud.fixedToCamera = true;
-    health1 = game.add.sprite(35, 0, 'player');
-    health1.fixedToCamera = true;
-    health1.animations.add('full', [25]);
-    health1.animations.add('half', [26]);
-    health1.animations.add('empty', [27]);
-    health2 = game.add.sprite(85, 0, 'player');
-    health2.fixedToCamera = true;
-    health2.animations.add('full', [25]);
-    health2.animations.add('half', [26]);
-    health2.animations.add('empty', [27]);
-    health3 = game.add.sprite(135, 0, 'player');
-    health3.fixedToCamera = true;
-    health3.animations.add('full', [25]);
-    health3.animations.add('half', [26]);
-    health3.animations.add('empty', [27]);
-    
-    var style = { font: "bold 12px Arial", fill: "#ff0044", align: "right"};
-    text = game.add.text(990,10, points + "XP\nLEVEL: " + level, style);
-
-    text.anchor.set(1,0);
-    text.fixedToCamera = true;
-    
-
-}
-
-//Control global variables
-var facing_right = true;
-
-var running = false;
-var firing = false;
-var choice = false;
-var fire_delay = 0;
-var ouch_timer = 0;
-var text_timeout = 0;
-var t;
-var t3;
-
-var fireball_delay = 0;
-
-function update() {
-	
-    if (game.physics.arcade.distanceBetween(player, level1boss) < 500) {
-        lantern_overlay.kill();
-        lantern.kill();
-    }
-	if (level === 1){
-		handleLevel1Boss();
-		if (!(player.health === 0)) {
-	        level1boss.animations.play('move', 5);
-	    }
-	}else if (level === 2){
-		monster_mj.body.velocity.x = 0;
-		if (monster_mj.health === 0)
-			monster_mj.kill();
-    
-        game.physics.arcade.collide(monster_mj, layer);
-        monster_mj.animations.play('dance', 1); 
-	}
-
-	handleHealth();
-
-	grenades.forEachExists(checkGrenadeCollisions, this);
-
-	if (text_timeout === 80){
-		t.destroy();
-	}
-    else if (text_timeout != 0)
-    	text_timeout++;
-	if (ouch_timer === 60 || ouch_timer === 0){
-		ouch_timer = 0;
-	}
-    else
-    	ouch_timer++;
-	
-	handlePlayerMonsterCollision();
-	
-    game.physics.arcade.collide(player, layer);
-    if (game.physics.arcade.collide(player, ouch_layer)){
-    	if (ouch_timer === 0){
-    		player.health--;
-    		ouch_timer++;
-    	}	
-    }
-   
-    if (game.physics.arcade.collide(item, player)){
-    	weapon = GRENADES;
-    	hasGrenades = true;
-    	handleXP(200);
-    	item.destroy();
-    	var text = "Grenades Acquired!";
-    	var style1 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-    	t = game.add.text(player.x - 100, player.y - 100, text, style1);
-    	text_timeout++;
-    }
-    
-    if (game.physics.arcade.collide(finish, player)){
-    	finish.destroy();
-    	hasAcquiredFinishToken = true;
-    	handleXP(player.health * 100);
-    }
-
-    handleMonsters();
-    
-    game.physics.arcade.collide(level1boss, layer);
-    bullets.forEachExists(checkBulletCollisions, this);
-  
-    fireballs.forEachExists(checkFireballCollisions, this);
-    handleInput();
-    
-    if (!level1boss.exists) {
-    	if (hasAcquiredFinishToken){
-    		hasAcquiredFinishToken = false;
-        	var text4 = "You Won!";
-        	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-        	t4 = game.add.text(500, 250, text4, style4);
-        	t4.fixedToCamera = true;
-        	t4.destroy();
-    		music.stop();
-    		reset();
-    		level++;
-    		create();
-    		
-    	}
+	    
+	    monster1 = game.add.sprite(2500, 600, 'monsters');
+        monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster1.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster1.animations.play('walk', 7, true);
+        //monster1.animations.play('attack', 10, true);
+        game.physics.enable(monster1);
+        monster1.body.collideWorldBounds = true;
+        monster1.body.gravity.y = 500;
+        monster1.health = 2;
+        monsters[monster_index] = monster1;
+        monster_index++;
+        
+        monster2 = game.add.sprite(2700, 450, 'monsters');
+        monster2.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster2.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster2.animations.play('walk', 7, true);
+        //monster2.animations.play('attack', 10, true);
+        game.physics.enable(monster2);
+        monster2.body.collideWorldBounds = true;
+        monster2.body.gravity.y = 500;
+        monster2.health = 2;
+        monsters[monster_index] = monster2;
+        monster_index++;
+        
+        monster3 = game.add.sprite(2500, 1000, 'monsters');
+        monster3.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster3.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster3.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster3);
+        monster3.body.collideWorldBounds = true;
+        monster3.body.gravity.y = 500;
+        monster3.health = 2;
+        monsters[monster_index] = monster3;
+        monster_index++;
+        
+        monster4 = game.add.sprite(2500, 1300, 'monsters');
+        monster4.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster4.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster4.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster4);
+        monster4.body.collideWorldBounds = true;
+        monster4.body.gravity.y = 500;
+        monster4.health = 2;
+        monsters[monster_index] = monster4;
+        monster_index++;
+        
+        monster5 = game.add.sprite(2500, 1900, 'monsters');
+        monster5.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster5.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster5.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster5);
+        monster5.body.collideWorldBounds = true;
+        monster5.body.gravity.y = 500;
+        monster5.health = 2;
+        monsters[monster_index] = monster5;
+        monster_index++;
     }
 }
 
@@ -449,7 +518,7 @@ function handleMonsters(){
                                      122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144], true);
 
             monsterExplode.anchor.set(0.43, 0.43);
-            monsterExplode.animations.play('explode', 5, true);
+            monsterExplode.animations.play('explode', 15);
         }
         if (explode_delay === 490) {
             monsterIsKilled = false;
@@ -586,7 +655,7 @@ function handleInput(){
 	    	fire_delay++;
 	}
     
-	if (weaponKey.isDown && hasGrenades && switched === 0){
+	if (weaponKey.isDown && hasGrenades && switched === 0 && fire_delay === 0){
 		if (weapon === GUN){
 			console.log("Grenades!");
 			weapon = GRENADES;

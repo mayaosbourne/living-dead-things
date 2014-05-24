@@ -140,6 +140,10 @@ function create() {
         map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
         item = game.add.sprite(2880, 512, 'item_box');
         game.physics.enable(item);
+        finish = game.add.sprite(4700, 780, 'finish');
+        finish.animations.add('spin');
+        finish.animations.play('spin', 30, true);
+        game.physics.enable(finish);
     }
     
     //  The platforms group contains the ground and the 2 ledges we can jump on
@@ -231,6 +235,7 @@ var fireball_delay = 0;
 
 function update() {
 	console.log(player.y);
+	console.log(player.x);
 	
     if (game.physics.arcade.distanceBetween(player, level1boss) < 500) {
         lantern_overlay.kill();
@@ -300,7 +305,7 @@ function update() {
     fireballs.forEachExists(checkFireballCollisions, this);
     handleInput();
     
-    if (!level1boss.exists) {
+    if (level === 1 && !level1boss.exists) {
     	if (hasAcquiredFinishToken){
     		hasAcquiredFinishToken = false;
         	var text4 = "You Won!";
@@ -314,7 +319,19 @@ function update() {
     		create();
     		
     	}
-    }
+    }else if(hasAcquiredFinishToken){
+		hasAcquiredFinishToken = false;
+    	var text4 = "You Won!";
+    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+    	t4 = game.add.text(500, 250, text4, style4);
+    	t4.fixedToCamera = true;
+    	t4.destroy();
+		music.stop();
+		reset();
+		level++;
+		create();
+		
+	}
 }
 
 function addMonstersToLevel(level){

@@ -23,6 +23,7 @@ function preload() {
     game.load.tilemap('map', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map_3', 'level_4.json', null, Phaser.Tilemap.TILED_JSON);
   
 	//Load the spritesheet for the tilemap
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
@@ -114,6 +115,11 @@ function create() {
         map.addTilesetImage('tile_06');
         map.addTilesetImage('tile_07');
         map.addTilesetImage('tile_08');
+    }else if (level === 3){
+    	map = game.add.tilemap('map_3');
+    	map.addTilesetImage('stars');
+    	map.addTilesetImage('cemetary');
+    	map.addTilesetImage('tile_04');
     }
     
 	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
@@ -660,7 +666,7 @@ var switched = 0;
 
 function handleInput(){
 	if (switched === 30 || switched === 0)
-		switched = 0
+		switched = 0;
 	else
 		switched++;
 	

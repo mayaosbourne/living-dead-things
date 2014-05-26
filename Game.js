@@ -20,7 +20,6 @@ function preload() {
 	game.load.image('grenade', 'assets/player/grenade.png');
 	
 	//Load the tilemap file
-    game.load.tilemap('map', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_3', 'level_4.json', null, Phaser.Tilemap.TILED_JSON);
@@ -120,6 +119,8 @@ function create() {
     	map.addTilesetImage('stars');
     	map.addTilesetImage('cemetary');
     	map.addTilesetImage('tile_04');
+    }else if (level === 4){
+    	//Don't know what tilesets are needed here.
     }
     
 	//'Platform Layer' is the name of a layer inside of Tiled Map Editor
@@ -150,6 +151,9 @@ function create() {
         finish.animations.add('spin');
         finish.animations.play('spin', 30, true);
         game.physics.enable(finish);
+    }else if (level === 3){
+    	map.setCollisionBetween(0, 1197, true, 'Platform Layer');
+        map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
     }
     
     //  The platforms group contains the ground and the 2 ledges we can jump on
@@ -240,7 +244,7 @@ var t3;
 var fireball_delay = 0;
 
 function update() {	
-    if (game.physics.arcade.distanceBetween(player, level1boss) < 500) {
+    if (level === 1 && game.physics.arcade.distanceBetween(player, level1boss) < 500) {
         lantern_overlay.kill();
         lantern.kill();
     }
@@ -294,11 +298,11 @@ function update() {
     	text_timeout++;
     }
     
-    if (game.physics.arcade.collide(finish, player)){
-    	finish.destroy();
-    	hasAcquiredFinishToken = true;
-    	handleXP(player.health * 100);
-    }
+//    if (game.physics.arcade.collide(finish, player)){
+//    	finish.destroy();
+//    	hasAcquiredFinishToken = true;
+//    	handleXP(player.health * 100);
+//    }
 
     handleMonsters();
     
@@ -552,21 +556,24 @@ function handleMonsters(){
 
 function handlePlayerMonsterCollision(){
 	 var i = 0;
+	 var collided = false;
 	    while (i < monster_index){
 	    	if (game.physics.arcade.collide(monsters[i], player)){
 	    		if (ouch_timer === 0){
+	    			collided = true;
 	        		player.health--;
 	        		ouch_timer++;
 	        	}		
 	    	}
 	    	i++;
 	    }
+	 return collided;
 }
 
 function initPlayer() {
 	
-    //player = game.add.sprite(3000, 200, 'player');
-    player = game.add.sprite(600, 800, 'player');
+    player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
@@ -702,7 +709,17 @@ function handleInput(){
         player.body.velocity.y = -250;
         player.body.velocity.x = velocity;
     }
-	if (player.body.onFloor()){
+	
+	var i = 0;
+	var collided = false;
+		while (i < monster_index){
+			if (game.physics.arcade.collide(monsters[i], player)){
+	    		collided = true;
+	    	}
+	    	i++;
+	    }
+	
+	if (player.body.onFloor() || collided){
     	jumping = false;
     }else{
     	player.body.velocity.x = velocity;

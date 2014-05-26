@@ -233,10 +233,7 @@ var t3;
 
 var fireball_delay = 0;
 
-function update() {
-	console.log(player.y);
-	console.log(player.x);
-	
+function update() {	
     if (game.physics.arcade.distanceBetween(player, level1boss) < 500) {
         lantern_overlay.kill();
         lantern.kill();
@@ -612,6 +609,13 @@ function handleLevel1Boss(){
    	    } else
    	        level1boss.scale.x = -1;
    }
+}
+
+function handleLevel2Boss(){
+	//Boss moves towards player once the player is within range.
+	//He will use a ranged attack that is hard to dodge if the player
+	//is too far away, luring him in so he can attack with a more 
+	//powerful melee attack. 
 }
 
 function handleHealth(){

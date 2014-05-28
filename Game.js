@@ -42,6 +42,7 @@ function preload() {
 	game.load.audio('music', 'assets/sound/bg_music.mp3');
 	game.load.audio('single shot', 'assets/sound/single_shot.mp3');
 	game.load.audio('explosion', 'assets/sound/explosion.mp3');
+	game.load.audio('grunt', 'assets/sound/grunt.mp3');
 
 }
 
@@ -76,11 +77,12 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 3;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
 	explosion = game.add.audio('explosion');
+	grunt = game.add.audio('grunt');
 	music = game.add.audio('music');
 	music.play('', 0, 1, true);
     // Enable physics for the game
@@ -192,17 +194,17 @@ function create() {
 	
 	addMonstersToLevel(level);
     
-    lantern = game.add.sprite(0, 0, 'lantern');
-    lantern.alpha = 0.86;
-    
-    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-    lantern_overlay.alpha = 0.8;
-    
-    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+//    lantern = game.add.sprite(0, 0, 'lantern');
+//    lantern.alpha = 0.86;
+//    
+//    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+//    lantern_overlay.alpha = 0.8;
+//    
+//    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
-    lantern_overlay.fixedToCamera = true;
-    lantern.fixedToCamera = true;
+//    lantern_overlay.fixedToCamera = true;
+//    lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;
@@ -282,6 +284,7 @@ function update() {
     game.physics.arcade.collide(player, layer);
     if (game.physics.arcade.collide(player, ouch_layer)){
     	if (ouch_timer === 0){
+    		grunt.play();
     		player.health--;
     		ouch_timer++;
     	}	
@@ -306,7 +309,7 @@ function update() {
 
     handleMonsters();
     
-    //game.physics.arcade.collide(level1boss, layer);
+    game.physics.arcade.collide(level1boss, layer);
     bullets.forEachExists(checkBulletCollisions, this);
   
     fireballs.forEachExists(checkFireballCollisions, this);
@@ -560,6 +563,7 @@ function handlePlayerMonsterCollision(){
 	    while (i < monster_index){
 	    	if (game.physics.arcade.collide(monsters[i], player)){
 	    		if (ouch_timer === 0){
+	    			grunt.play();
 	    			collided = true;
 	        		player.health--;
 	        		ouch_timer++;
@@ -572,8 +576,8 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    player = game.add.sprite(3000, 200, 'player');
-    //player = game.add.sprite(600, 100, 'player');
+    //player = game.add.sprite(3000, 200, 'player');
+    player = game.add.sprite(600, 600, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
@@ -922,6 +926,7 @@ function checkFireballCollisions(sprite)
     if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
         sprite.kill();
     if (game.physics.arcade.collide(sprite, player)) {
+    	grunt.play();
         player.health--;
         player.body.velocity.x = 0;
         sprite.kill();

@@ -1087,21 +1087,27 @@ function handleInput(){
 function checkGrenadeCollisions(sprite){
     if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
     {
-		sprite.animations.play('explosion', 20, false);
-		sprite.body.velocity.x = 0;
-		if (sprite.health === 0){
-			explosion.volume = 2;
-			explosion.play();
-			justExploded = false;
-			sprite.health++;
-		}
-	}else{
-        var i = 0;
-        if (game.physics.arcade.collide(sprite, level1boss)) {
-            level1boss.health-2;
-            level1boss.body.velocity.x = 0;
-            sprite.kill();
+        sprite.animations.play('explosion', 20, false);
+        sprite.body.velocity.x = 0;
+        if (sprite.health === 0){
+            explosion.volume = 2;
+            explosion.play();
+            justExploded = false;
+            sprite.health++;
         }
+    } else if (game.physics.arcade.collide(sprite, level1boss)) {
+        sprite.animations.play('explosion', 20, false);
+        sprite.body.velocity.x = 0;
+        level1boss.health = level1boss.health - 2;
+        level1boss.body.velocity.x = 0;
+        if (sprite.health === 0) {
+            explosion.volume = 2;
+            explosion.play();
+            justExploded = false;
+            sprite.health++;
+        }
+    }else{
+        var i = 0;
 		while (i < monster_index)
 		{
 			if (game.physics.arcade.collide(sprite, monsters[i]) && sprite.health === 0){

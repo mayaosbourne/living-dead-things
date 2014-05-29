@@ -1,0 +1,21 @@
+<TextureAtlas imagePath="level2boss.png">
+<SubTexture name="idle-1-00.png" x="60" y="0" width="54" height="91"/>
+<SubTexture name="idle-1-01.png" x="119" y="0" width="54" height="91"/>
+<SubTexture name="idle-1-02.png" x="180" y="0" width="54" height="91"/>
+     
+<SubTexture name="attack-1-00.png" x="0" y="99" width="62" height="74"/>
+<SubTexture name="attack-1-01.png" x="63" y="99" width="88" height="74"/>
+<SubTexture name="attack-1-02.png" x="165" y="99" width="144" height="74"/>
+<SubTexture name="attack-1-03.png" x="0" y="179" width="69" height="74"/>
+<SubTexture name="attack-1-04.png" x="73" y="179" width="84" height="74"/>
+<SubTexture name="attack-1-05.png" x="164" y="179" width="75" height="74"/>
+<SubTexture name="attack-1-06.png" x="243" y="179" width="69" height="74"/>
+<SubTexture name="attack-1-07.png" x="317" y="179" width="80" height="74"/>
+<SubTexture name="attack-1-08.png" x="404" y="179" width="88" height="74"/>
+
+<SubTexture name="spin_attack-1-00.png" x="0" y="269" width="94" height="97"/>
+<SubTexture name="spin_attack-1-01.png" x="103" y="269" width="97" height="97"/>
+
+<SubTexture name="channeling-1-00.png" x="214" y="289" width="78" height="64"/>
+<SubTexture name="channeling-1-01.png" x="303" y="289" width="75" height="64"/>
+</TextureAtlas>

@@ -775,6 +775,10 @@ function handleLevel1Boss(){
             var x = level1boss.x;
             var y = level1boss.y;
             var explodeBoss = game.add.sprite(x, y, 'player');
+            //explodeBoss.animations.add('puff', [5,6,7], 5, true);
+            //explodeBoss.anchor.set(0.43, 0.43);
+            //explodeBoss.animations.play('puff', 5, false);
+            //explodeBoss.killOnComplete = true;
             explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
             explodeBoss.anchor.set(0.43, 0.43);
             explodeBoss.animations.play('explosion', 20, false);

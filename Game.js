@@ -78,7 +78,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 2;
+var level = 1;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -355,7 +355,18 @@ function addMonstersToLevel(level){
 	monsters = new Array(10);
     
     if (level === 1) {
+
         level1boss = game.add.sprite(3950, 100, 'level1boss');
+        level1boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
+        game.physics.enable(level1boss);
+
+        //  Player physics properties.
+        level1boss.body.collideWorldBounds = true;
+        level1boss.body.bounce.y = 0;
+        level1boss.body.gravity.y = 500;
+        level1boss.anchor.set(0.5, 0.5);
+        level1boss.health = 6;
+        /*level1boss = game.add.sprite(3950, 100, 'level1boss');
         level1boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
         game.physics.enable(level1boss);
 
@@ -367,7 +378,7 @@ function addMonstersToLevel(level){
         level1boss.health = 6;
         
         monsters[monster_index] = level1boss;
-        monster_index++;
+        monster_index++;*/
         
         monster1 = game.add.sprite(1000, 100, 'monsters');
         monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
@@ -730,10 +741,57 @@ function initPlayer() {
 }
 
 var once = true;
+var boss_move;
 
 function handleLevel1Boss(){
-	
-	if (level1boss.health === 0){
+    if (level1boss.exists) {
+
+        if (fireball_delay === 90 || fireball_delay === 0)
+            fireball_delay = 0;
+        else
+            fireball_delay++;
+
+        if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 500)) {
+            createFireBall();
+            fireball_delay++;
+
+            if (player.x < level1boss.x) {
+                level1boss.scale.x = 1;
+                level1boss.body.velocity.x = -50;
+                //right = false;
+            } else {
+                level1boss.scale.x = -1;
+                level1boss.body.velocity.x = 50;
+                //right == true;
+            }
+        }
+
+
+        if (level1boss.health === 0) {
+            if (once) {
+                handleXP(1000);
+                once = false;
+            }
+            var x = level1boss.x;
+            var y = level1boss.y;
+            var explodeBoss = game.add.sprite(x, y, 'player');
+            explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
+            explodeBoss.anchor.set(0.43, 0.43);
+            explodeBoss.animations.play('explosion', 20, false);
+            explodeBoss.killOnComplete = true;
+            explosion.volume = 2;
+            explosion.play();
+            level1boss.destroy();
+
+        }
+
+    }
+
+    game.physics.arcade.collide(level1boss, layer);
+
+    //boss_move++;
+
+	/*if (level1boss.health === 0){
     	level1boss.destroy();
     	if (once){
     		handleXP(1000);
@@ -754,7 +812,7 @@ function handleLevel1Boss(){
    	        level1boss.scale.x = 1;
    	    } else
    	        level1boss.scale.x = -1;
-   }
+   }*/
 }
 
 function handleLevel2Boss(){
@@ -1027,7 +1085,8 @@ function handleInput(){
 }
 
 function checkGrenadeCollisions(sprite){
-	if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer)){
+    if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
+    {
 		sprite.animations.play('explosion', 20, false);
 		sprite.body.velocity.x = 0;
 		if (sprite.health === 0){
@@ -1037,8 +1096,14 @@ function checkGrenadeCollisions(sprite){
 			sprite.health++;
 		}
 	}else{
-		var i = 0;
-		while(i < monster_index){
+        var i = 0;
+        if (game.physics.arcade.collide(sprite, level1boss)) {
+            level1boss.health-2;
+            level1boss.body.velocity.x = 0;
+            sprite.kill();
+        }
+		while (i < monster_index)
+		{
 			if (game.physics.arcade.collide(sprite, monsters[i]) && sprite.health === 0){
 				sprite.animations.play('explosion', 20, false);
 				sprite.body.velocity.x = 0;
@@ -1054,12 +1119,19 @@ function checkGrenadeCollisions(sprite){
 			}
 			i++;
 		}
-	}
+		
+    }
+  
 }
 
 function checkBulletCollisions(sprite) {
 	if (game.physics.arcade.collide(sprite, layer) || game.physics.arcade.collide(sprite, ouch_layer))
-		sprite.kill();
+	    sprite.kill();
+	if (game.physics.arcade.collide(sprite, level1boss)) {
+	    level1boss.health--;
+	    level1boss.body.velocity.x = 0;
+	    sprite.kill();
+	}
 	var i = 0;
 	while(i < monster_index){
 		if (game.physics.arcade.collide(sprite, monsters[i])){

@@ -816,10 +816,10 @@ function handleInput(){
     	if (weapon === GUN){
     		if (facing_right) {
         		player.scale.x = 1;
-        		player.animations.play('shooting', 15, false);
+        		player.animations.play('jump shoot', 10, false);
         	} else {
         		player.scale.x = -1;
-        		player.animations.play('shooting', 15, false);
+        		player.animations.play('jump shoot', 10, false);
         	}
     	}else{
     		if (facing_right) {

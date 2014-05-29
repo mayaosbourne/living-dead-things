@@ -1,4 +1,4 @@
-/**
+/**q
  * 
  */
 var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
@@ -10,6 +10,7 @@ function preload() {
 	game.load.image('bullet', 'assets/player/bullet.png');
 	game.load.atlasXML('level1boss', 'assets/monsters/level1boss.png', 'assets/monsters/level1boss.xml');
 	game.load.atlasXML('fireball', 'assets/monsters/fireball.png', 'assets/monsters/fireball.xml');
+	game.load.atlasXML('level2boss', 'assets/monsters/level2boss.png', 'assets/monsters/level2boss.xml');
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
     //game.load.image('stand', 'assets/player/standing.png');
@@ -77,7 +78,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 2;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -256,12 +257,18 @@ function update() {
 	        level1boss.animations.play('move', 5);
 	    }
 	}else if (level === 2){
-		monster_mj.body.velocity.x = 0;
-		if (monster_mj.health === 0)
-			monster_mj.kill();
-    
-        game.physics.arcade.collide(monster_mj, layer);
-        monster_mj.animations.play('dance', 1); 
+		lantern_overlay.kill();
+        lantern.kill();
+//		monster_mj.body.velocity.x = 0;
+//		if (monster_mj.health === 0)
+//			monster_mj.kill();
+//    
+//        game.physics.arcade.collide(monster_mj, layer);
+//        monster_mj.animations.play('dance', 1); 
+		handleLevel2Boss();
+		if (!(player.health === 0)) {
+	        level2boss.animations.play('idle');
+		}
 	}
 
 	handleHealth();
@@ -402,14 +409,31 @@ function addMonstersToLevel(level){
         monster_index++;
   
     }else if (level === 2){
-    	monster_mj = game.add.sprite(3700, 720, 'monsters');
-		monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
-		monster_mj.health = 8;
+//    	monster_mj = game.add.sprite(3700, 720, 'monsters');
+//		monster_mj.animations.add('dance', [0, 1, 2, 3, 4, 5, 6, 7], true);
+//		monster_mj.health = 8;
+//
+//	    game.physics.enable(monster_mj);
+//	    monster_mj.body.gravity.y = 500;
+    	
+    	level2boss = game.add.sprite(3700, 720, 'level2boss');
+        level2boss.animations.add('idle', ['idle-1-00.png', 'idle-1-01.png', 'idle-1-02.png', 'idle-1-01.png'], 5, true);
+        level2boss.animations.add('attack', ['attack-1-00.png', 'attack-1-01.png', 'attack-1-02.png', 'attack-1-03.png', 
+                                            'attack-1-04.png', 'attack-1-05.png', 'attack-1-06.png', 'attack-1-07.png', 
+                                            'attack-1-08.png'], 3, false);
+        level2boss.animations.add('spin_attack', ['spin_attack-1-00.png', 'spin_attack-1-01.png'], 7, true);
+        level2boss.animations.add('chanelling', ['channeling-1-00.png', 'channeling-1-01.png'], false);
+        game.physics.enable(level2boss);
 
-	    game.physics.enable(monster_mj);
-	    monster_mj.body.gravity.y = 500;
+        //  Player physics properties.
+        level2boss.body.collideWorldBounds = true;
+        level2boss.body.bounce.y = 0;
+        level2boss.body.gravity.y = 500;
+        level2boss.anchor.set(0.5, 1);
+        level2boss.health = 6;
 	    
-	    monsters[monster_index] = monster_mj;
+//	    monsters[monster_index] = monster_mj;
+        monsters[monster_index] = level2boss;
 	    monster_index++;
 	    
 	    monster1 = game.add.sprite(2500, 600, 'monsters');
@@ -738,6 +762,28 @@ function handleLevel2Boss(){
 	//He will use a ranged attack that is hard to dodge if the player
 	//is too far away, luring him in so he can attack with a more 
 	//powerful melee attack. 
+	if (level2boss.health === 0){
+    	level2boss.destroy();
+    	if (once){
+    		handleXP(1000);
+    		once = false;
+    	}
+	}
+//	if (level2boss.exists){
+//   	 if (fireball_delay === 90 || fireball_delay === 0)
+//   	        fireball_delay = 0;
+//   	    else
+//   	        fireball_delay++;
+//
+//   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level2boss) < 500)) {
+//   	        createFireBall();
+//   	        fireball_delay++;
+//   	    }
+//   	    if (player.x < level2boss.x) {
+//   	        level2boss.scale.x = 1;
+//   	    } else
+//   	        level2boss.scale.x = -1;
+//   }
 }
 
 function handleHealth(){

@@ -17,5 +17,5 @@
 <SubTexture name="spin_attack-1-01.png" x="103" y="269" width="97" height="97"/>
 
 <SubTexture name="channeling-1-00.png" x="214" y="289" width="78" height="64"/>
-<SubTexture name="channeling-1-01.png" x="303" y="289" width="75" height="64"/>
+<SubTexture name="channeling-1-01.png" x="303" y="289" width="75" height="64"></SubTexture>
 </TextureAtlas>

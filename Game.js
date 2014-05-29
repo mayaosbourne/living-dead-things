@@ -23,7 +23,7 @@ function preload() {
     game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_3', 'level_4.json', null, Phaser.Tilemap.TILED_JSON);
-  
+
 	//Load the spritesheet for the tilemap
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
@@ -576,8 +576,9 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    player = game.add.sprite(3000, 200, 'player');
-    //player = game.add.sprite(600, 100, 'player');
+
+    //player = game.add.sprite(3000, 200, 'player');
+    player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);

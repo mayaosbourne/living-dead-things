@@ -70,6 +70,8 @@ var downKey;
 var fireKey;
 
 var level1boss;
+var level2boss;
+var level3boss;
 var fireball;
 var fb_explosion;
 
@@ -408,8 +410,22 @@ function addMonstersToLevel(level){
 
 	    game.physics.enable(monster_mj);
 	    monster_mj.body.gravity.y = 500;
+
 	    
 	    monsters[monster_index] = monster_mj;
+	    monster_index++;
+	    level2boss = game.add.sprite(4600, 800, 'level1boss');
+	    level2boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
+	    game.physics.enable(level2boss);
+
+        //  Player physics properties.
+	    level2boss.body.collideWorldBounds = true;
+	    level2boss.body.bounce.y = 0;
+	    level2boss.body.gravity.y = 500;
+	    level2boss.anchor.set(0.5, 0.5);
+	    level2boss.health = 6;
+
+	    monsters[monster_index] = level2boss;
 	    monster_index++;
 	    
 	    monster1 = game.add.sprite(2500, 600, 'monsters');

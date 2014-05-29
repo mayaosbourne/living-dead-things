@@ -23,7 +23,7 @@ function preload() {
     game.load.tilemap('map_1', 'level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_2', 'level_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map_3', 'level_4.json', null, Phaser.Tilemap.TILED_JSON);
-
+  
 	//Load the spritesheet for the tilemap
     game.load.image('up_cave', 'assets/tilesets/up_cave.png');
     game.load.image('down_cave', 'assets/tilesets/down_cave.png');
@@ -70,8 +70,6 @@ var downKey;
 var fireKey;
 
 var level1boss;
-var level2boss;
-var level3boss;
 var fireball;
 var fb_explosion;
 
@@ -410,22 +408,8 @@ function addMonstersToLevel(level){
 
 	    game.physics.enable(monster_mj);
 	    monster_mj.body.gravity.y = 500;
-
 	    
 	    monsters[monster_index] = monster_mj;
-	    monster_index++;
-	    level2boss = game.add.sprite(4600, 800, 'level1boss');
-	    level2boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
-	    game.physics.enable(level2boss);
-
-        //  Player physics properties.
-	    level2boss.body.collideWorldBounds = true;
-	    level2boss.body.bounce.y = 0;
-	    level2boss.body.gravity.y = 500;
-	    level2boss.anchor.set(0.5, 0.5);
-	    level2boss.health = 6;
-
-	    monsters[monster_index] = level2boss;
 	    monster_index++;
 	    
 	    monster1 = game.add.sprite(2500, 600, 'monsters');
@@ -491,6 +475,111 @@ function addMonstersToLevel(level){
         monster5.body.gravity.y = 500;
         monster5.health = 2;
         monsters[monster_index] = monster5;
+        monster_index++;
+        
+    }else if (level === 3) {
+    	monster1 = game.add.sprite(2336, 832, 'monsters');
+        monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster1.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster1.animations.play('walk', 7, true);
+        //monster1.animations.play('attack', 10, true);
+        game.physics.enable(monster1);
+        monster1.body.collideWorldBounds = true;
+        monster1.body.gravity.y = 500;
+        monster1.health = 2;
+        monsters[monster_index] = monster1;
+        monster_index++;
+        
+        monster2 = game.add.sprite(2624, 832, 'monsters');
+        monster2.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster2.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster2.animations.play('walk', 7, true);
+        //monster2.animations.play('attack', 10, true);
+        game.physics.enable(monster2);
+        monster2.body.collideWorldBounds = true;
+        monster2.body.gravity.y = 500;
+        monster2.health = 2;
+        monsters[monster_index] = monster2;
+        monster_index++;
+        
+        monster3 = game.add.sprite(3584, 1440, 'monsters');
+        monster3.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster3.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster3.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster3);
+        monster3.body.collideWorldBounds = true;
+        monster3.body.gravity.y = 500;
+        monster3.health = 2;
+        monsters[monster_index] = monster3;
+        monster_index++;
+        
+        monster4 = game.add.sprite(1440, 1344, 'monsters');
+        monster4.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster4.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster4.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster4);
+        monster4.body.collideWorldBounds = true;
+        monster4.body.gravity.y = 500;
+        monster4.health = 2;
+        monsters[monster_index] = monster4;
+        monster_index++;
+        
+        monster5 = game.add.sprite(1440, 1728, 'monsters');
+        monster5.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster5.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster5.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster5);
+        monster5.body.collideWorldBounds = true;
+        monster5.body.gravity.y = 500;
+        monster5.health = 2;
+        monsters[monster_index] = monster5;
+        monster_index++;
+        
+        monster6 = game.add.sprite(1440, 2112, 'monsters');
+        monster6.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster6.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster6.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster6);
+        monster6.body.collideWorldBounds = true;
+        monster6.body.gravity.y = 500;
+        monster6.health = 2;
+        monsters[monster_index] = monster6;
+        monster_index++;
+        
+        monster7 = game.add.sprite(2176, 2496, 'monsters');
+        monster7.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster7.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster7.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster7);
+        monster7.body.collideWorldBounds = true;
+        monster7.body.gravity.y = 500;
+        monster7.health = 2;
+        monsters[monster_index] = monster7;
+        monster_index++;
+        
+        monster8 = game.add.sprite(3296, 2080, 'monsters');
+        monster8.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+        monster8.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+        monster8.animations.play('walk', 7, true);
+        //monster3.animations.play('attack', 10, true);
+        game.physics.enable(monster8);
+        monster8.body.collideWorldBounds = true;
+        monster8.body.gravity.y = 500;
+        monster8.health = 2;
+        monsters[monster_index] = monster8;
         monster_index++;
     }
 }
@@ -592,9 +681,8 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-
-    //player = game.add.sprite(3000, 200, 'player');
-    player = game.add.sprite(600, 100, 'player');
+    player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
@@ -832,10 +920,10 @@ function handleInput(){
     	if (weapon === GUN){
     		if (facing_right) {
         		player.scale.x = 1;
-        		player.animations.play('jump shoot', 10, false);
+        		player.animations.play('shooting', 15, false);
         	} else {
         		player.scale.x = -1;
-        		player.animations.play('jump shoot', 10, false);
+        		player.animations.play('shooting', 15, false);
         	}
     	}else{
     		if (facing_right) {

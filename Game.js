@@ -77,7 +77,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 3;
+var level = 1;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -194,17 +194,17 @@ function create() {
 	
 	addMonstersToLevel(level);
     
-//    lantern = game.add.sprite(0, 0, 'lantern');
-//    lantern.alpha = 0.86;
-//    
-//    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-//    lantern_overlay.alpha = 0.8;
-//    
-//    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+    lantern = game.add.sprite(0, 0, 'lantern');
+    lantern.alpha = 0.86;
+    
+    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+    lantern_overlay.alpha = 0.8;
+    
+    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
-//    lantern_overlay.fixedToCamera = true;
-//    lantern.fixedToCamera = true;
+    lantern_overlay.fixedToCamera = true;
+    lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;
@@ -576,8 +576,8 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    //player = game.add.sprite(3000, 200, 'player');
-    player = game.add.sprite(600, 600, 'player');
+    player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
@@ -757,7 +757,7 @@ function handleInput(){
 			if (facing_right){
 				player.scale.x = 1;
 				player.animations.play('run shoot', 10);
-				player.anchor.setTo(0.2, 0);
+				player.anchor.setTo(0, 0);
 				player.body.velocity.x = 250;
 				velocity = player.body.velocity.x;
 			}
@@ -942,8 +942,8 @@ function createGrenade(){
 		explode.killOnComplete = true;
 		grenade.anchor.setTo(1,1);
 		grenade.reset(player.x + 20, player.y);
-		grenade.body.velocity.x = 300;
-		grenade.body.velocity.y = -250;
+		grenade.body.velocity.x = 170;
+		grenade.body.velocity.y = -100;
 		grenade.body.gravity.y = 500;
 		grenade.animations.play('grenade', 10, true);
 		grenade.scale.x = 1;
@@ -956,8 +956,8 @@ function createGrenade(){
 		explode.killOnComplete = true;
 		grenade.anchor.setTo(1,1);
 		grenade.reset(player.x - 10, player.y);
-		grenade.body.velocity.x = -300;
-		grenade.body.velocity.y = -250;
+		grenade.body.velocity.x = -170;
+		grenade.body.velocity.y = -100;
 		grenade.body.gravity.y = 500;
 		grenade.animations.play('grenade', 10, true);
 		grenade.scale.x = -1;
@@ -970,15 +970,16 @@ function createGrenade(){
 function createBullet() {
     if (facing_right === false){
     	var bullet = bullets.getFirstExists(false);
-		bullet.reset(player.x - 20, player.y + 15);
+		bullet.reset(player.x, player.y + 15);
 		bullet.body.velocity.x = -700;
 		bullet.scale.x = -1;
 	}else {
 		var bullet = bullets.getFirstExists(false);
-		bullet.reset(player.x + 20, player.y + 15);
+		bullet.reset(player.x, player.y + 15);
 		bullet.body.velocity.x = 700;
 		bullet.scale.x = 1;
 	}
+    player.bringToTop();
 }
 
 function createFireBall() {

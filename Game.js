@@ -321,11 +321,11 @@ function update() {
     	text_timeout++;
     }
     
-//    if (game.physics.arcade.collide(finish, player)){
-//    	finish.destroy();
-//    	hasAcquiredFinishToken = true;
-//    	handleXP(player.health * 100);
-//    }
+    if (game.physics.arcade.collide(finish, player)){
+    	finish.destroy();
+    	hasAcquiredFinishToken = true;
+    	handleXP(player.health * 100);
+    }
 
     handleMonsters();
     
@@ -335,7 +335,7 @@ function update() {
     fireballs.forEachExists(checkFireballCollisions, this);
     handleInput();
     
-    if (level === 1 && !level1boss.exists) {
+    if ((level === 1 && !level1boss.exists) || (level === 2 && !level2boss.exists)) {
     	if (hasAcquiredFinishToken){
     		hasAcquiredFinishToken = false;
         	var text4 = "You Won!";
@@ -349,19 +349,23 @@ function update() {
     		create();
     		
     	}
-    }else if(hasAcquiredFinishToken){
-		hasAcquiredFinishToken = false;
-    	var text4 = "You Won!";
-    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-    	t4 = game.add.text(500, 250, text4, style4);
-    	t4.fixedToCamera = true;
-    	t4.destroy();
-		music.stop();
-		reset();
-		level++;
-		create();
-		
-	}
+    }
+    
+    //TODO level === 3 and !level3boss.exists then go to credits or something
+    
+//    else if(hasAcquiredFinishToken){
+//		hasAcquiredFinishToken = false;
+//    	var text4 = "You Won!";
+//    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+//    	t4 = game.add.text(500, 250, text4, style4);
+//    	t4.fixedToCamera = true;
+//    	t4.destroy();
+//		music.stop();
+//		reset();
+//		level++;
+//		create();
+//		
+//	}
 }
 
 function addMonstersToLevel(level){

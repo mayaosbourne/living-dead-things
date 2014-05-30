@@ -39,6 +39,8 @@ function preload() {
 	game.load.image('hud', 'assets/hud.png');
 	game.load.image('lantern', 'assets/lantern6.png');
 	game.load.image('lantern overlay', 'assets/lantern_overlay2.png');
+	game.load.image('gunmod', 'assets/gun_mod.png');
+	game.load.image('grenademod', 'assets/grenade_mod.png');
 
 	game.load.audio('music', 'assets/sound/bg_music.mp3');
 	game.load.audio('single shot', 'assets/sound/single_shot.mp3');
@@ -54,6 +56,8 @@ var points = 0;
 var text;
 
 var grenades;
+var gun_mod;
+var grenade_mod;
 var item;
 var hud;
 var player;
@@ -79,7 +83,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 2;
+var level = 1;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -197,16 +201,19 @@ function create() {
 	addMonstersToLevel(level);
     
     lantern = game.add.sprite(0, 0, 'lantern');
-    //lantern.alpha = 0.86;
-    lantern.alpha = 0.00;
+    lantern.alpha = 0.86;
+    //lantern.alpha = 0.00;
     
     lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-    //lantern_overlay.alpha = 0.8;
-    lantern_overlay.alpha = 0.0;
+    lantern_overlay.alpha = 0.8;
+    //lantern_overlay.alpha = 0.0;
 
+    
     game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
+    gun_mod = game.add.sprite(450, 0, 'gunmod');
+    gun_mod.fixedToCamera = true;
     lantern_overlay.fixedToCamera = true;
     lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
@@ -308,6 +315,9 @@ function update() {
     	var text = "Grenades Acquired!";
     	var style1 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
     	t = game.add.text(player.x - 100, player.y - 100, text, style1);
+    	gun_mod.destroy();
+    	grenade_mod = game.add.sprite(450, 0, 'grenademod');
+    	grenade_mod.fixedToCamera = true;
     	text_timeout++;
     }
     
@@ -737,8 +747,9 @@ function initPlayer() {
     //} else {
     //    player = game.add.sprite(5100, 665, 'player');
     //}
-    player = game.add.sprite(3500, 3800, 'player');
-    //player = game.add.sprite(3000, 200, 'player');
+    //this is for level 3 boss testing
+    //player = game.add.sprite(3500, 3800, 'player');
+    player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
@@ -931,12 +942,18 @@ function handleInput(){
     
 	if (weaponKey.isDown && hasGrenades && switched === 0 && fire_delay === 0){
 		if (weapon === GUN){
-			console.log("Grenades!");
+		    console.log("Grenades!");
+		    gun_mod.destroy();
+		    grenade_mod = game.add.sprite(450, 0, 'grenademod');
+		    grenade_mod.fixedToCamera = true;
 			weapon = GRENADES;
 			switched++;
 		}
 		else if(weapon === GRENADES){
-			console.log("Gun!");
+		    console.log("Gun!");
+		    grenade_mod.destroy();
+		    gun_mod = game.add.sprite(450, 0, 'gunmod');
+		    gun_mod.fixedToCamera = true;
 			weapon = GUN;
 			switched++;
 		}

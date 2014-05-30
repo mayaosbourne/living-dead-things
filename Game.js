@@ -83,7 +83,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 2;
 
 function create() {
 	gun_shot = game.add.audio('single shot');

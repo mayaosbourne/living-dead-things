@@ -71,6 +71,7 @@ var downKey;
 var fireKey;
 
 var level1boss;
+var level3boss;
 var fireball;
 var fb_explosion;
 
@@ -78,7 +79,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 3;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -196,11 +197,13 @@ function create() {
 	addMonstersToLevel(level);
     
     lantern = game.add.sprite(0, 0, 'lantern');
-    lantern.alpha = 0.86;
+    //lantern.alpha = 0.86;
+    lantern.alpha = 0.00;
     
     lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-    lantern_overlay.alpha = 0.8;
-    
+    //lantern_overlay.alpha = 0.8;
+    lantern_overlay.alpha = 0.0;
+
     game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
@@ -512,7 +515,18 @@ function addMonstersToLevel(level){
         monsters[monster_index] = monster5;
         monster_index++;
         
-    }else if (level === 3) {
+    } else if (level === 3) {
+
+        level1boss = game.add.sprite(3500, 3800, 'level1boss');
+        level1boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
+        game.physics.enable(level1boss);
+
+        //  Player physics properties.
+        level1boss.body.collideWorldBounds = true;
+        level1boss.body.bounce.y = 0;
+        level1boss.body.gravity.y = 500;
+        level1boss.anchor.set(0.5, 0.5);
+        level1boss.health = 6;
     	monster1 = game.add.sprite(2336, 832, 'monsters');
         monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
         monster1.animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
@@ -716,7 +730,16 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    player = game.add.sprite(3000, 200, 'player');
+    //if (level === 1) {
+    //    player = game.add.sprite(600, 100, 'player');
+    //} else if (level === 2) {
+    //    player = game.add.sprite(3000, 200, 'player');
+    //} else {
+    //    player = game.add.sprite(5100, 665, 'player');
+    //}
+    player = game.add.sprite(3500, 3800, 'player');
+    //player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);

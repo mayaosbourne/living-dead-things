@@ -84,7 +84,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 3;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -163,6 +163,8 @@ function create() {
     }else if (level === 3){
     	map.setCollisionBetween(0, 1197, true, 'Platform Layer');
         map.setCollisionBetween(1, 1100, true, 'Ouch Layer');
+        item = game.add.sprite(2273, 615, 'item_box');
+        game.physics.enable(item);
     }
     
     //  The platforms group contains the ground and the 2 ledges we can jump on
@@ -258,9 +260,12 @@ var t3;
 var fireball_delay = 0;
 
 function update() {	
-    if ((level === 1 || level === 2) && game.physics.arcade.distanceBetween(player, level1boss) < 500) {
-        lantern_overlay.kill();
-        lantern.kill();
+    if (level === 1 && game.physics.arcade.distanceBetween(player, level1boss) < 500) {
+        lantern_overlay.destroy();
+        lantern.destroy();
+    }else if (level === 2 && game.physics.arcade.distanceBetween(player, level2boss) < 500){
+    	lantern_overlay.destroy();
+        lantern.destroy();
     }
 	if (level === 1){
 		handleLevel1Boss();
@@ -314,16 +319,16 @@ function update() {
     	text_timeout++;
     }
     
-    if (game.physics.arcade.collide(finish, player)){
-    	finish.destroy();
-    	hasAcquiredFinishToken = true;
-    	handleXP(player.health * 100);
-    }
+//    if (game.physics.arcade.collide(finish, player)){
+//    	finish.destroy();
+//    	hasAcquiredFinishToken = true;
+//    	handleXP(player.health * 100);
+//    }
 
     handleMonsters();
     
-    game.physics.arcade.collide(level1boss, layer);
-    game.physics.arcade.collide(level2boss, layer);
+    //game.physics.arcade.collide(level1boss, layer);
+    //game.physics.arcade.collide(level2boss, layer);
     bullets.forEachExists(checkBulletCollisions, this);
   
     fireballs.forEachExists(checkFireballCollisions, this);
@@ -432,7 +437,7 @@ function addMonstersToLevel(level){
   
     }else if (level === 2){
     	
-    	level2boss = game.add.sprite(3700, 720, 'level2boss');
+    	level2boss = game.add.sprite(3700, 420, 'level2boss');
         level2boss.animations.add('idle', ['idle-1-00.png', 'idle-1-01.png', 'idle-1-02.png', 'idle-1-01.png'], 5, true);
         level2boss.animations.add('attack', ['attack-1-00.png', 'attack-1-01.png', 'attack-1-02.png', 'attack-1-03.png', 
                                             'attack-1-04.png', 'attack-1-05.png', 'attack-1-06.png', 'attack-1-07.png', 
@@ -447,6 +452,9 @@ function addMonstersToLevel(level){
         level2boss.body.gravity.y = 500;
         level2boss.anchor.set(0.5, 1);
         level2boss.health = 6;
+        
+        monsters[monster_index] = level2boss;
+        monster_index++;
 	    
 	    monster1 = game.add.sprite(2500, 600, 'monsters');
         monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
@@ -688,7 +696,9 @@ function handleMonsters(){
     while (j < monster_index){
         if (monsters[j].health === 0) {
         	
-        	if (!monsters[j] === level1boss || !monsters[j] === level2boss){
+        	if (monsters[j] === level1boss || monsters[j] === level2boss){
+
+        	}else{
         		 monsterIsKilled = true;
                  var x = monsters[j].x;
                  var y = monsters[j].y;
@@ -702,7 +712,7 @@ function handleMonsters(){
                  monsterExplode.animations.play('explode', 15);
         	}  
         }
-        if (explode_delay === 490) {
+        if (explode_delay === 175) {
             monsterIsKilled = false;
             explode_delay = 0;
             monsterExplode.destroy();
@@ -726,28 +736,17 @@ function handlePlayerMonsterCollision(){
 	    	}
 	    	i++;
 	    }
-	    
-	    if(level === 2){
-	    	if (game.physics.arcade.collide(level2boss, player)){
-	    		if (ouch_timer === 0){
-	    			grunt.play();
-	    			collided = true;
-	        		player.health--;
-	        		ouch_timer++;
-	        	}		
-	    	}
-	    }
 	 return collided;
 }
 
 function initPlayer() {
 	
     if (level === 1) {
-        player = game.add.sprite(600, 100, 'player');
+        player = game.add.sprite(600, 800, 'player');
     } else if (level === 2) {
-        player = game.add.sprite(3000, 200, 'player');
+        player = game.add.sprite(600, 2000, 'player');
     } else {
-        player = game.add.sprite(5100, 665, 'player');
+        player = game.add.sprite(600, 200, 'player');
     }
     //this is for level 3 boss testing
     //player = game.add.sprite(3500, 3800, 'player');
@@ -1369,6 +1368,11 @@ function createFireBall() {
 }
 
 function reset() {
+	var i = 0;
+	while(i < monster_index){
+		monsters[i].destroy();
+		i++;
+	}
 	running = false;
 	firing = false;
 	choice = false;

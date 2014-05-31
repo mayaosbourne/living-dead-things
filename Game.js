@@ -995,11 +995,11 @@ function handleLevel3Boss(){
 				//b2_ani = 'idle';
 				//level3boss.animations.play('idle');
 				if(player.x + 80 < level3boss.x){
-					level3boss.scale.x = 1;
+					level3boss.scale.x = -1;
 					level3boss.body.velocity.x = -100;
 					boss_right = false;
 				} else if (player.x - 80 >= level3boss.x){
-					level3boss.scale.x = -1;
+					level3boss.scale.x = 1;
 					level3boss.body.velocity.x = 100;
 					boss_right = true;
 				} else if(game.physics.arcade.distanceBetween(player, level3boss) > 200){
@@ -1363,31 +1363,46 @@ function checkGrenadeCollisions(sprite){
             sprite.health++;
         }
     }else if (game.physics.arcade.collide(sprite, level3boss)) {
-        sprite.animations.play('explosion', 20, false);
+        //sprite.animations.play('explosion', 20, false);
         sprite.body.velocity.x = 0;
+        sprite.kill();
         level3boss.health = level3boss.health - 2;
         level3boss.body.velocity.x = 0;
-        if (sprite.health === 0) {
-            explosion.volume = 2;
-            explosion.play();
-            justExploded = false;
-            sprite.health++;
-        }
+        var x = level3boss.x;
+    	var y = level3boss.y-50;
+    	var explodeBoss = game.add.sprite(x, y, 'player');
+    	explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
+    	explodeBoss.anchor.set(0.43, 0.43);
+    	explodeBoss.animations.play('explosion', 20, false);
+    	explodeBoss.killOnComplete = true;
+    	explosion.volume = 2;
+    	explosion.play();
+//        if (sprite.health === 0) {
+//            explosion.volume = 2;
+//            explosion.play();
+//            justExploded = false;
+//            sprite.health++;
+//        }
     }else{
         var i = 0;
 		while (i < monster_index)
 		{
 			if (game.physics.arcade.collide(sprite, monsters[i]) && sprite.health === 0){
-				sprite.animations.play('explosion', 20, false);
-				sprite.body.velocity.x = 0;
-				monsters[i].health = monsters[i].health - 2;
-				monsters[i].body.velocity.x = 0;
-				console.log(monsters[i].health);
-				if (sprite.health === 0){
-					explosion.volume = 2;
-					explosion.play();
-					justExploded = false;
-					sprite.health++;
+				if (monsters[i] === level1boss || monsters[i] === level2boss || monsters[i] === level3boss){
+					
+				}
+				else{
+					sprite.animations.play('explosion', 20, false);
+					sprite.body.velocity.x = 0;
+					monsters[i].health = monsters[i].health - 2;
+					monsters[i].body.velocity.x = 0;
+					console.log(monsters[i].health);
+					if (sprite.health === 0){
+						explosion.volume = 2;
+						explosion.play();
+						justExploded = false;
+						sprite.health++;
+					}
 				}
 			}
 			i++;

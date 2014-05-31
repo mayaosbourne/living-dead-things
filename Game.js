@@ -387,9 +387,9 @@ function addMonstersToLevel(level){
         level1boss.body.gravity.y = 500;
         level1boss.anchor.set(0.5, 0.5);
         level1boss.health = 6;
-        
+        */
         monsters[monster_index] = level1boss;
-        monster_index++;*/
+        monster_index++;
         
         monster1 = game.add.sprite(1000, 100, 'monsters');
         monster1.animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
@@ -687,17 +687,20 @@ function handleMonsters(){
     var j = 0;
     while (j < monster_index){
         if (monsters[j].health === 0) {
-            monsterIsKilled = true;
-            var x = monsters[j].x;
-            var y = monsters[j].y;
-            monsters[j].health++;
-            monsters[j].destroy();
-            monsterExplode = game.add.sprite(x, y, 'monsters');
-            monsterExplode.animations.add('explode', [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
-                                     122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144], true);
+        	
+        	if (!monsters[j] === level1boss || !monsters[j] === level2boss){
+        		 monsterIsKilled = true;
+                 var x = monsters[j].x;
+                 var y = monsters[j].y;
+                 monsters[j].health++;
+                 monsters[j].destroy();
+                 monsterExplode = game.add.sprite(x, y, 'monsters');
+                 monsterExplode.animations.add('explode', [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+                                          122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144], true);
 
-            monsterExplode.anchor.set(0.43, 0.43);
-            monsterExplode.animations.play('explode', 15);
+                 monsterExplode.anchor.set(0.43, 0.43);
+                 monsterExplode.animations.play('explode', 15);
+        	}  
         }
         if (explode_delay === 490) {
             monsterIsKilled = false;
@@ -739,16 +742,16 @@ function handlePlayerMonsterCollision(){
 
 function initPlayer() {
 	
-    //if (level === 1) {
-    //    player = game.add.sprite(600, 100, 'player');
-    //} else if (level === 2) {
-    //    player = game.add.sprite(3000, 200, 'player');
-    //} else {
-    //    player = game.add.sprite(5100, 665, 'player');
-    //}
+    if (level === 1) {
+        player = game.add.sprite(600, 100, 'player');
+    } else if (level === 2) {
+        player = game.add.sprite(3000, 200, 'player');
+    } else {
+        player = game.add.sprite(5100, 665, 'player');
+    }
     //this is for level 3 boss testing
     //player = game.add.sprite(3500, 3800, 'player');
-    player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);

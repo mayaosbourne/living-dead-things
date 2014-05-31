@@ -1368,8 +1368,8 @@ function checkGrenadeCollisions(sprite){
         sprite.kill();
         level3boss.health = level3boss.health - 2;
         level3boss.body.velocity.x = 0;
-        var x = level3boss.x;
-    	var y = level3boss.y-50;
+        var x = sprite.x;
+    	var y = sprite.y;
     	var explodeBoss = game.add.sprite(x, y, 'player');
     	explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
     	explodeBoss.anchor.set(0.43, 0.43);

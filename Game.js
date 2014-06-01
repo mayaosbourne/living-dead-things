@@ -529,9 +529,11 @@ function addMonstersToLevel(level){
         
     } else if (level === 3) {
 
-        level3boss = game.add.sprite(3500, 3800, 'level3boss');
+        level3boss = game.add.sprite(3400, 3800, 'level3boss');
         level3boss.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], true);
         level3boss.animations.add('walking', [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], true);
+        level3boss.animations.add('charging', [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], true);
+
         game.physics.enable(level3boss);
         
         level3boss.animations.play('walking', 10, true);
@@ -770,7 +772,7 @@ function initPlayer() {
         player = game.add.sprite(600, 200, 'player');
     }
     //this is for level 3 boss testing
-    player = game.add.sprite(3500, 3800, 'player');
+    player = game.add.sprite(3700, 3800, 'player');
     //player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
@@ -985,80 +987,62 @@ function handleLevel2Boss(){
 
 }
 
+var charging = false;
+var b3_fire_delay = 0;
+
 function handleLevel3Boss(){
 	if (level3boss.exists){
+		if (b3_fire_delay === 60 || b3_fire_delay === 0)
+			b3_fire_delay = 0;
+	    else
+	    	b3_fire_delay++;
+		
 		if ((game.physics.arcade.distanceBetween(player, level3boss) < 500) && !player_met){
 			player_met = true;
 		}
+		
+		if(game.physics.arcade.distanceBetween(player, level3boss) > 200 ||
+				  game.physics.arcade.distanceBetween(player, level3boss) < -200){
+			ranged = true;
+			level3boss.body.velocity.x = 0;
+			console.log("ranged!");
+			b3_ani = 'idle';
+			level3boss.animations.play('idle');
+		}else{
+			ranged = false;
+			charging = true;
+		}
+		
 		if (player_met && !(player.health === 0)){
-			if(!channeling && !ranged && !attack){
-				//b2_ani = 'idle';
-				//level3boss.animations.play('idle');
+			if(!ranged && !charging){
+				b3_ani = 'walking';
+				level3boss.animations.play('walking');
 				if(player.x + 80 < level3boss.x){
 					level3boss.scale.x = -1;
 					level3boss.body.velocity.x = -100;
 					boss_right = false;
-				} else if (player.x - 80 >= level3boss.x){
+				} else if(player.x - 80 >= level3boss.x){
 					level3boss.scale.x = 1;
 					level3boss.body.velocity.x = 100;
 					boss_right = true;
-				} else if(game.physics.arcade.distanceBetween(player, level3boss) > 200){
-					ranged = true;
-					level3boss.body.velocity.x = 0;
-					//b2_ani = 'spin_attack';
-					//level3boss.animations.play('spin_attack');
-					if(boss_right){
-						level3boss.velocity = 100;
-					} else {
-						level3boss.velocity = -100;
-					}
-				} else {
-					attack = true;
-					if(boss_right){
-						level3boss.body.velocity.x = 1;	
-					}else{
-						level3boss.body.velocity.x = -1;
-					}
-					b2_ani = 'attack';
-					//level3boss.animations.play('attack');
+				} 
+			}else if (ranged){
+				if (b3_fire_delay === 0){
+					createLavaBubbles();
+					b3_fire_delay++;
 				}
-			}
-			
-			if(level3boss.health === 3 && !channeled ){
-				level3boss.body.velocity.x = 0;
-				b2_ani = 'chanelling';
-				//level3boss.animations.play('chanelling');
-				channeling = true;
-			}
-			
-		}
-		if (channeling){
-			if (tim === 60) {
-				channeling = false;
-				chaneled = true;
-				tim = 0;
-			} else {
-				tim++;
-			}
-			//raise zombie
-		}
-		if(ranged){
-			if (tim === 60) {
-				ranged = false;
-				tim = 0;
-			} else {
-				tim++;
-			}
-		}
-		
-		if(attack){
-			if (tim === 240) {
-				attack = false;
-				tim = 0;
-			} else {
-				tim++;
-			}
-			
+			}else{
+				level3boss.animations.play('charging', 15);
+				if(player.x + 80 < level3boss.x){
+					level3boss.scale.x = -1;
+					level3boss.body.velocity.x = -200;
+					boss_right = false;
+				} else if(player.x - 80 >= level3boss.x){
+					level3boss.scale.x = 1;
+					level3boss.body.velocity.x = 200;
+					boss_right = true;
+				} 
+			}	
 		}
 	
 		if (level3boss.health === 0){
@@ -1341,7 +1325,6 @@ function checkGrenadeCollisions(sprite){
             sprite.health++;
         }
     } else if (game.physics.arcade.collide(sprite, level1boss)) {
-        sprite.animations.play('explosion', 20, false);
         sprite.body.velocity.x = 0;
         level1boss.health = level1boss.health - 2;
         level1boss.body.velocity.x = 0;
@@ -1355,7 +1338,6 @@ function checkGrenadeCollisions(sprite){
     	explosion.volume = 2;
     	explosion.play();
     }else if (game.physics.arcade.collide(sprite, level2boss)) {
-        sprite.animations.play('explosion', 20, false);
         sprite.body.velocity.x = 0;
         level2boss.health = level2boss.health - 2;
         level2boss.body.velocity.x = 0;
@@ -1369,7 +1351,6 @@ function checkGrenadeCollisions(sprite){
     	explosion.volume = 2;
     	explosion.play();
     }else if (game.physics.arcade.collide(sprite, level3boss)) {
-        //sprite.animations.play('explosion', 20, false);
         sprite.body.velocity.x = 0;
         sprite.kill();
         level3boss.health = level3boss.health - 2;
@@ -1501,6 +1482,20 @@ function createBullet() {
 		bullet.scale.x = 1;
 	}
     player.bringToTop();
+}
+
+function createLavaBubbles() {
+    if (player.x < level3boss.x) {
+        var fireball = fireballs.getFirstExists(false);
+        fireball.reset(level3boss.x + 20, level3boss.y - 50);
+        game.physics.arcade.accelerateToObject(fireball, player, 300);
+        fireball.scale.x = -1;
+    } else {
+        var fireball = fireballs.getFirstExists(false);
+        fireball.reset(level3boss.x - 20, level3boss.y - 50);
+        game.physics.arcade.accelerateToObject(fireball, player, 300);
+        fireball.scale.x = 1;
+    }
 }
 
 function createFireBall() {

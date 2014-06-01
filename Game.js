@@ -358,8 +358,7 @@ function update() {
     
     //TODO level === 3 and !level3boss.exists then go to credits or something
     
-//    else if(hasAcquiredFinishToken){
-//		hasAcquiredFinishToken = false;
+//    else if(level3boss.exists === false){
 //    	var text4 = "You Won!";
 //    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
 //    	t4 = game.add.text(500, 250, text4, style4);
@@ -367,7 +366,6 @@ function update() {
 //    	t4.destroy();
 //		music.stop();
 //		reset();
-//		level++;
 //		create();
 //		
 //	}
@@ -533,6 +531,8 @@ function addMonstersToLevel(level){
         level3boss.animations.add('idle', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], true);
         level3boss.animations.add('walking', [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], true);
         level3boss.animations.add('charging', [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], true);
+        level3boss.animations.add('dying', [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
+                                            81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100], true);
 
         game.physics.enable(level3boss);
         
@@ -541,7 +541,7 @@ function addMonstersToLevel(level){
         level3boss.body.collideWorldBounds = true;
         level3boss.body.bounce.y = 0;
         level3boss.body.gravity.y = 500;
-        level3boss.anchor.set(0.5, 1);
+        level3boss.anchor.set(0, 1);
         level3boss.health = 10;
         
         monsters[monster_index] = level3boss;
@@ -1007,7 +1007,7 @@ function handleLevel3Boss(){
 			level3boss.body.velocity.x = 0;
 			console.log("ranged!");
 			b3_ani = 'idle';
-			level3boss.animations.play('idle');
+			
 		}else{
 			ranged = false;
 			charging = true;
@@ -1027,6 +1027,7 @@ function handleLevel3Boss(){
 					boss_right = true;
 				} 
 			}else if (ranged){
+				level3boss.animations.play('idle');
 				if (b3_fire_delay === 0){
 					createLavaBubbles();
 					b3_fire_delay++;
@@ -1052,11 +1053,12 @@ function handleLevel3Boss(){
     			once = false;
     		}
     		var x = level3boss.x;
-        	var y = level3boss.y-50;
-        	var explodeBoss = game.add.sprite(x, y, 'player');
-        	explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
-        	explodeBoss.anchor.set(0.43, 0.43);
-        	explodeBoss.animations.play('explosion', 20, false);
+        	var y = level3boss.y;
+        	var explodeBoss = game.add.sprite(x, y, 'level3boss');
+        	explodeBoss.anchor.set(0, 1);
+        	explodeBoss.animations.add('dying', [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
+                                                 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100], true);
+        	explodeBoss.animations.play('dying', 20, false);
         	explodeBoss.killOnComplete = true;
         	explosion.volume = 2;
         	explosion.play();

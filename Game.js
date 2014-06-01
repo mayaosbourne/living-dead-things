@@ -1345,23 +1345,29 @@ function checkGrenadeCollisions(sprite){
         sprite.body.velocity.x = 0;
         level1boss.health = level1boss.health - 2;
         level1boss.body.velocity.x = 0;
-        if (sprite.health === 0) {
-            explosion.volume = 2;
-            explosion.play();
-            justExploded = false;
-            sprite.health++;
-        }
+        var x = sprite.x;
+    	var y = sprite.y;
+    	var explodeBoss = game.add.sprite(x, y, 'player');
+    	explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
+    	explodeBoss.anchor.set(0.43, 0.43);
+    	explodeBoss.animations.play('explosion', 20, false);
+    	explodeBoss.killOnComplete = true;
+    	explosion.volume = 2;
+    	explosion.play();
     }else if (game.physics.arcade.collide(sprite, level2boss)) {
         sprite.animations.play('explosion', 20, false);
         sprite.body.velocity.x = 0;
         level2boss.health = level2boss.health - 2;
         level2boss.body.velocity.x = 0;
-        if (sprite.health === 0) {
-            explosion.volume = 2;
-            explosion.play();
-            justExploded = false;
-            sprite.health++;
-        }
+        var x = sprite.x;
+    	var y = sprite.y;
+    	var explodeBoss = game.add.sprite(x, y, 'player');
+    	explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
+    	explodeBoss.anchor.set(0.43, 0.43);
+    	explodeBoss.animations.play('explosion', 20, false);
+    	explodeBoss.killOnComplete = true;
+    	explosion.volume = 2;
+    	explosion.play();
     }else if (game.physics.arcade.collide(sprite, level3boss)) {
         //sprite.animations.play('explosion', 20, false);
         sprite.body.velocity.x = 0;
@@ -1377,12 +1383,6 @@ function checkGrenadeCollisions(sprite){
     	explodeBoss.killOnComplete = true;
     	explosion.volume = 2;
     	explosion.play();
-//        if (sprite.health === 0) {
-//            explosion.volume = 2;
-//            explosion.play();
-//            justExploded = false;
-//            sprite.health++;
-//        }
     }else{
         var i = 0;
 		while (i < monster_index)

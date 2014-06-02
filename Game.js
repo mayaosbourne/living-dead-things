@@ -988,10 +988,31 @@ function handleLevel2Boss(){
 }
 
 var charging = false;
+var b3_right;
 var b3_fire_delay = 0;
+var b3_health = 0;
 
 function handleLevel3Boss(){
+	
+	if(game.physics.arcade.distanceBetween(player, level3boss) > 200 ){
+		b3_right = true;
+	}else if(game.physics.arcade.distanceBetween(player, level3boss) < -200){
+		b3_right = false;
+	}
+	
 	if (level3boss.exists){
+		if (b3_health === 0){
+			var health = level3boss.health;
+			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
+		    b3_health = game.add.text(level3boss.x - level3boss.width/2, level3boss.y - 100, health, style1);
+		}else{
+			b3_health.destroy();
+			var health = level3boss.health;
+			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
+		    b3_health = game.add.text(level3boss.x - level3boss.width/2, level3boss.y - 100, health, style1);
+		}
+		
+		
 		if (b3_fire_delay === 60 || b3_fire_delay === 0)
 			b3_fire_delay = 0;
 	    else
@@ -1066,6 +1087,7 @@ function handleLevel3Boss(){
 		}
 	}
 	
+	game.physics.arcade.collide(level3boss, ouch_layer);
 	game.physics.arcade.collide(level3boss, layer);
 }
 
@@ -1357,6 +1379,11 @@ function checkGrenadeCollisions(sprite){
         sprite.kill();
         level3boss.health = level3boss.health - 2;
         level3boss.body.velocity.x = 0;
+        var text4 = level3boss.health;
+    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+    	t4 = game.add.text(level3boss.x, level3boss.y - 20, text4, style4);
+    	t4.fixedToCamera = true;
+    	t4.destroy();
         var x = sprite.x;
     	var y = sprite.y;
     	var explodeBoss = game.add.sprite(x, y, 'player');

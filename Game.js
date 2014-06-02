@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 3;
+var level = 2;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -799,7 +799,7 @@ function initPlayer() {
         player = game.add.sprite(600, 200, 'player');
     }
     //this is for level 3 boss testing
-    player = game.add.sprite(3700, 3800, 'player');
+   // player = game.add.sprite(3700, 3800, 'player');
     //player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
@@ -909,7 +909,9 @@ var channeling = false;
 var channeled = false;
 var ranged = false;
 var attack = false;
-var tim = 0;
+var risen = 0;
+var raise_timer = 0;
+var risenlist[5];
 
 function handleLevel2Boss(){
 	//Boss moves towards player once the player is within range.
@@ -917,80 +919,121 @@ function handleLevel2Boss(){
 	//is too far away, luring him in so he can attack with a more 
 	//powerful melee attack. 
 	if (level2boss.exists){
-		if ((game.physics.arcade.distanceBetween(player, level2boss) < 500) && !player_met){
+		
+		//Make sure player is nearby, before starting attacks
+		if ((game.physics.arcade.distanceBetween(player, level2boss) < 450) && !player_met && (player.y - level2boss.y < 10)){
 			player_met = true;
 		}
 		if (player_met && !(player.health === 0)){
 			if(!channeling && !ranged && !attack){
 				b2_ani = 'idle';
 				level2boss.animations.play('idle');
-				if(player.x + 80 < level2boss.x){
+				
+				//Go to player
+				if(player.x < level2boss.x){
 					level2boss.scale.x = 1;
 					level2boss.body.velocity.x = -50;
 					boss_right = false;
-				} else if (player.x - 80 >= level2boss.x){
+				} else if (player.x >= level2boss.x){
 					level2boss.scale.x = -1;
 					level2boss.body.velocity.x = 50;
 					boss_right = true;
-				} else if(game.physics.arcade.distanceBetween(player, level2boss) > 200){
+				}
+				
+				//Do a Ranged Attack
+				if(game.physics.arcade.distanceBetween(player, level2boss) > 400){
+					if(boss_right){
+						level2boss.body.velocity.x = 500;
+					} else {
+						level2boss.body.velocity.x = -500;
+					}
 					ranged = true;
-					level2boss.body.velocity.x = 0;
 					b2_ani = 'spin_attack';
 					level2boss.animations.play('spin_attack');
-					if(boss_right){
-						level2boss.velocity = 100;
-					} else {
-						level2boss.velocity = -100;
-					}
-				} else {
+					
+				//Do a Mellee attack
+				} else if(game.physics.arcade.distanceBetween(player, level2boss) < 81) {
 					attack = true;
-					if(boss_right){
+					if(boss_right) {
 						level2boss.body.velocity.x = 1;	
-					}else{
+					} else {
 						level2boss.body.velocity.x = -1;
 					}
+					
 					b2_ani = 'attack';
 					level2boss.animations.play('attack');
+					level2boss.events.onAnimationComplete.addOnce(function(){
+						attack = false;
+						b2_ani = 'idle';
+						level2boss.animations.play('idle');
+					}, this);
 				}
 			}
 			
+			//Chanel Zombies when at 3 Health
 			if(level2boss.health === 3 && !channeled ){
 				level2boss.body.velocity.x = 0;
 				b2_ani = 'chanelling';
 				level2boss.animations.play('chanelling');
 				channeling = true;
+				ranged = false;
+				attack = false;
 			}
 			
 		}
+		
+		//Chanelling Zombies
 		if (channeling){
-			if (tim === 60) {
-				channeling = false;
-				chaneled = true;
-				tim = 0;
-			} else {
-				tim++;
-			}
-			//raise zombie
-		}
-		if(ranged){
-			if (tim === 60) {
-				ranged = false;
-				tim = 0;
-			} else {
-				tim++;
+			if((raise_timer === 0 || raise_timer === 60) && risen < 5){
+				var raise_x;
+				if(boss_right){
+					raise_x = level2boss.x + 100;
+				} else {
+					raise_x = level2boss.x - 100;
+				}
+				risenlist[risen] = game.add.sprite(raise_x, level2boss.y - 50, 'monsters');
+				risenlist[risen].animations.add('walk', [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], true);
+				risenlist[risen].animations.add('attack', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+	                                           38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56], true);
+				risenlist[risen].animations.add('rise', [145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155], false);
+				risenlist[risen].animations.play('rise', 7);
+				risenlist[risen].events.onAnimationComplete.addOnce(function(){
+					risenlist[risen].animations.play('walk', 7, true);
+				}, this);
+				game.physics.enable(risenlist[risen]);
+				risenlist[risen].body.collideWorldBounds = true;
+				risenlist[risen].body.gravity.y = 500;
+				risenlist[risen].health = 2;
+				risen++;
+				raise_timer = 0;
+			} 
+			handleRisen();
+			raise_timer++;
+			
+			
+			if(risen > 5){
+				channeled = true;
+				chanelling = false;
 			}
 		}
 		
-		if(attack){
-			if (tim === 240) {
-				attack = false;
-				tim = 0;
-			} else {
-				tim++;
+		//Performing a ranged attack
+		if(ranged){
+			if(player.x < level2boss.x){
+				level2boss.scale.x = 1;
+				level2boss.body.velocity.x = -500;
+				boss_right = false;
+			} else if (player.x >= level2boss.x){
+				level2boss.scale.x = -1;
+				level2boss.body.velocity.x = 500;
+				boss_right = true;
 			}
-			
+			if(game.physics.arcade.collide(player, level2boss)){
+				ranged = false;
+			}
 		}
-	
+		
+		//On Death
 		if (level2boss.health === 0){
     		level2boss.destroy();
     		if (once){
@@ -1012,6 +1055,37 @@ function handleLevel2Boss(){
 	
 	game.physics.arcade.collide(level2boss, layer);
 
+}
+
+function handleRisen(){
+	var i = 0;
+	while(i < risen){
+		if(risenlist[i].animations.name === 'walk'){
+			if (player.x < risenlist[i].x){
+				risenlist[i].scale.x = 1;
+				risenlist[i].body.velocity.x = -50;
+			} else if (player.x >= risenlist[i].x){
+				risenlist[i].scale.x = -1;
+				risenlist[i].body.velocity.x = 50;
+			}
+	
+			if (risenlist[i].health === 0) {
+	        	
+		    	monsterIsKilled = true;
+		        var x = risenlist[i].x;
+		        var y = risenlist[i].y;
+		        risenlist[j].destroy();
+		        monsterExplode = game.add.sprite(x, y, 'monsters');
+		        monsterExplode.animations.add('explode', [104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+		                                      122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144], true);
+		
+		        monsterExplode.anchor.set(0.43, 0.43);
+		        monsterExplode.animations.play('explode', 15);
+	        }
+	    }
+		game.physics.arcade.collide(risenlist[i], layer);
+	    i++;
+	}
 }
 
 var charging = false;

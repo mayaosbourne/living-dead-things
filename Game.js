@@ -258,7 +258,8 @@ var ouch_timer = 0;
 var text_timeout = 0;
 var t;
 var t3;
-
+var game_over_delay = 0;
+var game_over_hud;
 var fireball_delay = 0;
 
 function update() {	
@@ -342,19 +343,32 @@ function update() {
     handleInput();
     
     if ((level === 1 && !level1boss.exists) || (level === 2 && !level2boss.exists)) {
-    	if (hasAcquiredFinishToken){
-    		hasAcquiredFinishToken = false;
-        	var text4 = "You Won!";
-        	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-        	t4 = game.add.text(500, 250, text4, style4);
-        	t4.fixedToCamera = true;
-        	t4.destroy();
-    		music.stop();
-    		reset();
-    		level++;
-    		create();
-    		
-    	}
+        if (hasAcquiredFinishToken) {
+            hasAcquiredFinishToken = false;
+            var text4 = "You Won!";
+            var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+            t4 = game.add.text(500, 250, text4, style4);
+            t4.fixedToCamera = true;
+            t4.destroy();
+            music.stop();
+            reset();
+            level++;
+            create();
+
+        }
+    }
+    else if (level === 3 && !level3boss.exists) {
+        game_over_delay++;
+        //fire_delay = 100;
+        
+        
+
+    }
+    if (game_over_delay === 115) {
+        game_over_hud = game.add.sprite(0, 0, 'the_end');
+        game_over_hud.fixedToCamera = true;
+        player.destroy();
+        music.stop();
     }
     
     //TODO level === 3 and !level3boss.exists then go to credits or something
@@ -1085,6 +1099,7 @@ function handleLevel3Boss(){
         	explosion.volume = 2;
         	explosion.play();
         	level3boss.destroy();
+     
 		}
 	}
 	

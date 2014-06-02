@@ -1,4 +1,4 @@
-<TextureAtlas imagePath="level2boss.png">
+<TextureAtlas imagePath="level3bossNEW.png">
 
 <!-- Idle: 0 to 11 -->
 <SubTexture name="idle-1-00.png" x="10" y="29" width="104" height="81"/>

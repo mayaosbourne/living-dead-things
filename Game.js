@@ -991,8 +991,31 @@ var charging = false;
 var b3_right;
 var b3_fire_delay = 0;
 var b3_health = 0;
+var charge_delay = 0;
 
 function handleLevel3Boss(){
+	
+	if(game.physics.arcade.distanceBetween(player, level3boss) > 200 ||
+			  game.physics.arcade.distanceBetween(player, level3boss) < -200){
+		ranged = true;
+		charging = false;
+		level3boss.body.velocity.x = 0;
+		console.log("ranged!");
+		b3_ani = 'idle';
+	}
+	if (charge_delay > 80 && charge_delay < 150){
+		charging = true;
+		ranged = false;
+		charge_delay++;
+	}else if (charge_delay === 150 || charge_delay === 0){
+		charge_delay = 0;
+		console.log("charging!");
+		charging = false;
+		ranged = true;
+		charge_delay++;
+	}
+    else
+    	charge_delay++;
 	
 	if(game.physics.arcade.distanceBetween(player, level3boss) > 200 ){
 		b3_right = true;
@@ -1011,8 +1034,7 @@ function handleLevel3Boss(){
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
 		    b3_health = game.add.text(level3boss.x - level3boss.width/2, level3boss.y - 100, health, style1);
 		}
-		
-		
+
 		if (b3_fire_delay === 60 || b3_fire_delay === 0)
 			b3_fire_delay = 0;
 	    else
@@ -1020,18 +1042,6 @@ function handleLevel3Boss(){
 		
 		if ((game.physics.arcade.distanceBetween(player, level3boss) < 500) && !player_met){
 			player_met = true;
-		}
-		
-		if(game.physics.arcade.distanceBetween(player, level3boss) > 200 ||
-				  game.physics.arcade.distanceBetween(player, level3boss) < -200){
-			ranged = true;
-			level3boss.body.velocity.x = 0;
-			console.log("ranged!");
-			b3_ani = 'idle';
-			
-		}else{
-			ranged = false;
-			charging = true;
 		}
 		
 		if (player_met && !(player.health === 0)){
@@ -1048,12 +1058,14 @@ function handleLevel3Boss(){
 					boss_right = true;
 				} 
 			}else if (ranged){
+				charging = false;
 				level3boss.animations.play('idle');
 				if (b3_fire_delay === 0){
 					createLavaBubbles();
 					b3_fire_delay++;
 				}
-			}else{
+			}else if (charging){
+				ranged = false;
 				level3boss.animations.play('charging', 15);
 				if(player.x + 80 < level3boss.x){
 					level3boss.scale.x = -1;
@@ -1066,7 +1078,7 @@ function handleLevel3Boss(){
 				} 
 			}	
 		}
-	
+		
 		if (level3boss.health === 0){
 			level3boss.destroy();
     		if (once){
@@ -1076,10 +1088,10 @@ function handleLevel3Boss(){
     		var x = level3boss.x;
         	var y = level3boss.y;
         	var explodeBoss = game.add.sprite(x, y, 'level3boss');
-        	explodeBoss.anchor.set(0, 1);
         	explodeBoss.animations.add('dying', [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
                                                  81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100], true);
         	explodeBoss.animations.play('dying', 20, false);
+        	explodeBoss.anchor.set(0.5, 1);
         	explodeBoss.killOnComplete = true;
         	explosion.volume = 2;
         	explosion.play();

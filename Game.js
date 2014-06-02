@@ -11,7 +11,7 @@ function preload() {
 	game.load.atlasXML('level1boss', 'assets/monsters/level1boss.png', 'assets/monsters/level1boss.xml');
 	game.load.atlasXML('fireball', 'assets/monsters/fireball.png', 'assets/monsters/fireball.xml');
 	game.load.atlasXML('level2boss', 'assets/monsters/level2boss.png', 'assets/monsters/level2boss.xml');
-	game.load.atlasXML('level3boss', 'assets/monsters/level3boss.png', 'assets/monsters/level3boss.xml');
+	game.load.atlasXML('level3boss', 'assets/monsters/level3bossNEW.png', 'assets/monsters/level3boss.xml');
 	//game.load.image('ground', 'assets/seductive.jpg');
 	
     //game.load.image('stand', 'assets/player/standing.png');

@@ -244,7 +244,8 @@ function create() {
     text.anchor.set(1,0);
     text.fixedToCamera = true;
     
-
+    game_over_hud = game.add.sprite(0, 0, 'the_end');
+    game_over_hud.fixedToCamera = true;
 }
 
 //Control global variables
@@ -359,14 +360,14 @@ function update() {
     }
     else if (level === 3 && !level3boss.exists) {
         game_over_delay++;
+
         //fire_delay = 100;
         
         
 
     }
-    if (game_over_delay === 115) {
-        game_over_hud = game.add.sprite(0, 0, 'the_end');
-        game_over_hud.fixedToCamera = true;
+    if (game_over_delay === 120) {
+        
         player.destroy();
         music.stop();
     }

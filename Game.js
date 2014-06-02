@@ -48,6 +48,7 @@ function preload() {
 	game.load.audio('explosion', 'assets/sound/explosion.mp3');
 	game.load.audio('grunt', 'assets/sound/grunt.mp3');
 
+	game.load.image('the_end', 'assets/gamecredits.png');
 }
 
 var GUN = 1;

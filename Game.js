@@ -214,22 +214,22 @@ function create() {
 	
 	
 
-//    lantern = game.add.sprite(0, 0, 'lantern');
-//    lantern.alpha = 0.86;
-//    //lantern.alpha = 0.00;
-//    
-//    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
-//    lantern_overlay.alpha = 0.8;
-//    //lantern_overlay.alpha = 0.0;
-//
-//    
-//    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
+    lantern = game.add.sprite(0, 0, 'lantern');
+    lantern.alpha = 0.86;
+    //lantern.alpha = 0.00;
+    
+    lantern_overlay = game.add.sprite(0, 0, 'lantern overlay');
+    lantern_overlay.alpha = 0.8;
+    //lantern_overlay.alpha = 0.0;
+
+    
+    game.add.tween(lantern_overlay).to( {alpha: 1}, 100, Phaser.Easing.Linear.None, true, 0 , 1000, true);
 	
     hud = game.add.sprite(0, 0, 'hud');
     gun_mod = game.add.sprite(450, 0, 'gunmod');
     gun_mod.fixedToCamera = true;
-//    lantern_overlay.fixedToCamera = true;
-//    lantern.fixedToCamera = true;
+    lantern_overlay.fixedToCamera = true;
+    lantern.fixedToCamera = true;
     hud.fixedToCamera = true;
     health1 = game.add.sprite(35, 0, 'player');
     health1.fixedToCamera = true;
@@ -276,8 +276,11 @@ function update() {
         lantern_overlay.destroy();
         lantern.destroy();
     }else if (level === 2 && game.physics.arcade.distanceBetween(player, level2boss) < 500){
-    	//lantern_overlay.destroy();
-        //lantern.destroy();
+    	lantern_overlay.destroy();
+        lantern.destroy();
+    }else if (level === 3 && game.physics.arcade.distanceBetween(player, level3boss) < 500){
+    	lantern_overlay.destroy();
+        lantern.destroy();
     }
 	if (level === 1){
 		handleLevel1Boss();
@@ -294,9 +297,9 @@ function update() {
 	}
 
 	handleHealth();
-
+	
 	grenades.forEachExists(checkGrenadeCollisions, this);
-
+	
 	if (text_timeout === 80){
 		t.destroy();
 	}
@@ -307,7 +310,7 @@ function update() {
 	}
     else
     	ouch_timer++;
-	
+
 	handlePlayerMonsterCollision();
 	
     game.physics.arcade.collide(player, layer);
@@ -319,7 +322,7 @@ function update() {
     	}	
     }
    
-    hasGrenades = true;
+    //hasGrenades = true;
     
     if (game.physics.arcade.collide(item, player)){
     	weapon = GRENADES;
@@ -335,16 +338,19 @@ function update() {
     	text_timeout++;
     }
     
-//    if (game.physics.arcade.collide(finish, player)){
-//    	finish.destroy();
-//    	hasAcquiredFinishToken = true;
-//    	handleXP(player.health * 100);
-//    }
-
+    if(level === 1 || level === 2){
+    	 if (game.physics.arcade.collide(finish, player)){
+    	    	finish.destroy();
+    	    	hasAcquiredFinishToken = true;
+    	    	handleXP(player.health * 100);
+    	    }
+    }
+   
+	
     handleMonsters();
-    
-    //game.physics.arcade.collide(level1boss, layer);
-    //game.physics.arcade.collide(level2boss, layer);
+	
+    game.physics.arcade.collide(level1boss, layer);
+    game.physics.arcade.collide(level2boss, layer);
     game.physics.arcade.collide(level3boss, layer);
     bullets.forEachExists(checkBulletCollisions, this);
   
@@ -370,10 +376,6 @@ function update() {
         game_over_delay++;
         
         game.add.tween(black_bg).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 1000, false);
-        //fire_delay = 100;
-        
-        
-
     }
     if (game_over_delay === 200) {
         
@@ -382,20 +384,6 @@ function update() {
         player.destroy();
         
     }
-    
-    //TODO level === 3 and !level3boss.exists then go to credits or something
-    
-//    else if(level3boss.exists === false){
-//    	var text4 = "You Won!";
-//    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-//    	t4 = game.add.text(500, 250, text4, style4);
-//    	t4.fixedToCamera = true;
-//    	t4.destroy();
-//		music.stop();
-//		reset();
-//		create();
-//		
-//	}
 }
 
 function addMonstersToLevel(level){
@@ -468,7 +456,7 @@ function addMonstersToLevel(level){
   
     }else if (level === 2){
     	
-    	level2boss = game.add.sprite(3700, 420, 'level2boss');
+    	level2boss = game.add.sprite(4706, 420, 'level2boss');
         level2boss.animations.add('idle', ['idle-1-00.png', 'idle-1-01.png', 'idle-1-02.png', 'idle-1-01.png'], 5, true);
         level2boss.animations.add('attack', ['attack-1-00.png', 'attack-1-01.png', 'attack-1-02.png', 'attack-1-03.png', 
                                             'attack-1-04.png', 'attack-1-05.png', 'attack-1-06.png', 'attack-1-07.png', 
@@ -813,7 +801,7 @@ function initPlayer() {
         player = game.add.sprite(600, 200, 'player');
     }
     //this is for level 3 boss testing
-    player = game.add.sprite(3700, 3800, 'player');
+    //player = game.add.sprite(3700, 3800, 'player');
     //player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
@@ -1072,7 +1060,6 @@ function handleLevel3Boss(){
 		ranged = true;
 		charging = false;
 		level3boss.body.velocity.x = 0;
-		console.log("ranged!");
 		b3_ani = 'idle';
 	}
 	if (charge_delay > 80 && charge_delay < 150){
@@ -1081,7 +1068,6 @@ function handleLevel3Boss(){
 		charge_delay++;
 	}else if (charge_delay === 150 || charge_delay === 0){
 		charge_delay = 0;
-		console.log("charging!");
 		charging = false;
 		ranged = true;
 		charge_delay++;
@@ -1168,16 +1154,12 @@ function handleLevel3Boss(){
         	explodeBoss.killOnComplete = true;
         	explosion.volume = 2;
         	explosion.play();
-        	level3boss.destroy();
         	black_bg = game.add.sprite(0, 0, 'black_bg');
         	black_bg.alpha = 0.0;
         	black_bg.fixedToCamera = true;
+        	level3boss.destroy();
         	music.stop();
         	the_end_music.play();
-        	
-            
-        	
-     
 		}
 	}
 	
@@ -1209,12 +1191,6 @@ function handleHealth() {
             t3 = game.add.text(player.x - 250, player.y - 100, "Thank You for Playing!\n" +
                     "Press 'Y' to Play Again!", { font: "65px Arial", fill: "#FFFFFF", align: "center" });
             text_timeout = 0;
-
-            var i = 0;
-            while (i < monster_index) {
-                monsters[i].destroy();
-                i++;
-            }
 
             if (yesKey.isDown) {
                 t3.destroy();
@@ -1248,7 +1224,6 @@ function handleInput(){
     
 	if (weaponKey.isDown && hasGrenades && switched === 0 && fire_delay === 0){
 		if (weapon === GUN){
-		    console.log("Grenades!");
 		    gun_mod.destroy();
 		    grenade_mod = game.add.sprite(450, 0, 'grenademod');
 		    grenade_mod.fixedToCamera = true;
@@ -1256,7 +1231,6 @@ function handleInput(){
 			switched++;
 		}
 		else if(weapon === GRENADES){
-		    console.log("Gun!");
 		    grenade_mod.destroy();
 		    gun_mod = game.add.sprite(450, 0, 'gunmod');
 		    gun_mod.fixedToCamera = true;
@@ -1447,6 +1421,7 @@ function checkGrenadeCollisions(sprite){
         }
     } else if (game.physics.arcade.collide(sprite, level1boss)) {
         sprite.body.velocity.x = 0;
+        sprite.kill();
         level1boss.health = level1boss.health - 2;
         level1boss.body.velocity.x = 0;
         var x = sprite.x;
@@ -1460,6 +1435,7 @@ function checkGrenadeCollisions(sprite){
     	explosion.play();
     }else if (game.physics.arcade.collide(sprite, level2boss)) {
         sprite.body.velocity.x = 0;
+        sprite.kill();
         level2boss.health = level2boss.health - 2;
         level2boss.body.velocity.x = 0;
         var x = sprite.x;
@@ -1476,11 +1452,6 @@ function checkGrenadeCollisions(sprite){
         sprite.kill();
         level3boss.health = level3boss.health - 2;
         level3boss.body.velocity.x = 0;
-        var text4 = level3boss.health;
-    	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-    	t4 = game.add.text(level3boss.x, level3boss.y - 20, text4, style4);
-    	t4.fixedToCamera = true;
-    	t4.destroy();
         var x = sprite.x;
     	var y = sprite.y;
     	var explodeBoss = game.add.sprite(x, y, 'player');
@@ -1503,7 +1474,6 @@ function checkGrenadeCollisions(sprite){
 					sprite.body.velocity.x = 0;
 					monsters[i].health = monsters[i].health - 2;
 					monsters[i].body.velocity.x = 0;
-					console.log(monsters[i].health);
 					if (sprite.health === 0){
 						explosion.volume = 2;
 						explosion.play();
@@ -1516,7 +1486,6 @@ function checkGrenadeCollisions(sprite){
 		}
 		
     }
-  
 }
 
 function checkBulletCollisions(sprite) {
@@ -1618,7 +1587,7 @@ function createLavaBubbles() {
         fireball.scale.x = -1;
     } else {
         var fireball = fireballs.getFirstExists(false);
-        fireball.reset(level3boss.x - 20, level3boss.y - 50);
+        fireball.reset(level3boss.x + 20, level3boss.y - 50);
         game.physics.arcade.accelerateToObject(fireball, player, 300);
         fireball.scale.x = 1;
     }
@@ -1658,5 +1627,6 @@ function reset() {
 	hasAcquiredFinishToken = false;
 	bossDestroyed = false;
 	player_met = false;
+	hasGrenades = false;
 
 }

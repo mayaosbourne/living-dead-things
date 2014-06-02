@@ -991,7 +991,6 @@ var charging = false;
 var b3_right;
 var b3_fire_delay = 0;
 var b3_health = 0;
-var charge_delay = 0;
 
 function handleLevel3Boss(){
 	

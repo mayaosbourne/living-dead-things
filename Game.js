@@ -48,7 +48,8 @@ function preload() {
 	game.load.audio('explosion', 'assets/sound/explosion.mp3');
 	game.load.audio('grunt', 'assets/sound/grunt.mp3');
 
-	game.load.image('the_end', 'assets/gamecredits.png');
+	game.load.image('black_bg', 'assets/black_bg.png');
+	game.load.image('the_end_text', 'assets/the_end_text.png');
 }
 
 var GUN = 1;
@@ -56,6 +57,8 @@ var GRENADES = 2;
 var hasGrenades = false;
 var points = 0;
 var text;
+var black_bg;
+var the_end_text;
 
 var grenades;
 var gun_mod;
@@ -205,6 +208,9 @@ function create() {
 	
 	addMonstersToLevel(level);
     
+	
+	
+
 //    lantern = game.add.sprite(0, 0, 'lantern');
 //    lantern.alpha = 0.86;
 //    //lantern.alpha = 0.00;
@@ -244,8 +250,7 @@ function create() {
     text.anchor.set(1,0);
     text.fixedToCamera = true;
     
-    game_over_hud = game.add.sprite(0, 0, 'the_end');
-    game_over_hud.fixedToCamera = true;
+    
 }
 
 //Control global variables
@@ -260,7 +265,7 @@ var text_timeout = 0;
 var t;
 var t3;
 var game_over_delay = 0;
-var game_over_hud;
+
 var fireball_delay = 0;
 
 function update() {	
@@ -360,14 +365,17 @@ function update() {
     }
     else if (level === 3 && !level3boss.exists) {
         game_over_delay++;
-
+        
+        game.add.tween(black_bg).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 1000, false);
         //fire_delay = 100;
         
         
 
     }
-    if (game_over_delay === 120) {
+    if (game_over_delay === 200) {
         
+        the_end_text = game.add.sprite(0, 0, 'the_end_text');
+        the_end_text.fixedToCamera = true;
         player.destroy();
         music.stop();
     }
@@ -1100,6 +1108,10 @@ function handleLevel3Boss(){
         	explosion.volume = 2;
         	explosion.play();
         	level3boss.destroy();
+        	black_bg = game.add.sprite(0, 0, 'black_bg');
+        	black_bg.alpha = 0.0;
+        	black_bg.fixedToCamera = true;
+        	
      
 		}
 	}

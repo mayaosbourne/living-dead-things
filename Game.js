@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 3;
+var level = 2;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -703,11 +703,19 @@ function handleMonsters(){
 		var k = 0;
 	    while (k < monster_index){
 	    	if (player.x < monsters[k].x){
-	    		monsters[k].scale.x = 1;
-	    		monsters[k].body.velocity.x = -50;
+	    		if (monsters[k] === level2boss){
+	    			
+	    		}else{
+	    			monsters[k].scale.x = 1;
+		    		monsters[k].body.velocity.x = -50;
+	    		}
 			} else if (player.x >=monsters[k].x){
-				monsters[k].scale.x = -1;
-				monsters[k].body.velocity.x = 50;
+				if (monsters[k] === level2boss){
+					
+				}else{
+					monsters[k].scale.x = -1;
+					monsters[k].body.velocity.x = 50;
+				}
 			}
 	    	k++;
 	    }
@@ -802,7 +810,7 @@ function initPlayer() {
     }
     //this is for level 3 boss testing
     //player = game.add.sprite(3700, 3800, 'player');
-    //player = game.add.sprite(3000, 200, 'player');
+    player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(600, 100, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
@@ -829,10 +837,22 @@ function initPlayer() {
 
 var once = true;
 var boss_move;
+var b1_health = 0;
 
 function handleLevel1Boss(){
     if (level1boss.exists) {
 
+    	if (b1_health === 0){
+			var health = level1boss.health;
+			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
+			b1_health = game.add.text(level1boss.x, level1boss.y - 100, health, style1);
+		}else{
+			b1_health.destroy();
+			var health = level1boss.health;
+			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
+			b1_health = game.add.text(level1boss.x, level1boss.y - 100, health, style1);
+		}
+    	
         if (fireball_delay === 90 || fireball_delay === 0)
             fireball_delay = 0;
         else
@@ -913,10 +933,22 @@ var ranged = false;
 var attack = false;
 var risen = 0;
 var raise_timer = 0;
+var b2_health = 0;
 
 function handleLevel2Boss(){
 	if (level2boss.exists){
 
+		if (b2_health === 0){
+			var health = level2boss.health;
+			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
+			b2_health = game.add.text(level2boss.x, level2boss.y - 100, health, style1);
+		}else{
+			b2_health.destroy();
+			var health = level2boss.health;
+			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
+			b2_health = game.add.text(level2boss.x, level2boss.y - 100, health, style1);
+		}
+		
 		if ((game.physics.arcade.distanceBetween(player, level2boss) < 450) && !player_met && (player.y - level2boss.y < 10)){
 			player_met = true;
 		}
@@ -942,6 +974,7 @@ function handleLevel2Boss(){
 						level2boss.body.velocity.x = -500;
 					}
 					ranged = true;
+					attack = false;
 					b2_ani = 'spin_attack';
 					level2boss.animations.play('spin_attack');
 
@@ -973,7 +1006,7 @@ function handleLevel2Boss(){
 			}
 
 			if (channeling){
-				if((raise_timer === 0 || raise_timer === 240) && risen < 5){
+				if((raise_timer === 0 || raise_timer === 30) && risen <= 5){
 					var raise_x;
 					if(boss_right){
 						raise_x = level2boss.x + 100;
@@ -996,18 +1029,23 @@ function handleLevel2Boss(){
 			        monster1.health = 2;
 			        monsters[monster_index] = monster1;
 			        monster_index++;
-					
+			        risen++;
 					raise_timer = 0;
 				} 
 				raise_timer++;
-			
-				if(risen > 5){
+				if(risen === 6){
+					console.log("made it!");
 					channeled = true;
-					chanelling = false;
+					channeling = false;
+					ranged = false;
+					attack = false;
+					risen++;
 				}
 			}
 
 			if(ranged){
+				console.log("ranged");
+				attack = false;
 				if(player.x < level2boss.x){
 					level2boss.scale.x = 1;
 					level2boss.body.velocity.x = -500;
@@ -1497,9 +1535,11 @@ function checkBulletCollisions(sprite) {
 	    sprite.kill();
 	}
 	if (game.physics.arcade.collide(sprite, level2boss)) {
-	    level2boss.health--;
-	    level2boss.body.velocity.x = 0;
-	    sprite.kill();
+	    if (!channeling){
+	    	level2boss.health--;   
+	    }
+	    level2boss.body.velocity.x = 0; 
+	    sprite.kill();	
 	}
 	if (game.physics.arcade.collide(sprite, level3boss)) {
 	    level3boss.health--;

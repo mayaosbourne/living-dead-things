@@ -44,10 +44,13 @@ function preload() {
 	game.load.image('grenademod', 'assets/grenade_mod.png');
 
 	game.load.audio('music', 'assets/sound/bg_music.mp3');
+	game.load.audio('the_end', 'assets/sound/the_end.mp3');
 	game.load.audio('single shot', 'assets/sound/single_shot.mp3');
 	game.load.audio('explosion', 'assets/sound/explosion.mp3');
 	game.load.audio('grunt', 'assets/sound/grunt.mp3');
 
+	game.load.image('black_bg', 'assets/black_bg.png');
+	game.load.image('the_end_text', 'assets/the_end_text.png');
 }
 
 var GUN = 1;
@@ -55,6 +58,8 @@ var GRENADES = 2;
 var hasGrenades = false;
 var points = 0;
 var text;
+var black_bg;
+var the_end_text;
 
 var grenades;
 var gun_mod;
@@ -74,6 +79,7 @@ var platforms;
 var upKey;
 var downKey;
 var fireKey;
+var the_end_music;
 
 var level1boss;
 var level2boss;
@@ -90,6 +96,7 @@ var level = 3;
 function create() {
 	gun_shot = game.add.audio('single shot');
 	explosion = game.add.audio('explosion');
+	the_end_music = game.add.audio('the_end');
 	grunt = game.add.audio('grunt');
 	music = game.add.audio('music');
 	music.play('', 0, 1, true);
@@ -204,6 +211,9 @@ function create() {
 	
 	addMonstersToLevel(level);
     
+	
+	
+
 //    lantern = game.add.sprite(0, 0, 'lantern');
 //    lantern.alpha = 0.86;
 //    //lantern.alpha = 0.00;
@@ -243,7 +253,7 @@ function create() {
     text.anchor.set(1,0);
     text.fixedToCamera = true;
     
-
+    
 }
 
 //Control global variables
@@ -257,6 +267,7 @@ var ouch_timer = 0;
 var text_timeout = 0;
 var t;
 var t3;
+var game_over_delay = 0;
 
 var fireball_delay = 0;
 
@@ -341,19 +352,35 @@ function update() {
     handleInput();
     
     if ((level === 1 && !level1boss.exists) || (level === 2 && !level2boss.exists)) {
-    	if (hasAcquiredFinishToken){
-    		hasAcquiredFinishToken = false;
-        	var text4 = "You Won!";
-        	var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
-        	t4 = game.add.text(500, 250, text4, style4);
-        	t4.fixedToCamera = true;
-        	t4.destroy();
-    		music.stop();
-    		reset();
-    		level++;
-    		create();
-    		
-    	}
+        if (hasAcquiredFinishToken) {
+            hasAcquiredFinishToken = false;
+            var text4 = "You Won!";
+            var style4 = { font: "65px Arial", fill: "#FFFFFF", align: "center" };
+            t4 = game.add.text(500, 250, text4, style4);
+            t4.fixedToCamera = true;
+            t4.destroy();
+            music.stop();
+            reset();
+            level++;
+            create();
+
+        }
+    }
+    else if (level === 3 && !level3boss.exists) {
+        game_over_delay++;
+        
+        game.add.tween(black_bg).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 1000, false);
+        //fire_delay = 100;
+        
+        
+
+    }
+    if (game_over_delay === 200) {
+        
+        the_end_text = game.add.sprite(0, 0, 'the_end_text');
+        the_end_text.fixedToCamera = true;
+        player.destroy();
+        
     }
     
     //TODO level === 3 and !level3boss.exists then go to credits or something
@@ -991,6 +1018,7 @@ var charging = false;
 var b3_right;
 var b3_fire_delay = 0;
 var b3_health = 0;
+var isTheEnd = false;
 
 function handleLevel3Boss(){
 	
@@ -1084,6 +1112,7 @@ function handleLevel3Boss(){
     			handleXP(1000);
     			once = false;
     		}
+    		isTheEnd = true;
     		var x = level3boss.x;
         	var y = level3boss.y;
         	var explodeBoss = game.add.sprite(x, y, 'level3boss');
@@ -1095,6 +1124,15 @@ function handleLevel3Boss(){
         	explosion.volume = 2;
         	explosion.play();
         	level3boss.destroy();
+        	black_bg = game.add.sprite(0, 0, 'black_bg');
+        	black_bg.alpha = 0.0;
+        	black_bg.fixedToCamera = true;
+        	music.stop();
+        	the_end_music.play();
+        	
+            
+        	
+     
 		}
 	}
 	
@@ -1102,42 +1140,45 @@ function handleLevel3Boss(){
 	game.physics.arcade.collide(level3boss, layer);
 }
 
-function handleHealth(){
-	 if(player.health === 6){
-		 health1.animations.play('full', 1);
-		 health2.animations.play('full', 1);
-		 health3.animations.play('full', 1);
-	 }else if(player.health === 5){
-		 health3.animations.play('half', 1);
-	 }else if(player.health === 4){
-		 health3.animations.play('empty', 1);
-	 }else if(player.health === 3){
-		 health2.animations.play('half', 1);
-	 }else if(player.health === 2){
-		 health2.animations.play('empty', 1);
-	 }else if(player.health === 1){
-		 health1.animations.play('half', 1);
-	 }else if (player.health === 0 && !choice){
-		 health1.animations.play('empty', 1);
-		player.destroy();
-		fire_delay = 100;
-		music.stop();
-    	t3 = game.add.text(player.x - 250, player.y - 100, "Thank You for Playing!\n" +
-    			"Press 'Y' to Play Again!", { font: "65px Arial", fill: "#FFFFFF", align: "center" });
-    	text_timeout = 0;
+function handleHealth() {
+    if (isTheEnd === false) {
+        if (player.health === 6) {
+            health1.animations.play('full', 1);
+            health2.animations.play('full', 1);
+            health3.animations.play('full', 1);
+        } else if (player.health === 5) {
+            health3.animations.play('half', 1);
+        } else if (player.health === 4) {
+            health3.animations.play('empty', 1);
+        } else if (player.health === 3) {
+            health2.animations.play('half', 1);
+        } else if (player.health === 2) {
+            health2.animations.play('empty', 1);
+        } else if (player.health === 1) {
+            health1.animations.play('half', 1);
+        } else if (player.health === 0 && !choice) {
+            health1.animations.play('empty', 1);
+            player.destroy();
+            fire_delay = 100;
+            music.stop();
+            t3 = game.add.text(player.x - 250, player.y - 100, "Thank You for Playing!\n" +
+                    "Press 'Y' to Play Again!", { font: "65px Arial", fill: "#FFFFFF", align: "center" });
+            text_timeout = 0;
 
-    	var i = 0;
-	    while (i < monster_index){
-	    	monsters[i].destroy();
-	    	i++;
-	    }
-    	
-    	if (yesKey.isDown) {
-    		t3.destroy();
-    		reset();
-    		create();
-    	}
-	 }
+            var i = 0;
+            while (i < monster_index) {
+                monsters[i].destroy();
+                i++;
+            }
+
+            if (yesKey.isDown) {
+                t3.destroy();
+                reset();
+                create();
+            }
+        }
+    }
+	
 }
 
 var switched = 0;

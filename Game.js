@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 2;
+var level = 3;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -175,12 +175,6 @@ function create() {
         game.physics.enable(item);
     }
     
-    //  The platforms group contains the ground and the 2 ledges we can jump on
-    platforms = game.add.group();
- 
-    //  We will enable physics for any object that is created in this group
-    platforms.enableBody = true;
-    
     initPlayer();
 
     game.physics.enable(player);
@@ -210,10 +204,7 @@ function create() {
 	fireballs.createMultiple(100, 'fireball', 2, false);
 	
 	addMonstersToLevel(level);
-    
 	
-	
-
     lantern = game.add.sprite(0, 0, 'lantern');
     lantern.alpha = 0.86;
     //lantern.alpha = 0.00;
@@ -283,20 +274,37 @@ function update() {
         lantern.destroy();
     }
 	if (level === 1){
+		if (level1boss.y > 900){
+			console.log("Fired");
+			level1boss.x = 4706;
+			level1boss.y = 800;
+		}
 		handleLevel1Boss();
 		if (!(player.health === 0)) {
 	        level1boss.animations.play('move', 5);
 	    }
 	}else if (level === 2){
+		if (level2boss.y > 900){
+			console.log("Fired");
+			level2boss.x = 4706;
+			level2boss.y = 800;
+		}
 		handleLevel2Boss();
 		if (!(player.health === 0)) {
 	        level2boss.animations.play(b2_ani);
 		}
 	}else if (level === 3){
+		if (player.y > 3900)
+			player.y = 3800;
+		if (level3boss.y > 3900)
+			level3boss.y = 3750;
 		handleLevel3Boss();
 	}
 
 	handleHealth();
+	game.physics.arcade.collide(level1boss, layer);
+	game.physics.arcade.collide(level2boss, layer);
+	game.physics.arcade.collide(level3boss, layer);
 	
 	grenades.forEachExists(checkGrenadeCollisions, this);
 	
@@ -310,8 +318,6 @@ function update() {
 	}
     else
     	ouch_timer++;
-
-	handlePlayerMonsterCollision();
 	
     game.physics.arcade.collide(player, layer);
     if (game.physics.arcade.collide(player, ouch_layer)){
@@ -345,13 +351,9 @@ function update() {
     	    	handleXP(player.health * 100);
     	    }
     }
-   
-	
+
     handleMonsters();
-	
-    game.physics.arcade.collide(level1boss, layer);
-    game.physics.arcade.collide(level2boss, layer);
-    game.physics.arcade.collide(level3boss, layer);
+    handlePlayerMonsterCollision();
     bullets.forEachExists(checkBulletCollisions, this);
   
     fireballs.forEachExists(checkFireballCollisions, this);
@@ -391,7 +393,7 @@ function addMonstersToLevel(level){
     
     if (level === 1) {
 
-        level1boss = game.add.sprite(3950, 100, 'level1boss');
+        level1boss = game.add.sprite(3950, 750, 'level1boss');
         level1boss.animations.add('move', [0, 1, 0, 1, 0, 1, 2, 3, 4], true);
         game.physics.enable(level1boss);
 
@@ -456,14 +458,15 @@ function addMonstersToLevel(level){
   
     }else if (level === 2){
     	
-    	level2boss = game.add.sprite(4706, 420, 'level2boss');
+    	level2boss = game.add.sprite(4706, 815, 'level2boss');
+    	game.physics.enable(level2boss);
         level2boss.animations.add('idle', ['idle-1-00.png', 'idle-1-01.png', 'idle-1-02.png', 'idle-1-01.png'], 5, true);
         level2boss.animations.add('attack', ['attack-1-00.png', 'attack-1-01.png', 'attack-1-02.png', 'attack-1-03.png', 
                                             'attack-1-04.png', 'attack-1-05.png', 'attack-1-06.png', 'attack-1-07.png', 
                                             'attack-1-08.png'], 5, false);
         level2boss.animations.add('spin_attack', ['spin_attack-1-00.png', 'spin_attack-1-01.png'], 7, true);
         level2boss.animations.add('chanelling', ['channeling-1-00.png', 'channeling-1-01.png'], 5, true);
-        game.physics.enable(level2boss);
+       
 
         //  Player physics properties.
         level2boss.body.collideWorldBounds = true;
@@ -810,9 +813,9 @@ function initPlayer() {
     }
     //this is for level 3 boss testing
     //player = game.add.sprite(3700, 3800, 'player');
-    player = game.add.sprite(3000, 200, 'player');
+    //player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
-    //player = game.add.sprite(600, 100, 'player');
+    //player = game.add.sprite(4506, 750, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);
@@ -996,7 +999,7 @@ function handleLevel2Boss(){
 				}
 			}
 
-			if(level2boss.health === 3 && !channeled ){
+			if((level2boss.health === 3 || level2boss.health === 2) && !channeled ){
 				level2boss.body.velocity.x = 0;
 				b2_ani = 'chanelling';
 				level2boss.animations.play('chanelling');
@@ -1668,5 +1671,7 @@ function reset() {
 	bossDestroyed = false;
 	player_met = false;
 	hasGrenades = false;
+	map.destroy();
+	layer.destroy();
 
 }

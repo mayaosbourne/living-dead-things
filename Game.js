@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 2;
+var level = 1;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -294,8 +294,8 @@ function update() {
 	        level2boss.animations.play(b2_ani);
 		}
 	}else if (level === 3){
-		if (player.x > 3996 && player.y > 1470)
-			player.y = 1440;
+		if (player.x > 3996 && player.y > 1470 && player.y < 3000)
+			player.y = 1400;
 		if (player.y > 3900)
 			player.y = 3800;
 		if (level3boss.y > 4000)
@@ -848,11 +848,15 @@ var b1_health = 0;
 function handleLevel1Boss(){
     if (level1boss.exists) {
 
-    	if (b1_health === 0){
+    	if (b1_health <= 0){
 			var health = level1boss.health;
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
 			b1_health = game.add.text(level1boss.x, level1boss.y - 100, health, style1);
-		}else{
+		}else if (level1boss.health < 0){
+			console.log("dead");
+			b1_health.destroy();
+		}
+		else{
 			b1_health.destroy();
 			var health = level1boss.health;
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
@@ -919,7 +923,10 @@ function handleLevel2Boss(){
 			var health = level2boss.health;
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
 			b2_health = game.add.text(level2boss.x, level2boss.y - 100, health, style1);
-		}else{
+		}else if (level2boss.health < 0){
+			b2_health.destroy();
+		}
+		else{
 			b2_health.destroy();
 			var health = level2boss.health;
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
@@ -1097,11 +1104,14 @@ function handleLevel3Boss(){
 	}
 	
 	if (level3boss.exists){
-		if (b3_health === 0){
+		if (b3_health <= 0){
 			var health = level3boss.health;
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };
 		    b3_health = game.add.text(level3boss.x, level3boss.y - 100, health, style1);
-		}else{
+		}else if (level3boss.health < 0){
+			b3_health.destroy();
+		}
+		else{
 			b3_health.destroy();
 			var health = level3boss.health;
 			var style1 = { font: "20px Arial", fill: "#FF0000", align: "center" };

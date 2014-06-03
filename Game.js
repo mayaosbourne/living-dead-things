@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 3;
+var level = 1;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -296,7 +296,7 @@ function update() {
 	}else if (level === 3){
 		if (player.y > 3900)
 			player.y = 3800;
-		if (level3boss.y > 3900)
+		if (level3boss.y > 4000)
 			level3boss.y = 3750;
 		handleLevel3Boss();
 	}

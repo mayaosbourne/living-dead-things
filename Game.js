@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 2;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -294,6 +294,8 @@ function update() {
 	        level2boss.animations.play(b2_ani);
 		}
 	}else if (level === 3){
+		if (player.x > 3996 && player.y > 1470)
+			player.y = 1440;
 		if (player.y > 3900)
 			player.y = 3800;
 		if (level3boss.y > 4000)
@@ -310,6 +312,7 @@ function update() {
 	
 	if (text_timeout === 80){
 		t.destroy();
+		text_timeout = 0;
 	}
     else if (text_timeout != 0)
     	text_timeout++;
@@ -877,7 +880,7 @@ function handleLevel1Boss(){
         }
 
 
-        if (level1boss.health === 0) {
+        if (level1boss.health <= 0 ) {
             if (once) {
                 handleXP(1000);
                 once = false;
@@ -885,10 +888,6 @@ function handleLevel1Boss(){
             var x = level1boss.x;
             var y = level1boss.y;
             var explodeBoss = game.add.sprite(x, y, 'player');
-            //explodeBoss.animations.add('puff', [5,6,7], 5, true);
-            //explodeBoss.anchor.set(0.43, 0.43);
-            //explodeBoss.animations.play('puff', 5, false);
-            //explodeBoss.killOnComplete = true;
             explodeBoss.animations.add('explosion', [71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90], 10, true);
             explodeBoss.anchor.set(0.43, 0.43);
             explodeBoss.animations.play('explosion', 20, false);
@@ -902,31 +901,6 @@ function handleLevel1Boss(){
     }
 
     game.physics.arcade.collide(level1boss, layer);
-
-    //boss_move++;
-
-	/*if (level1boss.health === 0){
-    	level1boss.destroy();
-    	if (once){
-    		handleXP(1000);
-    		once = false;
-    	}
-	}
-	if (level1boss.exists){
-   	 if (fireball_delay === 90 || fireball_delay === 0)
-   	        fireball_delay = 0;
-   	    else
-   	        fireball_delay++;
-
-   	 if (fireball_delay === 0 && !(player.health === 0) && (game.physics.arcade.distanceBetween(player, level1boss) < 500)) {
-   	        createFireBall();
-   	        fireball_delay++;
-   	    }
-   	    if (player.x < level1boss.x) {
-   	        level1boss.scale.x = 1;
-   	    } else
-   	        level1boss.scale.x = -1;
-   }*/
 }
 var player_met = false;
 var boss_right = false;
@@ -1063,7 +1037,7 @@ function handleLevel2Boss(){
 				}
 			}
 		
-			if (level2boss.health === 0){
+			if (level2boss.health <= 0){
 				level2boss.destroy();
 				if (once){
 					handleXP(1000);
@@ -1178,7 +1152,7 @@ function handleLevel3Boss(){
 			}	
 		}
 		
-		if (level3boss.health === 0){
+		if (level3boss.health <= 0){
 			level3boss.destroy();
     		if (once){
     			handleXP(1000);

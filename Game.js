@@ -814,11 +814,6 @@ function initPlayer() {
     } else {
         player = game.add.sprite(600, 200, 'player');
     }
-    //this is for level 3 boss testing
-    player = game.add.sprite(3700, 3800, 'player');
-    //player = game.add.sprite(3000, 200, 'player');
-    //player = game.add.sprite(5100, 665, 'player');
-    //player = game.add.sprite(4506, 750, 'player');
     player.animations.add('shooting', [0, 1, 2, 3], 5, true);
     player.animations.add('running', [4, 5, 6, 7, 8, 9], 10, true);
     player.animations.add('idle', [10, 11, 12, 13, 14, 15], 10, true);

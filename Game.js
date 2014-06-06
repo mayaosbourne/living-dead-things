@@ -91,7 +91,7 @@ var bossDestroyed = false;
 
 var hasAcquiredFinishToken = false;
 
-var level = 1;
+var level = 3;
 
 function create() {
 	gun_shot = game.add.audio('single shot');
@@ -815,7 +815,7 @@ function initPlayer() {
         player = game.add.sprite(600, 200, 'player');
     }
     //this is for level 3 boss testing
-    //player = game.add.sprite(3700, 3800, 'player');
+    player = game.add.sprite(3700, 3800, 'player');
     //player = game.add.sprite(3000, 200, 'player');
     //player = game.add.sprite(5100, 665, 'player');
     //player = game.add.sprite(4506, 750, 'player');
